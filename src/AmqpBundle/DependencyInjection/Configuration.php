@@ -63,11 +63,40 @@ class Configuration implements ConfigurationInterface
                     ->canBeUnset()
                     ->useAttributeAsKey('key')
                     ->prototype('array')
-                        ->append($this->getExchangeConfiguration())
-                        ->append($this->getQueueConfiguration())
                         ->children()
-                            ->scalarNode('connection')->defaultValue('default')->end()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.producer.class%')->end()
+                            ->scalarNode('connection')->defaultValue('default')->end()
+
+                            ->arrayNode('exchange_options')
+                                ->children()
+                                    // base info
+                                    ->scalarNode('name')->isRequired()->end()
+                                    ->scalarNode('type')->isRequired()->end()
+
+                                    // flags
+                                    ->booleanNode('passive')->defaultFalse()->end()
+                                    ->booleanNode('durable')->defaultTrue()->end()
+                                    ->booleanNode('auto_delete')->defaultFalse()->end()
+
+                                    // args
+                                    ->arrayNode('arguments')
+                                        ->prototype('scalar')->end()
+                                        ->defaultValue(array())
+                                    ->end()
+
+                                    // binding
+                                    ->arrayNode('routing_keys')
+                                        ->prototype('scalar')->end()
+                                        ->defaultValue(array())
+                                    ->end()
+
+                                    // default message attributes
+                                    ->arrayNode('publish_attributes')
+                                        ->prototype('scalar')->end()
+                                        ->defaultValue(array())
+                                    ->end()
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
@@ -82,73 +111,42 @@ class Configuration implements ConfigurationInterface
                     ->canBeUnset()
                     ->useAttributeAsKey('key')
                     ->prototype('array')
-                        ->append($this->getExchangeConfiguration())
-                        ->append($this->getQueueConfiguration())
                         ->children()
-                            ->scalarNode('connection')->defaultValue('default')->end()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.consumer.class%')->end()
-                            ->arrayNode('qos_options')
-                                ->canBeUnset()
+                            ->scalarNode('connection')->defaultValue('default')->end()
+
+                            ->arrayNode('exchange_options')
                                 ->children()
-                                    ->scalarNode('prefetch_size')->defaultValue(0)->end()
-                                    ->scalarNode('prefetch_count')->defaultValue(0)->end()
-                                    ->booleanNode('global')->defaultFalse()->end()
+                                    ->scalarNode('name')->isRequired()->end()
+                                ->end()
+                            ->end()
+
+                            ->arrayNode('queue_options')
+                                ->children()
+                                    // base
+                                    ->scalarNode('name')->isRequired()->end()
+
+                                    // flags
+                                    ->booleanNode('passive')->defaultFalse()->end()
+                                    ->booleanNode('durable')->defaultTrue()->end()
+                                    ->booleanNode('exclusive')->defaultFalse()->end()
+                                    ->booleanNode('auto_delete')->defaultFalse()->end()
+
+                                    // args
+                                    ->arrayNode('arguments')
+                                        ->prototype('scalar')->end()
+                                        ->defaultValue(array())
+                                    ->end()
+
+                                    // binding
+                                    ->arrayNode('routing_keys')
+                                        ->prototype('scalar')->end()
+                                        ->defaultValue(array())
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()
                     ->end()
-                ->end()
-            ->end();
-    }
-
-    protected function getExchangeConfiguration()
-    {
-        $node = new ArrayNodeDefinition('exchange_options');
-
-        return $node
-            ->children()
-                // base
-                ->scalarNode('name')->isRequired()->end()
-                ->scalarNode('type')->isRequired()->end()
-
-                // flags
-                ->booleanNode('passive')->defaultFalse()->end()
-                ->booleanNode('durable')->defaultTrue()->end()
-                ->booleanNode('auto_delete')->defaultFalse()->end()
-
-                // arg
-                ->arrayNode('arguments')
-                    ->prototype('scalar')->end()
-                    ->defaultValue(array())
-                ->end()
-            ->end();
-    }
-
-    protected function getQueueConfiguration()
-    {
-        $node = new ArrayNodeDefinition('queue_options');
-
-        return $node
-            ->children()
-                // base
-                ->scalarNode('name')->isRequired()->end()
-
-                // Flags
-                ->booleanNode('passive')->defaultFalse()->end()
-                ->booleanNode('durable')->defaultTrue()->end()
-                ->booleanNode('exclusive')->defaultFalse()->end()
-                ->booleanNode('auto_delete')->defaultFalse()->end()
-
-                // arg
-                ->arrayNode('arguments')
-                    ->prototype('scalar')->end()
-                    ->defaultValue(array())
-                ->end()
-
-                // binding
-                ->arrayNode('routing_keys')
-                    ->prototype('scalar')->end()
-                    ->defaultValue(array())
                 ->end()
             ->end();
     }

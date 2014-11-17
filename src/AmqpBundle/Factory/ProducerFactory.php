@@ -66,11 +66,10 @@ class ProducerFactory
      *
      * @param string $connexion       AMQP connexion
      * @param array  $exchangeOptions Exchange Options
-     * @param array  $queueOptions    Queue Options
      *
      * @return Producer
      */
-    public function get($connexion, array $exchangeOptions, array $queueOptions)
+    public function get($connexion, array $exchangeOptions)
     {
         $params = array();
 
@@ -89,7 +88,7 @@ class ProducerFactory
         $exchange->declareExchange();
 
         // Create the producer
-        $producer = new $this->producerClass($exchange, $queueOptions);
+        $producer = new $this->producerClass($exchange, $exchangeOptions);
 
         return $producer;
     }

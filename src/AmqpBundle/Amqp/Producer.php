@@ -15,18 +15,18 @@ class Producer extends AbstractAmqp
     /**
      * @var array
      */
-    protected $queueOptions = [];
+    protected $exchangeOptions = [];
 
     /**
      * __construct
      *
-     * @param string $exchange     Amqp Exchange
-     * @param array  $queueOptions Queue options
+     * @param string $exchange        Amqp Exchange
+     * @param array  $exchangeOptions Exchange options
      */
-    public function __construct(\AMQPExchange $exchange, Array $queueOptions)
+    public function __construct(\AMQPExchange $exchange, Array $exchangeOptions)
     {
-        $this->exchange     = $exchange;
-        $this->queueOptions = $queueOptions;
+        $this->setExchange($exchange);
+        $this->setExchangeOptions($exchangeOptions);
     }
 
     /**
@@ -42,10 +42,16 @@ class Producer extends AbstractAmqp
      * @throws AMQPChannelException If the channel is not open.
      * @throws AMQPConnectionException If the connection to the broker was lost.
      */
-    public function sendMessage($message, $flags = AMQP_NOPARAM, array $attributes = array())
+    public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = array())
     {
+        // Merge attributes
+        $attributes = empty($attributes) ? $this->exchangeOptions['publish_attributes'] :
+                      empty($this->exchangeOptions['publish_attributes']) ? $attributes :
+                      array_merge($this->exchangeOptions['publish_attributes'], $attributes);
+
+        // Publish the message for each routing keys
         $success = true;
-        foreach ($this->queueOptions['routing_keys'] as $routingKey) {
+        foreach ($this->exchangeOptions['routing_keys'] as $routingKey) {
             $success &= $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
         }
 
@@ -68,6 +74,34 @@ class Producer extends AbstractAmqp
     public function setExchange(\AMQPExchange $exchange)
     {
         $this->exchange = $exchange;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExchangeOptions()
+    {
+        return $this->exchangeOptions;
+    }
+
+    /**
+     * @param Array $exchangeOptions
+     *
+     * @return \M6Web\Bundle\AmqpBundle\Amqp\Consumer
+     */
+    public function setExchangeOptions(Array $exchangeOptions)
+    {
+        $this->exchangeOptions = $exchangeOptions;
+
+        if (!key_exists('publish_attributes', $this->exchangeOptions)) {
+            $this->exchangeOptions['publish_attributes'] = [];
+        }
+
+        if (!key_exists('routing_keys', $this->exchangeOptions)) {
+            $this->exchangeOptions['routing_keys'] = [];
+        }
 
         return $this;
     }
