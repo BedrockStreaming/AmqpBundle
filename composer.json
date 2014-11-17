@@ -1,0 +1,21 @@
+{
+    "name" : "m6web/amqp-bundle",
+    "description" : "Bundle AMQP",
+    "autoload" : {
+        "psr-4": { "M6Web\\Bundle\\": "src/" }
+    },
+    "config": {
+        "bin-dir": "bin/"
+    },
+    "minimum-stability" : "dev",
+    "prefer-stable" : true,
+    "require" : {
+        "php" : ">=5.4",
+        "ext-amqp" : "*"
+    },
+    "require-dev" : {
+        "atoum/atoum-bundle" : "dev-master",
+        "m6web/coke" : "~1.2",
+        "m6web/symfony2-coding-standard" : "~1.1"
+    }
+}
