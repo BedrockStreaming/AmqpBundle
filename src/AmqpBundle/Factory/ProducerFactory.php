@@ -10,11 +10,6 @@ class ProducerFactory
     /**
      * @var string
      */
-    protected $producerClass;
-
-    /**
-     * @var string
-     */
     protected $channelClass;
 
     /**
@@ -36,14 +31,8 @@ class ProducerFactory
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($producerClass, $channelClass, $exchangeClass)
+    public function __construct($channelClass, $exchangeClass)
     {
-        if (!class_exists($producerClass)) {
-            throw new \InvalidArgumentException(
-                sprintf("producerClass '%s' doesn't exist", $producerClass)
-            );
-        }
-
         if (!class_exists($channelClass) || !is_a($channelClass, 'AMQPChannel', true)) {
             throw new \InvalidArgumentException(
                 sprintf("channelClass '%s' doesn't exist or not a AMQPChannel", $channelClass)
@@ -56,7 +45,6 @@ class ProducerFactory
             );
         }
 
-        $this->producerClass = $producerClass;
         $this->channelClass  = $channelClass;
         $this->exchangeClass = $exchangeClass;
     }
@@ -69,9 +57,13 @@ class ProducerFactory
      *
      * @return Producer
      */
-    public function get($connexion, array $exchangeOptions)
+    public function get($class, $connexion, array $exchangeOptions)
     {
-        $params = array();
+        if (!class_exists($class)) {
+            throw new \InvalidArgumentException(
+                sprintf("Producer class '%s' doesn't exist", $class)
+            );
+        }
 
         // Open a new channel
         $channel = new $this->channelClass($connexion);
@@ -88,7 +80,7 @@ class ProducerFactory
         $exchange->declareExchange();
 
         // Create the producer
-        $producer = new $this->producerClass($exchange, $exchangeOptions);
+        $producer = new $class($exchange, $exchangeOptions);
 
         return $producer;
     }

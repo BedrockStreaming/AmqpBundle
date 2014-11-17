@@ -71,6 +71,7 @@ class M6WebAmqpExtension extends Extension
             $producerDefinition = new Definition(
                 $producer['class'],
                 [
+                    $producer['class'],
                     new Reference(sprintf('m6_web_amqp.connection.%s', $producer['connection'])),
                     $producer['exchange_options'],
                 ]
@@ -107,6 +108,7 @@ class M6WebAmqpExtension extends Extension
             $consumerDefinition = new Definition(
                 $consumer['class'],
                 [
+                    $consumer['class'],
                     new Reference(sprintf('m6_web_amqp.connection.%s', $consumer['connection'])),
                     $consumer['exchange_options'],
                     $consumer['queue_options'],

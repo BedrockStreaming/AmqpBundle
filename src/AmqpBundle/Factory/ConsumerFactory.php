@@ -10,11 +10,6 @@ class ConsumerFactory
     /**
      * @var string
      */
-    protected $consumerClass;
-
-    /**
-     * @var string
-     */
     protected $channelClass;
 
     /**
@@ -36,14 +31,8 @@ class ConsumerFactory
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($consumerClass, $channelClass, $queueClass)
+    public function __construct($channelClass, $queueClass)
     {
-        if (!class_exists($consumerClass)) {
-            throw new \InvalidArgumentException(
-                sprintf("consumerClass '%s' doesn't exist", $consumerClass)
-            );
-        }
-
         if (!class_exists($channelClass) || !is_a($channelClass, "AMQPChannel", true)) {
             throw new \InvalidArgumentException(
                 sprintf("channelClass '%s' doesn't exist or not a AMQPChannel", $channelClass)
@@ -56,7 +45,6 @@ class ConsumerFactory
             );
         }
 
-        $this->consumerClass  = $consumerClass;
         $this->channelClass  = $channelClass;
         $this->queueClass = $queueClass;
     }
@@ -70,9 +58,13 @@ class ConsumerFactory
      *
      * @return Consumer
      */
-    public function get($connexion, array $exchangeOptions, array $queueOptions)
+    public function get($class, $connexion, array $exchangeOptions, array $queueOptions)
     {
-        $params = array();
+        if (!class_exists($class)) {
+            throw new \InvalidArgumentException(
+                sprintf("Consumer class '%s' doesn't exist", $class)
+            );
+        }
 
         // Open a new channel
         $channel = new $this->channelClass($connexion);
@@ -97,7 +89,7 @@ class ConsumerFactory
         }
 
         // Create the consumer
-        $consumer = new $this->consumerClass($queue, $queueOptions);
+        $consumer = new $class($queue, $queueOptions);
 
         return $consumer;
     }
