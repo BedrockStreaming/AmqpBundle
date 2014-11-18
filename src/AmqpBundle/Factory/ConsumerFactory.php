@@ -25,9 +25,8 @@ class ConsumerFactory
     /**
      * __construct
      *
-     * @param string $consumerClass Consumer class name
-     * @param string $channelClass  Channel class name
-     * @param string $queueClass    Queue class name
+     * @param string $channelClass Channel class name
+     * @param string $queueClass   Queue class name
      *
      * @throws \InvalidArgumentException
      */
@@ -52,6 +51,7 @@ class ConsumerFactory
     /**
      * build the consumer class
      *
+     * @param string $class           Consumer class name
      * @param string $connexion       AMQP connexion
      * @param array  $exchangeOptions Exchange Options
      * @param array  $queueOptions    Queue Options
