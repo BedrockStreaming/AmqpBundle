@@ -11,7 +11,7 @@ giving you the ability to publish to any exchange and consume from any queue.
 Publishing messages to AMQP Server from a Symfony2 controller is as easy as:
 
 ```php
-$msg = ["key" => "value];
+$msg = ["key" => "value"];
 $this->get('m6web_amqp.producer.myproducer')->publishMessage(serialize($msg));
 ```
 
@@ -118,7 +118,7 @@ you will have to specify the connection options along with the exchange options.
 Let's say that you want to publish a message :
 
 ```php
-$msg = ["key" => "value];
+$msg = ["key" => "value"];
 $this->get('m6web_amqp.producer.myproducer')->publishMessage(serialize($msg));
 ```
 
