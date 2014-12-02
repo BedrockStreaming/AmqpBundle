@@ -42,12 +42,12 @@ class Producer extends AbstractAmqp
      * @throws AMQPChannelException If the channel is not open.
      * @throws AMQPConnectionException If the connection to the broker was lost.
      */
-    public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = array())
+    public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = [])
     {
         // Merge attributes
         $attributes = empty($attributes) ? $this->exchangeOptions['publish_attributes'] :
-                      empty($this->exchangeOptions['publish_attributes']) ? $attributes :
-                      array_merge($this->exchangeOptions['publish_attributes'], $attributes);
+                      (empty($this->exchangeOptions['publish_attributes']) ? $attributes :
+                      array_merge($this->exchangeOptions['publish_attributes'], $attributes));
 
         // Publish the message for each routing keys
         $success = true;
@@ -55,7 +55,7 @@ class Producer extends AbstractAmqp
             $success &= $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
         }
 
-        return $success;
+        return (boolean) $success;
     }
 
     /**

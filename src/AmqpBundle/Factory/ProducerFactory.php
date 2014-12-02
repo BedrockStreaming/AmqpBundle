@@ -25,7 +25,6 @@ class ProducerFactory
     /**
      * __construct
      *
-     * @param string $producerClass Producer class name
      * @param string $channelClass  Channel class name
      * @param string $exchangeClass Exchange class name
      *
@@ -52,6 +51,7 @@ class ProducerFactory
     /**
      * build the producer class
      *
+     * @param string $class           Provider class name
      * @param string $connexion       AMQP connexion
      * @param array  $exchangeOptions Exchange Options
      *
