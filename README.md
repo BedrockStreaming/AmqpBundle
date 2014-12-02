@@ -64,7 +64,6 @@ Add the `m6_web_amqp` section in your configuration file:
 
 ```yaml
 m6_web_amqp:
-    disable_data_collector: true
     connections:
         default:
             host:     'localhost'  # optional - default 'localhost'
@@ -150,14 +149,7 @@ If you choose to not acknowledge the message, the second parameter of nackMessag
 
 ### DataCollector
 
-DataCollector is enabled by defaut.
-
-To disable :
-
-```
-m6_web_aws:
-    disable_data_collector: true
-```
+DataCollector is enabled by defaut if kernel.debug is set. Typically in the dev environment.
 
 # Unit tests :
 

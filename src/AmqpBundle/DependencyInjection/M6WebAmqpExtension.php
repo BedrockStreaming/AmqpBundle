@@ -28,7 +28,7 @@ class M6WebAmqpExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        if (!$config['disable_data_collector']) {
+        if ($container->getParameter('kernel.debug')) {
             $loader->load('data_collector.yml');
         }
 
