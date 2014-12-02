@@ -1,5 +1,7 @@
 # AmQPBundle
 
+[![Build Status](https://travis-ci.org/M6Web/AmqpBundle.svg?branch=master)](https://travis-ci.org/M6Web/AmqpBundle)
+
 The configuration and documentation is inspired from [videlalvaro/RabbitMqBundle](https://github.com/videlalvaro/RabbitMqBundle).
 
 #### Amqp client as a Symfony Service
