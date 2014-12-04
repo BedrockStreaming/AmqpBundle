@@ -20,8 +20,8 @@ class Consumer extends AbstractAmqp
     /**
      * __construct
      *
-     * @param string $queue        Amqp Queue
-     * @param array  $queueOptions Queue options
+     * @param \AMQPQueue $queue        Amqp Queue
+     * @param array      $queueOptions Queue options
      */
     public function __construct(\AMQPQueue $queue, Array $queueOptions)
     {
@@ -32,12 +32,12 @@ class Consumer extends AbstractAmqp
     /**
      * Retrieve the next message from the queue.
      *
-     * @param string $flags MQP_AUTOACK or AMQP_NOPARAM
+     * @param int $flags MQP_AUTOACK or AMQP_NOPARAM
      *
-     * @throws AMQPChannelException If the channel is not open.
-     * @throws AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException If the channel is not open.
+     * @throws \AMQPConnectionException If the connection to the broker was lost.
      *
-     * @return AMQPEnvelope|boolean
+     * @return \AMQPEnvelope|boolean
      */
     public function getMessage($flags = AMQP_AUTOACK)
     {
@@ -52,8 +52,8 @@ class Consumer extends AbstractAmqp
      *
      * @return boolean
      *
-     * @throws AMQPChannelException If the channel is not open.
-     * @throws AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException If the channel is not open.
+     * @throws \AMQPConnectionException If the connection to the broker was lost.
      */
     public function ackMessage($deliveryTag, $flags = AMQP_NOPARAM)
     {
@@ -66,8 +66,8 @@ class Consumer extends AbstractAmqp
      * @param string  $deliveryTag Delivery tag of last message to reject.
      * @param integer $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s).
      *
-     * @throws AMQPChannelException If the channel is not open.
-     * @throws AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException If the channel is not open.
+     * @throws \AMQPConnectionException If the connection to the broker was lost.
      *
      * @return boolean
      */
@@ -79,8 +79,8 @@ class Consumer extends AbstractAmqp
     /**
      * Purge the contents of the queue.
      *
-     * @throws AMQPChannelException If the channel is not open.
-     * @throws AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException If the channel is not open.
+     * @throws \AMQPConnectionException If the connection to the broker was lost.
      *
      * @return boolean
      */
@@ -110,7 +110,7 @@ class Consumer extends AbstractAmqp
     }
 
     /**
-     * @return AMQPQueue
+     * @return \AMQPQueue
      */
     public function getQueue()
     {

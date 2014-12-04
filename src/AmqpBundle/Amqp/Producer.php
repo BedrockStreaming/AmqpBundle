@@ -20,8 +20,8 @@ class Producer extends AbstractAmqp
     /**
      * __construct
      *
-     * @param string $exchange        Amqp Exchange
-     * @param array  $exchangeOptions Exchange options
+     * @param \AMQPExchange $exchange        Amqp Exchange
+     * @param array         $exchangeOptions Exchange options
      */
     public function __construct(\AMQPExchange $exchange, Array $exchangeOptions)
     {
@@ -31,16 +31,16 @@ class Producer extends AbstractAmqp
 
     /**
      * @param string $message    The message to publish.
-     * @param string $flags      One or more of AMQP_MANDATORY and AMQP_IMMEDIATE.
+     * @param int    $flags      One or more of AMQP_MANDATORY and AMQP_IMMEDIATE.
      * @param array  $attributes One of content_type, content_encoding,
      *                           message_id, user_id, app_id, delivery_mode, priority,
      *                           timestamp, expiration, type or reply_to.
      *
      * @return boolean          TRUE on success or FALSE on failure.
      *
-     * @throws AMQPExchangeException On failure.
-     * @throws AMQPChannelException If the channel is not open.
-     * @throws AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPExchangeException On failure.
+     * @throws \AMQPChannelException If the channel is not open.
+     * @throws \AMQPConnectionException If the connection to the broker was lost.
      */
     public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = [])
     {
@@ -59,7 +59,7 @@ class Producer extends AbstractAmqp
     }
 
     /**
-     * @return AMQPExchange
+     * @return \AMQPExchange
      */
     public function getExchange()
     {
