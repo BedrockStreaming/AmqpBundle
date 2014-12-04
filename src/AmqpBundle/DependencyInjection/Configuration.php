@@ -23,7 +23,6 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
-                ->booleanNode('disable_data_collector')->defaultValue(false)->end()
             ->end();
 
         $this->addConnections($rootNode);
