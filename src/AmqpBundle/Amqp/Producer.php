@@ -95,11 +95,11 @@ class Producer extends AbstractAmqp
     {
         $this->exchangeOptions = $exchangeOptions;
 
-        if (!key_exists('publish_attributes', $this->exchangeOptions)) {
+        if (!array_key_exists('publish_attributes', $this->exchangeOptions)) {
             $this->exchangeOptions['publish_attributes'] = [];
         }
 
-        if (!key_exists('routing_keys', $this->exchangeOptions)) {
+        if (!array_key_exists('routing_keys', $this->exchangeOptions)) {
             $this->exchangeOptions['routing_keys'] = [];
         }
 
