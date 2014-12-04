@@ -84,7 +84,7 @@ m6_web_amqp:
                 durable: bool                                      # optional - defaut true
                 auto_delete: bool                                  # optional - defaut false
                 arguments: { key: value }                          # optional - default { } - Please refer to the documentation of your broker for information about the arguments.
-                routing_keys: { 'routingkey', 'routingkey2' }      # optional - default { }
+                routing_keys: ['routingkey', 'routingkey2']        # optional - default { }
                 publish_attributes: { key: value }                 # optional - default { } - possible keys : content_type, content_encoding, message_id, user_id, app_id, delivery_mode,
                                                                    #                          priority, timestamp, expiration, type, reply_to, headers.
 
@@ -103,7 +103,7 @@ m6_web_amqp:
                 arguments: { key: value }                     # optional - default { } - Please refer to the documentation of your broker for information about the arguments.
                                                               #                          RabbitMQ ex : {'x-ha-policy': 'all', 'x-dead-letter-routing-key': 'async.dead',
                                                               #                                      'x-dead-letter-exchange': 'async_dead', 'x-message-ttl': 20000}
-                routing_keys: { 'routingkey', 'routingkey2' } # optional - default { }
+                routing_keys: ['routingkey', 'routingkey2']   # optional - default { }
 ```
 
 Here we configure the connection service and the message endpoints that our application will have.
