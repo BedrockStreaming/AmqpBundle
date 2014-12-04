@@ -2,8 +2,6 @@
 
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
-use M6Web\Bundle\AmqpBundle\Event\Command;
-
 /**
  * Abstract AMQP
  */
