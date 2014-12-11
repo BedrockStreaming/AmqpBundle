@@ -34,7 +34,7 @@ Require the bundle in your composer.json file:
 ````
 {
     "require": {
-        "m6web/amqp-bundle"if they: "~1.0",
+        "m6web/amqp-bundle": "~1.0",
     }
 }
 ```
