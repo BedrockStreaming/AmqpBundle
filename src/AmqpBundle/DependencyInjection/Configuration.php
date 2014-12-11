@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('login')->defaultValue('guest')->end()
                             ->scalarNode('password')->defaultValue('guest')->end()
                             ->scalarNode('vhost')->defaultValue('/')->end()
+                            ->booleanNode('lazy')->defaultFalse()->end()
                         ->end()
                     ->end()
                 ->end()

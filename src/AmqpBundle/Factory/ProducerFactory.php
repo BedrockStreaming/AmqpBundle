@@ -54,15 +54,22 @@ class ProducerFactory
      * @param string $class           Provider class name
      * @param string $connexion       AMQP connexion
      * @param array  $exchangeOptions Exchange Options
+     * @param bool   $lazy            Specifies if it should connect
      *
      * @return Producer
      */
-    public function get($class, $connexion, array $exchangeOptions)
+    public function get($class, $connexion, array $exchangeOptions, $lazy = false)
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
                 sprintf("Producer class '%s' doesn't exist", $class)
             );
+        }
+
+        if ($lazy) {
+            if (!$connexion->isConnected()) {
+                $connexion->connect();
+            }
         }
 
         // Open a new channel
