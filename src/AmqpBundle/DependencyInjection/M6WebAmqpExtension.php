@@ -98,7 +98,7 @@ class M6WebAmqpExtension extends Extension
 
             if ($lazy) {
                 if (!method_exists($producerDefinition, 'setLazy')) {
-                    throw new \InvalidArgumentException('It\'t not possible to declare a service as lazy. Are you using Symfony 2.3?');
+                    throw new \InvalidArgumentException('It\'s not possible to declare a service as lazy. Are you using Symfony 2.3?');
                 }
 
                 $producerDefinition->setLazy(true);
@@ -147,7 +147,7 @@ class M6WebAmqpExtension extends Extension
 
             if ($lazy) {
                 if (!method_exists($consumerDefinition, 'setLazy')) {
-                    throw new \InvalidArgumentException('It\'t not possible to declare a service as lazy. Are you using Symfony 2.3?');
+                    throw new \InvalidArgumentException('It\'s not possible to declare a service as lazy. Are you using Symfony 2.3?');
                 }
 
                 $consumerDefinition->setLazy(true);
