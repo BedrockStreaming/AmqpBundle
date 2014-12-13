@@ -50,8 +50,11 @@ class M6WebAmqpExtension extends Extension
                                 ->addMethodCall('setReadTimeout', [$connection['timeout']])
                                 ->addMethodCall('setLogin', [$connection['login']])
                                 ->addMethodCall('setPassword', [$connection['password']])
-                                ->addMethodCall('setVhost', [$connection['vhost']])
-                                ->addMethodCall('connect');
+                                ->addMethodCall('setVhost', [$connection['vhost']]);
+
+            if (!$connection['lazy']) {
+                $connexionDefinition->addMethodCall('connect');
+            }
 
             $container->setDefinition(
                 sprintf('m6_web_amqp.connection.%s', $key),
@@ -67,6 +70,8 @@ class M6WebAmqpExtension extends Extension
     protected function loadProducers(ContainerBuilder $container, array $config)
     {
         foreach ($config['producers'] as $key => $producer) {
+            $lazy = $config['connections'][$producer['connection']]['lazy'];
+
             // Create the producer with the factory
             $producerDefinition = new Definition(
                 $producer['class'],
@@ -74,6 +79,7 @@ class M6WebAmqpExtension extends Extension
                     $producer['class'],
                     new Reference(sprintf('m6_web_amqp.connection.%s', $producer['connection'])),
                     $producer['exchange_options'],
+                    $lazy,
                 ]
             );
 
@@ -90,6 +96,14 @@ class M6WebAmqpExtension extends Extension
             $producerDefinition->setFactoryService('m6_web_amqp.producer_factory')
                                ->setFactoryMethod('get');
 
+            if ($lazy) {
+                if (!method_exists($producerDefinition, 'setLazy')) {
+                    throw new \InvalidArgumentException('It\'s not possible to declare a service as lazy. Are you using Symfony 2.3?');
+                }
+
+                $producerDefinition->setLazy(true);
+            }
+
             $container->setDefinition(
                 sprintf('m6_web_amqp.producer.%s', $key),
                 $producerDefinition
@@ -104,6 +118,8 @@ class M6WebAmqpExtension extends Extension
     protected function loadConsumers(ContainerBuilder $container, array $config)
     {
         foreach ($config['consumers'] as $key => $consumer) {
+            $lazy = $config['connections'][$consumer['connection']]['lazy'];
+
             // Create the consumer with the factory
             $consumerDefinition = new Definition(
                 $consumer['class'],
@@ -112,6 +128,7 @@ class M6WebAmqpExtension extends Extension
                     new Reference(sprintf('m6_web_amqp.connection.%s', $consumer['connection'])),
                     $consumer['exchange_options'],
                     $consumer['queue_options'],
+                    $lazy,
                 ]
             );
 
@@ -127,6 +144,14 @@ class M6WebAmqpExtension extends Extension
             // Use a factory to build the consumer
             $consumerDefinition->setFactoryService('m6_web_amqp.consumer_factory')
                                ->setFactoryMethod('get');
+
+            if ($lazy) {
+                if (!method_exists($consumerDefinition, 'setLazy')) {
+                    throw new \InvalidArgumentException('It\'s not possible to declare a service as lazy. Are you using Symfony 2.3?');
+                }
+
+                $consumerDefinition->setLazy(true);
+            }
 
             $container->setDefinition(
                 sprintf('m6_web_amqp.consumer.%s', $key),

@@ -72,6 +72,7 @@ m6_web_amqp:
             login:     'guest'     # optional - default 'guest'
             password: 'guest'      # optional - default 'guest'
             vhost:    '/'          # optional - default '/'
+            lazy:     false        # optional - default false
     producers:
         myproducer:
             class: "My\\Provider\\Class"                           # optional - to overload the default provider class
@@ -147,9 +148,15 @@ The "flags" argument of getMessage accepts MQP_AUTOACK (auto acknowledge by defa
 To manually acknowledge a message, use the consumer's ackMessage/nackMessage methods with a delivery_tag argument's value from the AMQPEnvelope object. 
 If you choose to not acknowledge the message, the second parameter of nackMessage accepts AMQP_REQUEUE to requeue the message or AMQP_NOPARAM to forget it. 
 
+### Lazy connections
+
+It's highly recommended to set all connections to ```lazy: true``` in the configuration file. It'll prevent the bundle from connecting to RabbitMQ on each request.
+
+If you want lazy connections, you have to add ```"ocramius/proxy-manager": "~0.5"``` to your composer.json file, and (as said before) add ```lazy: true``` to your connections.
+
 ### DataCollector
 
-DataCollector is enabled by defaut if kernel.debug is set. Typically in the dev environment.
+DataCollector is enabled by default if kernel.debug is set. Typically in the dev environment.
 
 # Unit tests :
 

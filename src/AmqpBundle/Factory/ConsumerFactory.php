@@ -55,15 +55,22 @@ class ConsumerFactory
      * @param string $connexion       AMQP connexion
      * @param array  $exchangeOptions Exchange Options
      * @param array  $queueOptions    Queue Options
+     * @param bool   $lazy            Specifies if it should connect
      *
      * @return Consumer
      */
-    public function get($class, $connexion, array $exchangeOptions, array $queueOptions)
+    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false)
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
                 sprintf("Consumer class '%s' doesn't exist", $class)
             );
+        }
+
+        if ($lazy) {
+            if (!$connexion->isConnected()) {
+                $connexion->connect();
+            }
         }
 
         // Open a new channel
