@@ -164,3 +164,25 @@ DataCollector is enabled by default if kernel.debug is set. Typically in the dev
     composer install
     ./bin/atoum
 ```
+
+# Docker
+
+If you have a multi-containers apps, we provide a Dockerfile for a container with rabbitmq-server.
+This container is for testing only.
+
+Example of fig.yml :
+
+```
+web:
+    build: .
+    volumes:
+        - .:/var/www
+    links:
+        - rabbitmq:rabbitmq.local
+
+rabbitmq:
+    build: vendor/m6web/amqp-bundle/
+    ports:
+        - "15672:15672"
+        - "5672:5672"
+```
