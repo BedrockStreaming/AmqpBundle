@@ -69,6 +69,8 @@ class M6WebAmqpExtension extends Extension
      */
     protected function loadProducers(ContainerBuilder $container, array $config)
     {
+        $eventDispatcher = $config['event_dispatcher'];
+
         foreach ($config['producers'] as $key => $producer) {
             $lazy = $config['connections'][$producer['connection']]['lazy'];
 
@@ -84,13 +86,15 @@ class M6WebAmqpExtension extends Extension
             );
 
             // Add the Event dispatcher & Command Event
-            $producerDefinition->addMethodCall(
-                'setEventDispatcher',
-                [
-                    new Reference('event_dispatcher'),
-                    $container->getParameter('m6_web_amqp.event.command.class')
-                ]
-            );
+            if ($eventDispatcher === true) {
+                $producerDefinition->addMethodCall(
+                    'setEventDispatcher',
+                    [
+                        new Reference('event_dispatcher'),
+                        $container->getParameter('m6_web_amqp.event.command.class')
+                    ]
+                );
+            }
 
             // Use a factory to build the producer
             $producerDefinition->setFactoryService('m6_web_amqp.producer_factory')
@@ -117,6 +121,8 @@ class M6WebAmqpExtension extends Extension
      */
     protected function loadConsumers(ContainerBuilder $container, array $config)
     {
+        $eventDispatcher = $config['event_dispatcher'];
+
         foreach ($config['consumers'] as $key => $consumer) {
             $lazy = $config['connections'][$consumer['connection']]['lazy'];
 
@@ -133,13 +139,15 @@ class M6WebAmqpExtension extends Extension
             );
 
             // Add the Event dispatcher & Command Event
-            $consumerDefinition->addMethodCall(
-                'setEventDispatcher',
-                [
-                    new Reference('event_dispatcher'),
-                    $container->getParameter('m6_web_amqp.event.command.class')
-                ]
-            );
+            if ($eventDispatcher === true) {
+                $consumerDefinition->addMethodCall(
+                    'setEventDispatcher',
+                    [
+                        new Reference('event_dispatcher'),
+                        $container->getParameter('m6_web_amqp.event.command.class')
+                    ]
+                );
+            }
 
             // Use a factory to build the consumer
             $consumerDefinition->setFactoryService('m6_web_amqp.consumer_factory')
