@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
+                ->booleanNode('event_dispatcher')->defaultTrue()->end()
             ->end();
 
         $this->addConnections($rootNode);
