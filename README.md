@@ -14,13 +14,13 @@ Publishing messages to AMQP Server from a Symfony2 controller is as easy as:
 
 ```php
 $msg = ["key" => "value"];
-$this->get('m6web_amqp.producer.myproducer')->publishMessage(serialize($msg));
+$this->get('m6_web_amqp.producer.myproducer')->publishMessage(serialize($msg));
 ```
 
 When you want to consume a message out of a queue :
 
 ```php
-$msg = $this->get('m6web_amqp.consumer.myconsumer')->getMessage();
+$msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
 ```
 
 For now, the AmQPBundle do not provide a daemon mode to run AMQP consumers but you can do it with the [M6Web/DaemonBundle](https://github.com/M6Web/DaemonBundle).
@@ -117,7 +117,7 @@ m6_web_amqp:
 
 Here we configure the connection service and the message endpoints that our application will have.
 
-In this example your service container will contain the service `m6web_amqp.producer.myproducer` and `m6web_amqp.consumer.myconsumer`.
+In this example your service container will contain the service `m6_web_amqp.producer.myproducer` and `m6_web_amqp.consumer.myconsumer`.
 
 ### Producer
 
@@ -130,10 +130,10 @@ Let's say that you want to publish a message :
 
 ```php
 $msg = ["key" => "value"];
-$this->get('m6web_amqp.producer.myproducer')->publishMessage(serialize($msg));
+$this->get('m6_web_amqp.producer.myproducer')->publishMessage(serialize($msg));
 ```
 
-For a producer called __myproducer__, you will have in the service container a service called __m6web\_amqp.producer.myproducer__.
+For a producer called __myproducer__, you will have in the service container a service called __m6\_web\_amqp.producer.myproducer__.
 
 If you need to add option default publish attributes for each message, publish_attributes options can be something like this :
 
@@ -148,7 +148,7 @@ A consumer will be used to get a message from the queue.
 Let's say that you want to get a message :
 
 ```php
-$msg = $this->get('m6web_amqp.consumer.myconsumer')->getMessage();
+$msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
 ```
 
 The consumer do not wait for a message : getMessage will return null immediately if no message is available or return a AMQPEnvelope object if a message can be consumed.
@@ -161,7 +161,7 @@ If you choose to not acknowledge the message, the second parameter of nackMessag
 
 It's highly recommended to set all connections to ```lazy: true``` in the configuration file. It'll prevent the bundle from connecting to RabbitMQ on each request.
 
-If you want lazy connections, you have to add ```"ocramius/proxy-manager": "~0.5"``` to your composer.json file, and (as said before) add ```lazy: true``` to your connections.
+If you want lazy connections, you have to add ```"ocramius/proxy-manager": "~1.0"``` to your composer.json file, and (as said before) add ```lazy: true``` to your connections.
 
 ### DataCollector
 
