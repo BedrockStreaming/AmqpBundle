@@ -30,11 +30,12 @@ class Producer extends AbstractAmqp
     }
 
     /**
-     * @param string $message    The message to publish.
-     * @param int    $flags      One or more of AMQP_MANDATORY and AMQP_IMMEDIATE.
-     * @param array  $attributes One of content_type, content_encoding,
-     *                           message_id, user_id, app_id, delivery_mode, priority,
-     *                           timestamp, expiration, type or reply_to.
+     * @param string $message     The message to publish.
+     * @param int    $flags       One or more of AMQP_MANDATORY and AMQP_IMMEDIATE.
+     * @param array  $attributes  One of content_type, content_encoding,
+     *                            message_id, user_id, app_id, delivery_mode, priority,
+     *                            timestamp, expiration, type or reply_to.
+     * @param array  $routingKeys If set, overrides the Producer 'routing_keys' for this message
      *
      * @return boolean          TRUE on success or FALSE on failure.
      *
@@ -42,16 +43,20 @@ class Producer extends AbstractAmqp
      * @throws \AMQPChannelException If the channel is not open.
      * @throws \AMQPConnectionException If the connection to the broker was lost.
      */
-    public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = [])
+    public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = [], array $routingKeys = [])
     {
         // Merge attributes
         $attributes = empty($attributes) ? $this->exchangeOptions['publish_attributes'] :
                       (empty($this->exchangeOptions['publish_attributes']) ? $attributes :
                       array_merge($this->exchangeOptions['publish_attributes'], $attributes));
 
+        if (empty($routingKeys)) {
+            $routingKeys = $this->exchangeOptions['routing_keys'];
+        }
+
         // Publish the message for each routing keys
         $success = true;
-        foreach ($this->exchangeOptions['routing_keys'] as $routingKey) {
+        foreach ($routingKeys as $routingKey) {
             $success &= $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
         }
 

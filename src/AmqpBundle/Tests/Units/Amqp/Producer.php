@@ -125,6 +125,32 @@ class Producer extends atoum
                     ->isTrue();
     }
 
+    public function testSendMessageWithOverridedRoutingKey()
+    {
+        $msgList = [];
+
+        // To verify merged attributs
+        $this
+            ->if($msgList = [])
+            ->and($exchange = $this->getExchange($msgList))
+            ->and($exchangeOptions = [
+                'routing_keys' => ['routing_test', 'routing_test2']
+            ])
+
+            ->and($producer = new Base($exchange, $exchangeOptions))
+            ->boolean($producer->publishMessage('message1'))
+            ->isTrue()
+            ->boolean($producer->publishMessage('message2', AMQP_IMMEDIATE, [], ['routing_override1', 'routing_override2']))
+            ->isTrue()
+            ->array($msgList)
+            ->isEqualTo([
+                ['message1', 'routing_test', AMQP_NOPARAM, []],
+                ['message1', 'routing_test2', AMQP_NOPARAM, []],
+                ['message2', 'routing_override1', AMQP_IMMEDIATE, []],
+                ['message2', 'routing_override2', AMQP_IMMEDIATE, []],
+            ]);
+    }
+
     protected function getExchange(&$msgList = [])
     {
         $this->mockGenerator->orphanize('__construct');
