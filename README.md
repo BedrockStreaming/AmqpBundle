@@ -141,6 +141,14 @@ If you need to add option default publish attributes for each message, publish_a
 publish_attributes: { 'content_type' : 'application/json', 'delivery_mode': 'persistent', 'priority': 8,  'expiration': '3200'}
 ```
 
+If you don't want to use the configuration to define the __routing key__ (for instance, if it should be computed for each message), 
+you can define it during the call to `publishMessage()` :
+
+```php
+$routingKey = $this->computeRoutingKey($message);
+$this->get('m6_web_amqp.producer.myproducer')->publishMessage($message, AMQP_NOPARAM, [], [$routingKey]);
+```
+
 ### Consumer
 
 A consumer will be used to get a message from the queue.
