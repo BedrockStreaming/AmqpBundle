@@ -113,6 +113,9 @@ m6_web_amqp:
                                                               #                          RabbitMQ ex : {'x-ha-policy': 'all', 'x-dead-letter-routing-key': 'async.dead',
                                                               #                                      'x-dead-letter-exchange': 'async_dead', 'x-message-ttl': 20000}
                 routing_keys: ['routingkey', 'routingkey2']   # optional - default { }
+            qos_options:
+                prefetch_size: integer                        # optional - default 0
+                prefetch_count: integer                       # optional - default 0
 ```
 
 Here we configure the connection service and the message endpoints that our application will have.
@@ -164,6 +167,9 @@ The "flags" argument of getMessage accepts MQP_AUTOACK (auto acknowledge by defa
 
 To manually acknowledge a message, use the consumer's ackMessage/nackMessage methods with a delivery_tag argument's value from the AMQPEnvelope object. 
 If you choose to not acknowledge the message, the second parameter of nackMessage accepts AMQP_REQUEUE to requeue the message or AMQP_NOPARAM to forget it. 
+
+Be careful with qos parameters, you should know that it can hurt your performances. Please [read this](http://www.rabbitmq.com/blog/2012/05/11/some-queuing-theory-throughput-latency-and-bandwidth/).
+Also be aware that currently there is no `global` parameter available within PHP `amqp` extension.
 
 ### Lazy connections
 
