@@ -135,6 +135,7 @@ class M6WebAmqpExtension extends Extension
                     $consumer['exchange_options'],
                     $consumer['queue_options'],
                     $lazy,
+                    $consumer['qos_options'],
                 ]
             );
 

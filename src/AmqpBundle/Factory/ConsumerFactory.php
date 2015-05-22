@@ -56,10 +56,11 @@ class ConsumerFactory
      * @param array  $exchangeOptions Exchange Options
      * @param array  $queueOptions    Queue Options
      * @param bool   $lazy            Specifies if it should connect
+     * @param array  $qosOptions      Qos Options
      *
      * @return Consumer
      */
-    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false)
+    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false, array $qosOptions = [])
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
@@ -75,6 +76,13 @@ class ConsumerFactory
 
         // Open a new channel
         $channel = new $this->channelClass($connexion);
+
+        if (isset($qosOptions['prefetch_size'])) {
+            $channel->setPrefetchSize($qosOptions['prefetch_size']);
+        }
+        if (isset($qosOptions['prefetch_count'])) {
+            $channel->setPrefetchCount($qosOptions['prefetch_count']);
+        }
 
         // Create the queue
         $queue = new $this->queueClass($channel);

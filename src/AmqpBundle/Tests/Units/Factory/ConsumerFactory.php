@@ -63,8 +63,12 @@ class ConsumerFactory extends atoum
                 'auto_delete' => false,
                 'routing_keys' => ['key']
             ])
+            ->and($qosOptions = [
+                'prefetch_size'  => 0,
+                'prefetch_count' => 0,
+            ])
             ->and($factory = new Base($channelClass, $queueClass))
-                ->object($factory->get($consumerClass, $connexion, $exchangeOptions, $queueOptions))
+                ->object($factory->get($consumerClass, $connexion, $exchangeOptions, $queueOptions, $qosOptions))
                     ->isInstanceOf($consumerClass);
     }
 
