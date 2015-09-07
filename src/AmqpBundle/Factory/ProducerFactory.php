@@ -101,17 +101,19 @@ class ProducerFactory
         );
         $exchange->declareExchange();
 
-        // create, declare queue, and bind it to exchange
-        /** @var \AMQPQueue $queue */
-        $queue = new $this->queueClass($channel);
-        $queue->setName($queueOptions['name']);
-        $queue->setFlags(
-            ($queueOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
-            ($queueOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
-            ($queueOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM)
-        );
-        $queue->declareQueue();
-        $queue->bind($exchangeOptions['name']);
+        if (isset($queueOptions['name'])) {
+            // create, declare queue, and bind it to exchange
+            /** @var \AMQPQueue $queue */
+            $queue = new $this->queueClass($channel);
+            $queue->setName($queueOptions['name']);
+            $queue->setFlags(
+                ($queueOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
+                ($queueOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
+                ($queueOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM)
+            );
+            $queue->declareQueue();
+            $queue->bind($exchangeOptions['name']);
+        }
 
         // Create the producer
         $producer = new $class($exchange, $exchangeOptions);

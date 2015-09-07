@@ -70,7 +70,7 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode('queue_options')
                                 ->children()
                                     // base info
-                                    ->scalarNode('name')->isRequired()->end()
+                                    ->scalarNode('name')->end()
 
                                     // flags
                                     ->booleanNode('passive')->defaultFalse()->end()
