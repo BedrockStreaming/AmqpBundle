@@ -77,7 +77,7 @@ m6_web_amqp:
         default:
             host:     'localhost'  # optional - default 'localhost'
             port:     5672         # optional - default 5672
-            timeout:  10           # optional - default 10
+            timeout:  10           # optional - default 10 - in seconds
             login:     'guest'     # optional - default 'guest'
             password: 'guest'      # optional - default 'guest'
             vhost:    '/'          # optional - default '/'
