@@ -81,6 +81,7 @@ class M6WebAmqpExtension extends Extension
                     $producer['class'],
                     new Reference(sprintf('m6_web_amqp.connection.%s', $producer['connection'])),
                     $producer['exchange_options'],
+                    $producer['queue_options'],
                     $lazy,
                 ]
             );
