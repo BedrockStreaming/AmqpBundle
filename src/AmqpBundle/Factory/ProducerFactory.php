@@ -18,6 +18,11 @@ class ProducerFactory
     protected $exchangeClass;
 
     /**
+     * @var string
+     */
+    protected $queueClass;
+
+    /**
      * @var amqp channel
      */
     protected $channel;
@@ -27,10 +32,11 @@ class ProducerFactory
      *
      * @param string $channelClass  Channel class name
      * @param string $exchangeClass Exchange class name
+     * @param string $queueClass    Queue class name
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($channelClass, $exchangeClass)
+    public function __construct($channelClass, $exchangeClass, $queueClass)
     {
         if (!class_exists($channelClass) || !is_a($channelClass, 'AMQPChannel', true)) {
             throw new \InvalidArgumentException(
@@ -44,8 +50,15 @@ class ProducerFactory
             );
         }
 
+        if (!class_exists($queueClass) || !is_a($queueClass, 'AMQPQueue', true)) {
+            throw new \InvalidArgumentException(
+                sprintf("queueClass '%s' doesn't exist or not a AMQPQueue", $queueClass)
+            );
+        }
+
         $this->channelClass  = $channelClass;
         $this->exchangeClass = $exchangeClass;
+        $this->queueClass    = $queueClass;
     }
 
     /**
@@ -54,11 +67,12 @@ class ProducerFactory
      * @param string $class           Provider class name
      * @param string $connexion       AMQP connexion
      * @param array  $exchangeOptions Exchange Options
+     * @param array  $queueOptions    Queue Options
      * @param bool   $lazy            Specifies if it should connect
      *
      * @return Producer
      */
-    public function get($class, $connexion, array $exchangeOptions, $lazy = false)
+    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false)
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
@@ -76,6 +90,7 @@ class ProducerFactory
         $channel = new $this->channelClass($connexion);
 
         // Create and declare an exchange
+        /** @var \AMQPExchange $exchange */
         $exchange = new $this->exchangeClass($channel);
         $exchange->setName($exchangeOptions['name']);
         $exchange->setType($exchangeOptions['type']);
@@ -85,6 +100,20 @@ class ProducerFactory
             ($exchangeOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM)
         );
         $exchange->declareExchange();
+
+        if (isset($queueOptions['name'])) {
+            // create, declare queue, and bind it to exchange
+            /** @var \AMQPQueue $queue */
+            $queue = new $this->queueClass($channel);
+            $queue->setName($queueOptions['name']);
+            $queue->setFlags(
+                ($queueOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
+                ($queueOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
+                ($queueOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM)
+            );
+            $queue->declareQueue();
+            $queue->bind($exchangeOptions['name']);
+        }
 
         // Create the producer
         $producer = new $class($exchange, $exchangeOptions);

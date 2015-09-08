@@ -86,6 +86,11 @@ m6_web_amqp:
         myproducer:
             class: "My\\Provider\\Class"                           # optional - to overload the default provider class
             connection: myconnection                               # require
+            queue_options:
+                name: 'my-queue'                                   # optional
+                passive: bool                                      # optional - defaut false
+                durable: bool                                      # optional - defaut true
+                auto_delete: bool                                  # optional - defaut false
             exchange_options:
                 name: 'myexchange'                                 # require
                 type: direct/fanout/headers/topic                  # require
