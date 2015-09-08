@@ -151,6 +151,29 @@ class Producer extends atoum
             ]);
     }
 
+    public function testSendMessagesWithoutRoutingKey()
+    {
+        $msgList = [];
+
+        $this
+            ->if($msgList = [])
+            ->and($exchange = $this->getExchange($msgList))
+            ->and($exchangeOptions = [
+                'publish_attributes' => ['attr_test' => 'value'],
+                'routing_keys' => []
+            ])
+            ->and($producer = new Base($exchange, $exchangeOptions))
+                ->boolean($producer->publishMessage('message1'))
+                    ->isTrue()
+                ->boolean($producer->publishMessage('message2'))
+                    ->isTrue()
+                ->array($msgList)
+                    ->isEqualTo([
+                        ['message1', null, AMQP_NOPARAM, $exchangeOptions['publish_attributes']],
+                        ['message2', null, AMQP_NOPARAM, $exchangeOptions['publish_attributes']],
+            ]);
+    }
+
     protected function getExchange(&$msgList = [])
     {
         $this->mockGenerator->orphanize('__construct');

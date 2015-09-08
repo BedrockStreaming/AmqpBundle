@@ -50,8 +50,9 @@ class Producer extends AbstractAmqp
                       (empty($this->exchangeOptions['publish_attributes']) ? $attributes :
                       array_merge($this->exchangeOptions['publish_attributes'], $attributes));
 
-        if (empty($routingKeys)) {
-            $routingKeys = $this->exchangeOptions['routing_keys'];
+        $routingKeys = !empty($routingKeys) ? $routingKeys : $this->exchangeOptions['routing_keys'];
+        if (!$routingKeys) {
+            return $this->call($this->exchange, 'publish', [$message, null, $flags, $attributes]);
         }
 
         // Publish the message for each routing keys
