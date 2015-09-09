@@ -68,6 +68,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.producer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()
                             ->arrayNode('queue_options')
+                                ->addDefaultsIfNotSet()
                                 ->children()
                                     // base info
                                     ->scalarNode('name')->end()
