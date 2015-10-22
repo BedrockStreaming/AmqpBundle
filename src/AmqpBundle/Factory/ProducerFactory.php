@@ -94,6 +94,7 @@ class ProducerFactory
         $exchange = new $this->exchangeClass($channel);
         $exchange->setName($exchangeOptions['name']);
         $exchange->setType($exchangeOptions['type']);
+        $exchange->setArguments($exchangeOptions['arguments']);
         $exchange->setFlags(
             ($exchangeOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
             ($exchangeOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
