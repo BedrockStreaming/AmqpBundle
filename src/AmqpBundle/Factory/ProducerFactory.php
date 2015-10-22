@@ -106,6 +106,7 @@ class ProducerFactory
             /** @var \AMQPQueue $queue */
             $queue = new $this->queueClass($channel);
             $queue->setName($queueOptions['name']);
+            $queue->setArguments($queueOptions['arguments']);
             $queue->setFlags(
                 ($queueOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
                 ($queueOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
@@ -113,6 +114,11 @@ class ProducerFactory
             );
             $queue->declareQueue();
             $queue->bind($exchangeOptions['name']);
+
+            // Bind the queue to some routing keys
+            foreach ($queueOptions['routing_keys'] as $routingKey) {
+                $queue->bind($exchangeOptions['name'], $routingKey);
+            }
         }
 
         // Create the producer

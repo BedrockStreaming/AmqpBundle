@@ -82,6 +82,8 @@ class ProducerFactory extends atoum
                 'passive' => false,
                 'durable' => true,
                 'auto_delete' => false,
+                'arguments'   => [],
+                'routing_keys' => []
             ])
             ->and($factory = new Base($channelClass, $exchangeClass, $queueClass))
                 ->object($factory->get($producerClass, $connexion, $exchangeOptions, $queueOptions))

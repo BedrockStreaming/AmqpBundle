@@ -77,6 +77,19 @@ class Configuration implements ConfigurationInterface
                                     ->booleanNode('passive')->defaultFalse()->end()
                                     ->booleanNode('durable')->defaultTrue()->end()
                                     ->booleanNode('auto_delete')->defaultFalse()->end()
+
+                                    // args
+                                    ->arrayNode('arguments')
+                                    ->prototype('scalar')->end()
+                                    ->defaultValue(array())
+                                    ->normalizeKeys(false)
+                                    ->end()
+
+                                    // binding
+                                    ->arrayNode('routing_keys')
+                                    ->prototype('scalar')->end()
+                                    ->defaultValue(array())
+                                    ->end()
                                 ->end()
                             ->end()
                             ->arrayNode('exchange_options')
@@ -148,6 +161,7 @@ class Configuration implements ConfigurationInterface
                                     ->arrayNode('arguments')
                                         ->prototype('scalar')->end()
                                         ->defaultValue(array())
+                                        ->normalizeKeys(false)
                                     ->end()
 
                                     // binding
