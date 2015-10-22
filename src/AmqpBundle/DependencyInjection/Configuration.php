@@ -94,6 +94,7 @@ class Configuration implements ConfigurationInterface
                                     ->arrayNode('arguments')
                                         ->prototype('scalar')->end()
                                         ->defaultValue(array())
+                                        ->normalizeKeys(false)
                                     ->end()
 
                                     // binding

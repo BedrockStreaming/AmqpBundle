@@ -75,7 +75,8 @@ class ProducerFactory extends atoum
                 'passive' => false,
                 'durable' => true,
                 'auto_delete' => false,
-                'routing_keys' => ['key']
+                'routing_keys' => ['key'],
+                'arguments' => ['alternate-exchange' => 'my-ae'],
             ])
             ->and($queueOptions = [
                 'name' => 'myqueue',
