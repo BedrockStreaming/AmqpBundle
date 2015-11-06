@@ -26,6 +26,7 @@ m6_web_amqp:
                 arguments:
                     x-message-ttl: 1000
     consumers:
+        #Assume that exchange is already defined
         consumer_1:
             connection: default
             exchange_options:
@@ -35,3 +36,12 @@ m6_web_amqp:
                 routing_keys: ['super_routing_key']
                 arguments:
                     x-dead-letter-exchange: 'exchange_2'
+        #Test how exchange is defined
+        consumer_2:
+            connection: default
+            exchange_options:
+                name: 'exchange_2'
+                type: direct
+                routing_keys: ['super_routing_key']
+            queue_options:
+                name: 'ha.queue_exchange_2'

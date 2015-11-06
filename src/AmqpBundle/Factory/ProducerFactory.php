@@ -2,10 +2,12 @@
 
 namespace M6Web\Bundle\AmqpBundle\Factory;
 
+use M6Web\Bundle\AmqpBundle\Amqp\Producer;
+
 /**
  * ProducerFactory
  */
-class ProducerFactory
+class ProducerFactory extends AMQPFactory
 {
     /**
      * @var string
@@ -21,11 +23,6 @@ class ProducerFactory
      * @var string
      */
     protected $queueClass;
-
-    /**
-     * @var amqp channel
-     */
-    protected $channel;
 
     /**
      * __construct
@@ -64,11 +61,11 @@ class ProducerFactory
     /**
      * build the producer class
      *
-     * @param string $class           Provider class name
-     * @param string $connexion       AMQP connexion
-     * @param array  $exchangeOptions Exchange Options
-     * @param array  $queueOptions    Queue Options
-     * @param bool   $lazy            Specifies if it should connect
+     * @param string          $class           Provider class name
+     * @param \AMQPConnection $connexion       AMQP connexion
+     * @param array           $exchangeOptions Exchange Options
+     * @param array           $queueOptions    Queue Options
+     * @param bool            $lazy            Specifies if it should connect
      *
      * @return Producer
      */
@@ -87,20 +84,8 @@ class ProducerFactory
         }
 
         // Open a new channel
-        $channel = new $this->channelClass($connexion);
-
-        // Create and declare an exchange
-        /** @var \AMQPExchange $exchange */
-        $exchange = new $this->exchangeClass($channel);
-        $exchange->setName($exchangeOptions['name']);
-        $exchange->setType($exchangeOptions['type']);
-        $exchange->setArguments($exchangeOptions['arguments']);
-        $exchange->setFlags(
-            ($exchangeOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
-            ($exchangeOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
-            ($exchangeOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM)
-        );
-        $exchange->declareExchange();
+        $channel  = new $this->channelClass($connexion);
+        $exchange = $this->createExchange($this->exchangeClass, $channel, $exchangeOptions);
 
         if (isset($queueOptions['name'])) {
             // create, declare queue, and bind it to exchange

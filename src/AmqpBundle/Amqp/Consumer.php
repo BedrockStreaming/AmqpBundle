@@ -18,8 +18,6 @@ class Consumer extends AbstractAmqp
     protected $queueOptions = [];
 
     /**
-     * __construct
-     *
      * @param \AMQPQueue $queue        Amqp Queue
      * @param array      $queueOptions Queue options
      */
@@ -47,7 +45,7 @@ class Consumer extends AbstractAmqp
     /**
      * Acknowledge the receipt of a message.
      *
-     * @param string  $deliveryTag Delivery tag of last message to reject.
+     * @param string  $deliveryTag Delivery tag of last message to ack.
      * @param integer $flags       AMQP_MULTIPLE or AMQP_NOPARAM
      *
      * @return boolean
@@ -63,7 +61,7 @@ class Consumer extends AbstractAmqp
     /**
      * Mark a message as explicitly not acknowledged.
      *
-     * @param string  $deliveryTag Delivery tag of last message to reject.
+     * @param string  $deliveryTag Delivery tag of last message to nack.
      * @param integer $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s).
      *
      * @throws \AMQPChannelException If the channel is not open.

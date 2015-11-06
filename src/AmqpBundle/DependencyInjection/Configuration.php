@@ -2,6 +2,8 @@
 
 namespace M6Web\Bundle\AmqpBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -67,36 +69,12 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.producer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()
+                            ->append($this->exchangeOptions())
                             ->arrayNode('queue_options')
                                 ->addDefaultsIfNotSet()
                                 ->children()
                                     // base info
                                     ->scalarNode('name')->end()
-
-                                    // flags
-                                    ->booleanNode('passive')->defaultFalse()->end()
-                                    ->booleanNode('durable')->defaultTrue()->end()
-                                    ->booleanNode('auto_delete')->defaultFalse()->end()
-
-                                    // args
-                                    ->arrayNode('arguments')
-                                    ->prototype('scalar')->end()
-                                    ->defaultValue(array())
-                                    ->normalizeKeys(false)
-                                    ->end()
-
-                                    // binding
-                                    ->arrayNode('routing_keys')
-                                    ->prototype('scalar')->end()
-                                    ->defaultValue(array())
-                                    ->end()
-                                ->end()
-                            ->end()
-                            ->arrayNode('exchange_options')
-                                ->children()
-                                    // base info
-                                    ->scalarNode('name')->isRequired()->end()
-                                    ->scalarNode('type')->isRequired()->end()
 
                                     // flags
                                     ->booleanNode('passive')->defaultFalse()->end()
@@ -112,12 +90,6 @@ class Configuration implements ConfigurationInterface
 
                                     // binding
                                     ->arrayNode('routing_keys')
-                                        ->prototype('scalar')->end()
-                                        ->defaultValue(array())
-                                    ->end()
-
-                                    // default message attributes
-                                    ->arrayNode('publish_attributes')
                                         ->prototype('scalar')->end()
                                         ->defaultValue(array())
                                     ->end()
@@ -140,13 +112,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.consumer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()
-
-                            ->arrayNode('exchange_options')
-                                ->children()
-                                    ->scalarNode('name')->isRequired()->end()
-                                ->end()
-                            ->end()
-
+                            ->append($this->exchangeOptions())
                             ->arrayNode('queue_options')
                                 ->children()
                                     // base
@@ -184,5 +150,44 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end();
+    }
+
+    private function exchangeOptions()
+    {
+        $builder = new NodeBuilder();
+        return $builder
+            ->arrayNode('exchange_options')
+                ->children()
+                    // base info
+                    ->scalarNode('name')->isRequired()->end()
+                    ->scalarNode('type')
+                        ->info('Set the type of the exchange. If exchange already exist - you can skip it. Otherwise behavior is unpredictable')
+                    ->end()
+
+                    // flags
+                    ->booleanNode('passive')->defaultFalse()->end()
+                    ->booleanNode('durable')->defaultTrue()->end()
+                    ->booleanNode('auto_delete')->defaultFalse()->end()
+
+                    // args
+                    ->arrayNode('arguments')
+                        ->prototype('scalar')->end()
+                        ->defaultValue(array())
+                        ->normalizeKeys(false)
+                    ->end()
+
+                    // binding
+                    ->arrayNode('routing_keys')
+                        ->prototype('scalar')->end()
+                        ->defaultValue(array())
+                    ->end()
+
+                    // default message attributes
+                    ->arrayNode('publish_attributes')
+                        ->prototype('scalar')->end()
+                        ->defaultValue(array())
+                    ->end()
+                ->end();
+            //last end is missed here intentionally because arrayNode doesn't have an actual parent
     }
 }
