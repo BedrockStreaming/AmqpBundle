@@ -2,10 +2,13 @@
 
 namespace M6Web\Bundle\AmqpBundle\Factory;
 
+use M6Web\Bundle\AmqpBundle\Amqp\CallbackInterface;
+use M6Web\Bundle\AmqpBundle\Amqp\Consumer;
+
 /**
  * ConsumerFactory
  */
-class ConsumerFactory
+class ConsumerFactory extends AMQPFactory
 {
     /**
      * @var string
@@ -18,19 +21,18 @@ class ConsumerFactory
     protected $queueClass;
 
     /**
-     * @var amqp channel
+     * @var string
      */
-    protected $channel;
+    protected $exchangeClass;
 
     /**
      * __construct
      *
-     * @param string $channelClass Channel class name
-     * @param string $queueClass   Queue class name
-     *
-     * @throws \InvalidArgumentException
+     * @param string $channelClass  Channel class name
+     * @param string $queueClass    Queue class name
+     * @param string $exchangeClass Exchange class name
      */
-    public function __construct($channelClass, $queueClass)
+    public function __construct($channelClass, $queueClass, $exchangeClass)
     {
         if (!class_exists($channelClass) || !is_a($channelClass, "AMQPChannel", true)) {
             throw new \InvalidArgumentException(
@@ -44,6 +46,12 @@ class ConsumerFactory
             );
         }
 
+        if (!class_exists($exchangeClass) || !is_a($exchangeClass, "AMQPQueue", true)) {
+            throw new \InvalidArgumentException(
+                sprintf("exchangeClass '%s' doesn't exist or not a AMQPQueue", $exchangeClass)
+            );
+        }
+
         $this->channelClass  = $channelClass;
         $this->queueClass = $queueClass;
     }
@@ -51,16 +59,17 @@ class ConsumerFactory
     /**
      * build the consumer class
      *
-     * @param string $class           Consumer class name
-     * @param string $connexion       AMQP connexion
-     * @param array  $exchangeOptions Exchange Options
-     * @param array  $queueOptions    Queue Options
-     * @param bool   $lazy            Specifies if it should connect
-     * @param array  $qosOptions      Qos Options
+     * @param string                 $class           Consumer class name
+     * @param \AMQPConnection        $connexion       AMQP connexion
+     * @param array                  $exchangeOptions Exchange Options
+     * @param array                  $queueOptions    Queue Options
+     * @param bool                   $lazy            Specifies if it should connect
+     * @param array                  $qosOptions      Qos Options
+     * @param CallbackInterface|null $callback        callback for Consumer::consume() method
      *
      * @return Consumer
      */
-    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false, array $qosOptions = [])
+    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false, array $qosOptions = [], CallbackInterface $callback = null)
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
@@ -74,7 +83,7 @@ class ConsumerFactory
             }
         }
 
-        // Open a new channel
+        /** @var \AMQPChannel $channel */
         $channel = new $this->channelClass($connexion);
 
         if (isset($qosOptions['prefetch_size'])) {
@@ -84,7 +93,10 @@ class ConsumerFactory
             $channel->setPrefetchCount($qosOptions['prefetch_count']);
         }
 
-        // Create the queue
+        //ensure that exchange exists
+        $this->createExchange($this->exchangeClass, $channel, $exchangeOptions);
+
+        /** @var \AMQPQueue $queue */
         $queue = new $this->queueClass($channel);
         $queue->setName($queueOptions['name']);
         $queue->setArguments($queueOptions['arguments']);
@@ -103,9 +115,6 @@ class ConsumerFactory
             $queue->bind($exchangeOptions['name'], $routingKey);
         }
 
-        // Create the consumer
-        $consumer = new $class($queue, $queueOptions);
-
-        return $consumer;
+        return new $class($queue, $queueOptions, $callback);
     }
 }

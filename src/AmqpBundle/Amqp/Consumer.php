@@ -18,12 +18,16 @@ class Consumer extends AbstractAmqp
     protected $queueOptions = [];
 
     /**
-     * __construct
-     *
-     * @param \AMQPQueue $queue        Amqp Queue
-     * @param array      $queueOptions Queue options
+     * @var CallbackInterface|null
      */
-    public function __construct(\AMQPQueue $queue, Array $queueOptions)
+    protected $callback;
+
+    /**
+     * @param \AMQPQueue             $queue        Amqp Queue
+     * @param array                  $queueOptions Queue options
+     * @param CallbackInterface|null $callback     callback to be called in consume method
+     */
+    public function __construct(\AMQPQueue $queue, Array $queueOptions, CallbackInterface $callback = null)
     {
         $this->queue        = $queue;
         $this->queueOptions = $queueOptions;
@@ -45,9 +49,33 @@ class Consumer extends AbstractAmqp
     }
 
     /**
+     * Consume the message. Thread will be blocked until message is received
+     *
+     * @param int          $flags       A bitmask of any of the flags: AMQP_AUTOACK.
+     * @param string| null $consumerTag A string describing this consumer. Used for canceling subscriptions with cancel().
+     *
+     * @throws \RuntimeException if callback is not defined in consumer
+     */
+    public function consume($flags = AMQP_NOPARAM, $consumerTag = null)
+    {
+        if (!$this->callback) {
+            throw new \RuntimeException("Callback is not defined");
+        }
+        $result = null;
+        $callback = function (\AMQPEnvelope $message) use (&$result) {
+            if ($this->callback->consume($message)) {
+                $this->ackMessage($message->getDeliveryTag());
+            } else {
+                $this->nackMessage($message->getDeliveryTag());
+            }
+        };
+        $this->call($this->queue, 'consume', [$callback, $flags, $consumerTag]);
+    }
+
+    /**
      * Acknowledge the receipt of a message.
      *
-     * @param string  $deliveryTag Delivery tag of last message to reject.
+     * @param string  $deliveryTag Delivery tag of last message to ack.
      * @param integer $flags       AMQP_MULTIPLE or AMQP_NOPARAM
      *
      * @return boolean
@@ -63,7 +91,7 @@ class Consumer extends AbstractAmqp
     /**
      * Mark a message as explicitly not acknowledged.
      *
-     * @param string  $deliveryTag Delivery tag of last message to reject.
+     * @param string  $deliveryTag Delivery tag of last message to nack.
      * @param integer $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s).
      *
      * @throws \AMQPChannelException If the channel is not open.
