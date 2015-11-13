@@ -140,6 +140,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.consumer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()
+                            ->scalarNode('callback')->info('service id that implements CallbackInterface and to be called when consume() message called w/o parameters')->end()
 
                             ->arrayNode('exchange_options')
                                 ->children()

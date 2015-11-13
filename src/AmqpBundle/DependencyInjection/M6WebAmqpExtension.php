@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -128,17 +127,23 @@ class M6WebAmqpExtension extends Extension
             $lazy = $config['connections'][$consumer['connection']]['lazy'];
 
             // Create the consumer with the factory
-            $consumerDefinition = new Definition(
+            $arguments = [
                 $consumer['class'],
-                [
-                    $consumer['class'],
-                    new Reference(sprintf('m6_web_amqp.connection.%s', $consumer['connection'])),
-                    $consumer['exchange_options'],
-                    $consumer['queue_options'],
-                    $lazy,
-                    $consumer['qos_options'],
-                ]
-            );
+                new Reference(sprintf('m6_web_amqp.connection.%s', $consumer['connection'])),
+                $consumer['exchange_options'],
+                $consumer['queue_options'],
+                $lazy,
+                $consumer['qos_options'],
+            ];
+
+            if ($consumer['callback']) {
+                //just to validate that callback service exists
+                $container->findDefinition($consumer['callback']);
+
+                $arguments[] = new Reference($consumer['callback']);
+            }
+
+            $consumerDefinition = new Definition($consumer['class'], $arguments);
 
             // Add the Event dispatcher & Command Event
             if ($eventDispatcher === true) {
