@@ -23,7 +23,7 @@ When you want to consume a message out of a queue :
 $msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
 ```
 
-For now, the AmQPBundle do not provide a daemon mode to run AMQP consumers but you can do it with the [M6Web/DaemonBundle](https://github.com/M6Web/DaemonBundle).
+The AmQPBundle does not provide a daemon mode to run AMQP consumers and will not. You can do it with the [M6Web/DaemonBundle](https://github.com/M6Web/DaemonBundle).
 
 ## Installation ##
 
