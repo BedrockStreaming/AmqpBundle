@@ -59,12 +59,12 @@ class ConsumerFactory extends AMQPFactory
     /**
      * build the consumer class
      *
-     * @param string                 $class           Consumer class name
-     * @param \AMQPConnection        $connexion       AMQP connexion
-     * @param array                  $exchangeOptions Exchange Options
-     * @param array                  $queueOptions    Queue Options
-     * @param bool                   $lazy            Specifies if it should connect
-     * @param array                  $qosOptions      Qos Options
+     * @param string          $class           Consumer class name
+     * @param \AMQPConnection $connexion       AMQP connexion
+     * @param array           $exchangeOptions Exchange Options
+     * @param array           $queueOptions    Queue Options
+     * @param bool            $lazy            Specifies if it should connect
+     * @param array           $qosOptions      Qos Options
      *
      * @return Consumer
      */
