@@ -16,15 +16,17 @@ class ConsumerFactory extends atoum
         $this
             ->if($channelClass = '\AMQPChannel')
             ->and($queueClass = '\AMQPQueue')
-                ->object($factory = new Base($channelClass, $queueClass))
+            ->and($exchangeClass = '\AMQPExchange')
+                ->object($factory = new Base($channelClass, $queueClass, $exchangeClass))
                     ->isInstanceOf('M6Web\Bundle\AmqpBundle\Factory\ConsumerFactory');
 
         $this
             ->if($channelClass = '\DateTime')
             ->and($queueClass = '\AMQPQueue')
+            ->and($exchangeClass = '\AMQPExchange')
                 ->exception(
-                     function() use($channelClass, $queueClass) {
-                         $factory = new Base($channelClass, $queueClass);
+                     function() use($channelClass, $queueClass, $exchangeClass) {
+                         $factory = new Base($channelClass, $queueClass, $exchangeClass);
                      }
                  )
                      ->isInstanceOf('InvalidArgumentException')
@@ -33,13 +35,26 @@ class ConsumerFactory extends atoum
         $this
             ->if($channelClass = '\AMQPChannel')
             ->and($queueClass = '\DateTime')
+            ->and($exchangeClass = '\AMQPExchange')
                 ->exception(
-                     function() use($channelClass, $queueClass) {
-                         $factory = new Base($channelClass, $queueClass);
+                     function() use($channelClass, $queueClass, $exchangeClass) {
+                         $factory = new Base($channelClass, $queueClass, $exchangeClass);
                      }
                  )
                      ->isInstanceOf('InvalidArgumentException')
                      ->hasMessage("exchangeClass '\DateTime' doesn't exist or not a AMQPQueue");
+
+        $this
+            ->if($channelClass = '\AMQPChannel')
+            ->and($queueClass = '\AMQPQueue')
+            ->and($exchangeClass = '\DateTime')
+            ->exception(
+                function() use($channelClass, $queueClass, $exchangeClass) {
+                    $factory = new Base($channelClass, $queueClass, $exchangeClass);
+                }
+            )
+            ->isInstanceOf('InvalidArgumentException')
+            ->hasMessage("exchangeClass '\DateTime' doesn't exist or not a AMQPExchange");
     }
 
     public function testFactory()
@@ -52,8 +67,17 @@ class ConsumerFactory extends atoum
         $this
             ->if($channelClass = '\mock\M6Web\Bundle\AmqpBundle\Tests\Units\Factory\Mock\MockAMQPChannel')
             ->and($queueClass = '\mock\M6Web\Bundle\AmqpBundle\Tests\Units\Factory\Mock\MockAMQPQueue')
+            ->and($exchangeClass = '\mock\M6Web\Bundle\AmqpBundle\Tests\Units\Factory\Mock\MockAMQPExchange')
             ->and($consumerClass = '\mock\M6Web\Bundle\AmqpBundle\Amqp\Consumer')
-            ->and($exchangeOptions = ['name' => 'myexchange'])
+            ->and($exchangeOptions = [
+                'name' => 'myexchange',
+                'type' => 'type',
+                'passive' => false,
+                'durable' => true,
+                'auto_delete' => false,
+                'routing_keys' => ['key'],
+                'arguments' => ['alternate-exchange' => 'my-ae'],
+            ])
             ->and($queueOptions = [
                 'name' => 'myqueue',
                 'arguments' => [],
@@ -67,7 +91,7 @@ class ConsumerFactory extends atoum
                 'prefetch_size'  => 0,
                 'prefetch_count' => 0,
             ])
-            ->and($factory = new Base($channelClass, $queueClass))
+            ->and($factory = new Base($channelClass, $queueClass, $exchangeClass))
                 ->object($factory->get($consumerClass, $connexion, $exchangeOptions, $queueOptions, $qosOptions))
                     ->isInstanceOf($consumerClass);
     }
