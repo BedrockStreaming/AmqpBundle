@@ -26,3 +26,4 @@ services:
         arguments:
             - %m6_web_amqp.channel.class%
             - %m6_web_amqp.queue.class%
+            - %m6_web_amqp.exchange.class%
