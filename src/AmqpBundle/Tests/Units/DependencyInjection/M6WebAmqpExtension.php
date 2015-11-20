@@ -81,6 +81,15 @@ class M6WebAmqpExtension extends test
                 ->hasSize(1)
                 ->contains('super_routing_key')
         ;
+
+        //test connection options
+        $this
+            ->boolean($container->has('m6_web_amqp.connection.with_heartbeat'))
+                ->isTrue()
+            ->array($connectionArguments = $container->getDefinition('m6_web_amqp.connection.with_heartbeat')->getArguments())
+                ->hasSize(1)
+            ->integer($connectionArguments[0]['heartbeat'])
+                ->isEqualTo(1);
     }
 
 }

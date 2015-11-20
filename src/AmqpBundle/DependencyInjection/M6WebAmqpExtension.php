@@ -43,21 +43,23 @@ class M6WebAmqpExtension extends Extension
     protected function loadConnections(ContainerBuilder $container, array $config)
     {
         foreach ($config['connections'] as $key => $connection) {
-            $connexionDefinition = new Definition($connection['class']);
-            $connexionDefinition->addMethodCall('setHost ', [$connection['host']])
+            $connectionDefinition = new Definition($connection['class']);
+            $connectionDefinition->addMethodCall('setHost ', [$connection['host']])
                                 ->addMethodCall('setPort', [$connection['port']])
                                 ->addMethodCall('setReadTimeout', [$connection['timeout']])
                                 ->addMethodCall('setLogin', [$connection['login']])
                                 ->addMethodCall('setPassword', [$connection['password']])
                                 ->addMethodCall('setVhost', [$connection['vhost']]);
 
+            $connectionDefinition->setArguments([['heartbeat' => $connection['heartbeat']]]);
+
             if (!$connection['lazy']) {
-                $connexionDefinition->addMethodCall('connect');
+                $connectionDefinition->addMethodCall('connect');
             }
 
             $container->setDefinition(
                 sprintf('m6_web_amqp.connection.%s', $key),
-                $connexionDefinition
+                $connectionDefinition
             );
         }
     }
