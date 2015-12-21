@@ -15,4 +15,8 @@ class MockAMQPQueue extends \AMQPQueue
     public function bind($exchange_name, $routing_key = null, $arguments = array())
     {
     }
+
+    public function declareQueue()
+    {
+    }
 }
