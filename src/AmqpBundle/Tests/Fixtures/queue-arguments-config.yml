@@ -1,4 +1,5 @@
 m6_web_amqp:
+    prototype: true
     connections:
         default:
             host:     'localhost'
