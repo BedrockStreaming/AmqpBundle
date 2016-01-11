@@ -53,6 +53,10 @@ class M6WebAmqpExtension extends Extension
 
             $connectionDefinition->setArguments([['heartbeat' => $connection['heartbeat']]]);
 
+            if ($config['prototype']) {
+                $connectionDefinition->setScope('prototype');
+            }
+
             if (!$connection['lazy']) {
                 $connectionDefinition->addMethodCall('connect');
             }
@@ -101,6 +105,10 @@ class M6WebAmqpExtension extends Extension
             // Use a factory to build the producer
             $producerDefinition->setFactoryService('m6_web_amqp.producer_factory')
                                ->setFactoryMethod('get');
+
+            if ($config['prototype']) {
+                $producerDefinition->setScope('prototype');
+            }
 
             if ($lazy) {
                 if (!method_exists($producerDefinition, 'setLazy')) {
@@ -155,6 +163,10 @@ class M6WebAmqpExtension extends Extension
             // Use a factory to build the consumer
             $consumerDefinition->setFactoryService('m6_web_amqp.consumer_factory')
                                ->setFactoryMethod('get');
+
+            if ($config['prototype']) {
+                $consumerDefinition->setScope('prototype');
+            }
 
             if ($lazy) {
                 if (!method_exists($consumerDefinition, 'setLazy')) {

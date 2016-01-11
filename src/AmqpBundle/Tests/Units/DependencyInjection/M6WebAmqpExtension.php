@@ -41,6 +41,8 @@ class M6WebAmqpExtension extends test
         $this
             ->boolean($container->has('m6_web_amqp.producer.producer_2'))
                 ->isTrue()
+            ->string($container->getDefinition('m6_web_amqp.producer.producer_2')->getScope())
+                ->isEqualTo('prototype')
             ->array($queueOptions = $container->getDefinition('m6_web_amqp.producer.producer_2')->getArgument(3))
                 ->hasSize(6)
             ->string($queueOptions['name'])
@@ -63,6 +65,8 @@ class M6WebAmqpExtension extends test
         $this
             ->boolean($container->has('m6_web_amqp.consumer.consumer_1'))
                 ->isTrue()
+            ->string($container->getDefinition('m6_web_amqp.consumer.consumer_1')->getScope())
+                ->isEqualTo('prototype')
             ->array($queueOptions = $container->getDefinition('m6_web_amqp.consumer.consumer_1')->getArgument(3))
                 ->hasSize(7)
             ->string($queueOptions['name'])
