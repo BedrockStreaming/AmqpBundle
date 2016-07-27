@@ -168,7 +168,7 @@ $msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
 ```
 
 The consumer do not wait for a message : getMessage will return null immediately if no message is available or return a AMQPEnvelope object if a message can be consumed.
-The "flags" argument of getMessage accepts MQP_AUTOACK (auto acknowledge by default) or AMQP_NOPARAM (manual acknowledge).
+The "flags" argument of getMessage accepts AMQP_AUTOACK (auto acknowledge by default) or AMQP_NOPARAM (manual acknowledge).
 
 To manually acknowledge a message, use the consumer's ackMessage/nackMessage methods with a delivery_tag argument's value from the AMQPEnvelope object. 
 If you choose to not acknowledge the message, the second parameter of nackMessage accepts AMQP_REQUEUE to requeue the message or AMQP_NOPARAM to forget it. 
