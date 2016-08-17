@@ -1,17 +1,27 @@
 language: php
 
-
 php:
   - 5.5
   - 5.6
   - 7.0
 
-before_script:
+sudo: false
+
+matrix:
+  include:
+    - php: 5.5
+      env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 7.0
+      env: COMPOSER_FLAGS="--prefer-stable" SYMFONY_VERSION=2.7.*
+  fast_finish: true
+
+before_install:
   - phpenv config-rm xdebug.ini
   #- bash travis/$TRAVIS_PHP_VERSION.sh
   - bash travis/install_amqp.sh
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar install
+  - composer self-update
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require symfony/symfony:${SYMFONY_VERSION} --no-update; fi
 
-script:
-  - bin/atoum
+install: composer update --prefer-dist $COMPOSER_FLAGS
+
+script: bin/atoum
