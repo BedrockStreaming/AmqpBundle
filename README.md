@@ -198,7 +198,7 @@ DataCollector is enabled by default if kernel.debug is set. Typically in the dev
 If you have a multi-containers apps, we provide a Dockerfile for a container with rabbitmq-server.
 This container is for testing only.
 
-Example of fig.yml :
+Example of docker-compose.yml :
 
 ```
 web:
