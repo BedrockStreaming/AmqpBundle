@@ -11,7 +11,7 @@ RUN echo "deb http://www.rabbitmq.com/debian/ testing main" >> /etc/apt/sources.
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y --force-yes install \
     git \
     rabbitmq-server \
     vim
