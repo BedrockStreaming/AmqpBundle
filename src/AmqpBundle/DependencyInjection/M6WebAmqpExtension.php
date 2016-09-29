@@ -54,7 +54,7 @@ class M6WebAmqpExtension extends Extension
             $connectionDefinition->setArguments([['heartbeat' => $connection['heartbeat']]]);
 
             if ($config['prototype']) {
-                $connectionDefinition->setScope('prototype');
+                $connectionDefinition->setShared(false);
             }
 
             if (!$connection['lazy']) {
@@ -103,11 +103,13 @@ class M6WebAmqpExtension extends Extension
             }
 
             // Use a factory to build the producer
-            $producerDefinition->setFactoryService('m6_web_amqp.producer_factory')
-                               ->setFactoryMethod('get');
+            $producerDefinition->setFactory([
+                new Reference('m6_web_amqp.producer_factory'),
+                'get'
+            ]);
 
             if ($config['prototype']) {
-                $producerDefinition->setScope('prototype');
+                $producerDefinition->setShared(false);
             }
 
             if ($lazy) {
@@ -161,11 +163,13 @@ class M6WebAmqpExtension extends Extension
             }
 
             // Use a factory to build the consumer
-            $consumerDefinition->setFactoryService('m6_web_amqp.consumer_factory')
-                               ->setFactoryMethod('get');
+            $consumerDefinition->setFactory([
+                new Reference('m6_web_amqp.consumer_factory'),
+                'get'
+            ]);
 
             if ($config['prototype']) {
-                $consumerDefinition->setScope('prototype');
+                $consumerDefinition->setShared(false);
             }
 
             if ($lazy) {
