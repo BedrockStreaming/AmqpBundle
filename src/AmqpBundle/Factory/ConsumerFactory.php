@@ -109,9 +109,12 @@ class ConsumerFactory extends AMQPFactory
         // Declare the queue
         $queue->declareQueue();
 
-        // Bind the queue to some routing keys
-        foreach ($queueOptions['routing_keys'] as $routingKey) {
-            $queue->bind($exchangeOptions['name'], $routingKey);
+        if (count($queueOptions['routing_keys'])) {
+            foreach ($queueOptions['routing_keys'] as $routingKey) {
+                $queue->bind($exchangeOptions['name'], $routingKey);
+            }
+        } else {
+            $queue->bind($exchangeOptions['name']);
         }
 
         return new $class($queue, $queueOptions);
