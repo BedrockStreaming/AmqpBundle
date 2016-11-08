@@ -70,6 +70,8 @@ abstract class AbstractAmqp
      * @param Object $eventDispatcher The eventDispatcher object, which implement the notify method
      * @param string $eventClass      The event class used to create an event and send it to the event dispatcher
      *
+     * @throws \Exception
+     *
      * @return void
      */
     public function setEventDispatcher($eventDispatcher, $eventClass)

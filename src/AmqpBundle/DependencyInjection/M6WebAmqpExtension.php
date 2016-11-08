@@ -2,6 +2,7 @@
 
 namespace M6Web\Bundle\AmqpBundle\DependencyInjection;
 
+use M6Web\Bundle\AmqpBundle\Event\NullEventDispatcher;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -74,8 +75,6 @@ class M6WebAmqpExtension extends Extension
      */
     protected function loadProducers(ContainerBuilder $container, array $config)
     {
-        $eventDispatcher = $config['event_dispatcher'];
-
         foreach ($config['producers'] as $key => $producer) {
             $lazy = $config['connections'][$producer['connection']]['lazy'];
 
@@ -91,16 +90,7 @@ class M6WebAmqpExtension extends Extension
                 ]
             );
 
-            // Add the Event dispatcher & Command Event
-            if ($eventDispatcher === true) {
-                $producerDefinition->addMethodCall(
-                    'setEventDispatcher',
-                    [
-                        new Reference('event_dispatcher'),
-                        $container->getParameter('m6_web_amqp.event.command.class')
-                    ]
-                );
-            }
+            $this->setEventDispatcher($container, $config['event_dispatcher'], $producerDefinition);
 
             // Use a factory to build the producer
             $producerDefinition->setFactory([
@@ -133,7 +123,6 @@ class M6WebAmqpExtension extends Extension
      */
     protected function loadConsumers(ContainerBuilder $container, array $config)
     {
-        $eventDispatcher = $config['event_dispatcher'];
 
         foreach ($config['consumers'] as $key => $consumer) {
             $lazy = $config['connections'][$consumer['connection']]['lazy'];
@@ -151,16 +140,7 @@ class M6WebAmqpExtension extends Extension
                 ]
             );
 
-            // Add the Event dispatcher & Command Event
-            if ($eventDispatcher === true) {
-                $consumerDefinition->addMethodCall(
-                    'setEventDispatcher',
-                    [
-                        new Reference('event_dispatcher'),
-                        $container->getParameter('m6_web_amqp.event.command.class')
-                    ]
-                );
-            }
+            $this->setEventDispatcher($container, $config['event_dispatcher'], $consumerDefinition);
 
             // Use a factory to build the consumer
             $consumerDefinition->setFactory([
@@ -183,6 +163,25 @@ class M6WebAmqpExtension extends Extension
             $container->setDefinition(
                 sprintf('m6_web_amqp.consumer.%s', $key),
                 $consumerDefinition
+            );
+        }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param bool             $enableEventDispatcher
+     * @param Definition       $definition
+     */
+    private function setEventDispatcher(ContainerBuilder $container, $enableEventDispatcher, Definition $definition)
+    {
+        // Add the Event dispatcher & Command Event
+        if ($enableEventDispatcher === true) {
+            $definition->addMethodCall(
+                'setEventDispatcher',
+                [
+                    new Reference('event_dispatcher'),
+                    $container->getParameter('m6_web_amqp.event.command.class')
+                ]
             );
         }
     }

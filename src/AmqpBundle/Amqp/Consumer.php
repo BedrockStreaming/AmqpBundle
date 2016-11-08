@@ -1,6 +1,9 @@
 <?php
 
 namespace M6Web\Bundle\AmqpBundle\Amqp;
+use M6Web\Bundle\AmqpBundle\Event\AckEvent;
+use M6Web\Bundle\AmqpBundle\Event\NackEvent;
+use M6Web\Bundle\AmqpBundle\Event\PurgeEvent;
 
 /**
  * Consumer
@@ -55,6 +58,12 @@ class Consumer extends AbstractAmqp
      */
     public function ackMessage($deliveryTag, $flags = AMQP_NOPARAM)
     {
+        if ($this->eventDispatcher) {
+            $ackEvent = new AckEvent($deliveryTag, $flags);
+
+            $this->eventDispatcher->dispatch($ackEvent);
+        }
+
         return $this->call($this->queue, 'ack', [$deliveryTag, $flags]);
     }
 
@@ -71,6 +80,12 @@ class Consumer extends AbstractAmqp
      */
     public function nackMessage($deliveryTag, $flags = AMQP_NOPARAM)
     {
+        if ($this->eventDispatcher) {
+            $nackEvent = new NackEvent($deliveryTag, $flags);
+
+            $this->eventDispatcher->dispatch($nackEvent);
+        }
+
         return $this->call($this->queue, 'nack', [$deliveryTag, $flags]);
     }
 
@@ -84,6 +99,12 @@ class Consumer extends AbstractAmqp
      */
     public function purge()
     {
+        if ($this->eventDispatcher) {
+            $purgeEvent = new PurgeEvent($this->queue);
+
+            $this->eventDispatcher->dispatch($purgeEvent);
+        }
+
         return $this->call($this->queue, 'purge');
     }
 
