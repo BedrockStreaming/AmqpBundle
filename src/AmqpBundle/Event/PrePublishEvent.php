@@ -84,11 +84,27 @@ class PrePublishEvent extends SymfonyEvent
     }
 
     /**
+     * @param string $message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+    }
+
+    /**
      * @return array
      */
     public function getRoutingKeys()
     {
         return $this->routingKeys;
+    }
+
+    /**
+     * @param array $routingKeys
+     */
+    public function setRoutingKeys($routingKeys)
+    {
+        $this->routingKeys = $routingKeys;
     }
 
     /**
@@ -100,10 +116,26 @@ class PrePublishEvent extends SymfonyEvent
     }
 
     /**
+     * @param int $flags
+     */
+    public function setFlags($flags)
+    {
+        $this->flags = $flags;
+    }
+
+    /**
      * @return array
      */
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
     }
 }

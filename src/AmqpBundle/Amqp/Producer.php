@@ -53,9 +53,9 @@ class Producer extends AbstractAmqp
 
         $routingKeys = !empty($routingKeys) ? $routingKeys : $this->exchangeOptions['routing_keys'];
 
-        if ($this->eventDispatcher) {
-            $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
+        $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
 
+        if ($this->eventDispatcher) {
             $this->eventDispatcher->dispatch($prePublishEvent);
 
             if (!$prePublishEvent->canPublish()) {
@@ -63,14 +63,14 @@ class Producer extends AbstractAmqp
             }
         }
 
-        if (!$routingKeys) {
-            return $this->call($this->exchange, 'publish', [$message, null, $flags, $attributes]);
+        if (!$prePublishEvent->getRoutingKeys()) {
+            return $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), null, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
         }
 
         // Publish the message for each routing keys
         $success = true;
-        foreach ($routingKeys as $routingKey) {
-            $success &= $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
+        foreach ($prePublishEvent->getRoutingKeys() as $routingKey) {
+            $success &= $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), $routingKey, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
         }
 
         return (boolean) $success;
