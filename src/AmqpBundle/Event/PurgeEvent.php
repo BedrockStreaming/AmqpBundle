@@ -9,6 +9,8 @@ use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
  */
 class PurgeEvent extends SymfonyEvent
 {
+    const NAME = 'amqp.purge';
+
     /**
      * @var \AMQPQueue
      */

@@ -61,7 +61,7 @@ class Consumer extends AbstractAmqp
         if ($this->eventDispatcher) {
             $ackEvent = new AckEvent($deliveryTag, $flags);
 
-            $this->eventDispatcher->dispatch($ackEvent);
+            $this->eventDispatcher->dispatch(AckEvent::NAME, $ackEvent);
         }
 
         return $this->call($this->queue, 'ack', [$deliveryTag, $flags]);
@@ -83,7 +83,7 @@ class Consumer extends AbstractAmqp
         if ($this->eventDispatcher) {
             $nackEvent = new NackEvent($deliveryTag, $flags);
 
-            $this->eventDispatcher->dispatch($nackEvent);
+            $this->eventDispatcher->dispatch(NackEvent::NAME, $nackEvent);
         }
 
         return $this->call($this->queue, 'nack', [$deliveryTag, $flags]);
@@ -102,7 +102,7 @@ class Consumer extends AbstractAmqp
         if ($this->eventDispatcher) {
             $purgeEvent = new PurgeEvent($this->queue);
 
-            $this->eventDispatcher->dispatch($purgeEvent);
+            $this->eventDispatcher->dispatch(PurgeEvent::NAME, $purgeEvent);
         }
 
         return $this->call($this->queue, 'purge');

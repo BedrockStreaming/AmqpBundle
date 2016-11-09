@@ -9,6 +9,8 @@ use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
  */
 class PrePublishEvent extends SymfonyEvent
 {
+    const NAME = 'amqp.pre_publish';
+
     /**
      * @var string
      */

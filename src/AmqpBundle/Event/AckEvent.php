@@ -9,6 +9,8 @@ use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
  */
 class AckEvent extends SymfonyEvent
 {
+    const NAME = 'amqp.ack';
+
     /**
      * @var string
      */

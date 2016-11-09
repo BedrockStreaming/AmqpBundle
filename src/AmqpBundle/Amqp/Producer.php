@@ -56,7 +56,7 @@ class Producer extends AbstractAmqp
         $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
 
         if ($this->eventDispatcher) {
-            $this->eventDispatcher->dispatch($prePublishEvent);
+            $this->eventDispatcher->dispatch(PrePublishEvent::NAME, $prePublishEvent);
 
             if (!$prePublishEvent->canPublish()) {
                 return true;
