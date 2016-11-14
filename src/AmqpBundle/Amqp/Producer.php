@@ -57,19 +57,19 @@ class Producer extends AbstractAmqp
 
         if ($this->eventDispatcher) {
             $this->eventDispatcher->dispatch(PrePublishEvent::NAME, $prePublishEvent);
-
-            if (!$prePublishEvent->canPublish()) {
-                return true;
-            }
         }
 
-        if (!$prePublishEvent->getRoutingKeys()) {
+        if (!$prePublishEvent->canPublish()) {
+            return true;
+        }
+
+        if (!$routingKeys = $prePublishEvent->getRoutingKeys()) {
             return $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), null, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
         }
 
         // Publish the message for each routing keys
         $success = true;
-        foreach ($prePublishEvent->getRoutingKeys() as $routingKey) {
+        foreach ($routingKeys as $routingKey) {
             $success &= $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), $routingKey, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
         }
 

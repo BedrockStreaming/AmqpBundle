@@ -3,6 +3,7 @@
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 use M6Web\Bundle\AmqpBundle\Event\AckEvent;
 use M6Web\Bundle\AmqpBundle\Event\NackEvent;
+use M6Web\Bundle\AmqpBundle\Event\PreRetrieveEvent;
 use M6Web\Bundle\AmqpBundle\Event\PurgeEvent;
 
 /**
@@ -42,7 +43,15 @@ class Consumer extends AbstractAmqp
      */
     public function getMessage($flags = AMQP_AUTOACK)
     {
-        return $this->call($this->queue, 'get', [$flags]);
+        $envelope = $this->call($this->queue, 'get', [$flags]);
+
+        $preRetrieveEvent = new PreRetrieveEvent($envelope);
+
+        if ($this->eventDispatcher) {
+            $this->eventDispatcher->dispatch(PreRetrieveEvent::NAME, $preRetrieveEvent);
+        }
+
+        return $preRetrieveEvent->getEnvelope();
     }
 
     /**
