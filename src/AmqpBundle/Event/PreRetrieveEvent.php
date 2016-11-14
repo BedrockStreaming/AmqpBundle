@@ -13,22 +13,22 @@ class PreRetrieveEvent extends SymfonyEvent
     const NAME = 'amqp.pre_retrieve';
 
     /**
-     * @var AMQPEnvelope
+     * @var AMQPEnvelope|bool
      */
     private $envelope;
 
     /**
      * Constructor.
      *
-     * @param AMQPEnvelope|null $envelope
+     * @param AMQPEnvelope|bool $envelope
      */
-    public function __construct(AMQPEnvelope $envelope = null)
+    public function __construct($envelope)
     {
         $this->envelope = $envelope;
     }
 
     /**
-     * @return AMQPEnvelope
+     * @return AMQPEnvelope|bool
      */
     public function getEnvelope()
     {
@@ -36,7 +36,7 @@ class PreRetrieveEvent extends SymfonyEvent
     }
 
     /**
-     * @param AMQPEnvelope $envelope
+     * @param AMQPEnvelope|bool $envelope
      */
     public function setEnvelope($envelope)
     {
