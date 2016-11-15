@@ -62,7 +62,7 @@ $ composer update m6web/amqp-bundle
 
 Add the `m6_web_amqp` section in your configuration file.
 
-By default, the sf2 event dispatcher will throw an event on each command (the event contains the AMQP command and the time used to execute it). To disable this feature : 
+By default, the sf2 event dispatcher will throw an event on each command (the event contains the AMQP command and the time used to execute it). To disable this feature, as well as other events' dispatching:
 
 ```yaml
 m6_web_amqp:

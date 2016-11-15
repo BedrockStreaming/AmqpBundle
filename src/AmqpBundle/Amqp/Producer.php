@@ -1,6 +1,7 @@
 <?php
 
 namespace M6Web\Bundle\AmqpBundle\Amqp;
+use M6Web\Bundle\AmqpBundle\Event\PrePublishEvent;
 
 /**
  * Producer
@@ -18,7 +19,7 @@ class Producer extends AbstractAmqp
     protected $exchangeOptions = [];
 
     /**
-     * __construct
+     * Constructor
      *
      * @param \AMQPExchange $exchange        Amqp Exchange
      * @param array         $exchangeOptions Exchange options
@@ -51,14 +52,25 @@ class Producer extends AbstractAmqp
                       array_merge($this->exchangeOptions['publish_attributes'], $attributes));
 
         $routingKeys = !empty($routingKeys) ? $routingKeys : $this->exchangeOptions['routing_keys'];
-        if (!$routingKeys) {
-            return $this->call($this->exchange, 'publish', [$message, null, $flags, $attributes]);
+
+        $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
+
+        if ($this->eventDispatcher) {
+            $this->eventDispatcher->dispatch(PrePublishEvent::NAME, $prePublishEvent);
+        }
+
+        if (!$prePublishEvent->canPublish()) {
+            return true;
+        }
+
+        if (!$routingKeys = $prePublishEvent->getRoutingKeys()) {
+            return $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), null, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
         }
 
         // Publish the message for each routing keys
         $success = true;
         foreach ($routingKeys as $routingKey) {
-            $success &= $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
+            $success &= $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), $routingKey, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
         }
 
         return (boolean) $success;
@@ -93,7 +105,7 @@ class Producer extends AbstractAmqp
     }
 
     /**
-     * @param Array $exchangeOptions
+     * @param array $exchangeOptions
      *
      * @return \M6Web\Bundle\AmqpBundle\Amqp\Consumer
      */
