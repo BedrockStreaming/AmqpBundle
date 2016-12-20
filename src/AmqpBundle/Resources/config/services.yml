@@ -15,15 +15,15 @@ parameters:
 
 services:
     m6_web_amqp.producer_factory:
-        class: %m6_web_amqp.producer_factory.class%
+        class: "%m6_web_amqp.producer_factory.class%"
         arguments:
-            - %m6_web_amqp.channel.class%
-            - %m6_web_amqp.exchange.class%
-            - %m6_web_amqp.queue.class%
+            - "%m6_web_amqp.channel.class%"
+            - "%m6_web_amqp.exchange.class%"
+            - "%m6_web_amqp.queue.class%"
             
     m6_web_amqp.consumer_factory:
-        class: %m6_web_amqp.consumer_factory.class%
+        class: "%m6_web_amqp.consumer_factory.class%"
         arguments:
-            - %m6_web_amqp.channel.class%
-            - %m6_web_amqp.queue.class%
-            - %m6_web_amqp.exchange.class%
+            - "%m6_web_amqp.channel.class%"
+            - "%m6_web_amqp.queue.class%"
+            - "%m6_web_amqp.exchange.class%"
