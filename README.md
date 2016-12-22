@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/M6Web/AmqpBundle.svg?branch=master)](https://travis-ci.org/M6Web/AmqpBundle)
 
-The configuration and documentation is inspired from [videlalvaro/RabbitMqBundle](https://github.com/videlalvaro/RabbitMqBundle).
+The configuration and documentation are inspired from [videlalvaro/RabbitMqBundle](https://github.com/videlalvaro/RabbitMqBundle).
 
 #### Amqp client as a Symfony Service
 
@@ -69,7 +69,7 @@ m6_web_amqp:
    event_dispatcher: false
 ```   
 
-Here a configuration example : 
+Here a configuration example: 
 
 ```yaml
 m6_web_amqp:
@@ -167,7 +167,7 @@ Let's say that you want to get a message :
 $msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
 ```
 
-The consumer do not wait for a message : getMessage will return null immediately if no message is available or return a AMQPEnvelope object if a message can be consumed.
+The consumer does not wait for a message : getMessage will return null immediately if no message is available or return a AMQPEnvelope object if a message can be consumed.
 The "flags" argument of getMessage accepts AMQP_AUTOACK (auto acknowledge by default) or AMQP_NOPARAM (manual acknowledge).
 
 To manually acknowledge a message, use the consumer's ackMessage/nackMessage methods with a delivery_tag argument's value from the AMQPEnvelope object. 
