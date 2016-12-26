@@ -96,4 +96,40 @@ class M6WebAmqpExtension extends test
                 ->isEqualTo(1);
     }
 
+    public function testSandboxClasses()
+    {
+        $container = $this->getContainerForConfiguration('queue-arguments-config');
+        $container->compile();
+
+        $this
+            ->string($container->getParameter('m6_web_amqp.exchange.class'))
+                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullExchange')
+            ->string($container->getParameter('m6_web_amqp.queue.class'))
+                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullQueue')
+            ->string($container->getParameter('m6_web_amqp.connection.class'))
+                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullConnection')
+            ->string($container->getParameter('m6_web_amqp.channel.class'))
+                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullChannel')
+            ->string($container->getParameter('m6_web_amqp.envelope.class'))
+                ->isEqualTo('\M6Web\Bundle\AmqpBundle\Sandbox\NullEnvelope');
+    }
+
+    public function testDefaultConfiguration()
+    {
+        $container = $this->getContainerForConfiguration('queue-defaults');
+        $container->compile();
+
+        //sandbox is off by default, check indirectly via classes definition
+        $this
+            ->string($container->getParameter('m6_web_amqp.exchange.class'))
+                ->isEqualTo('AMQPExchange')
+            ->string($container->getParameter('m6_web_amqp.queue.class'))
+                ->isEqualTo('AMQPQueue')
+            ->string($container->getParameter('m6_web_amqp.connection.class'))
+                ->isEqualTo('AMQPConnection')
+            ->string($container->getParameter('m6_web_amqp.channel.class'))
+                ->isEqualTo('AMQPChannel')
+            ->string($container->getParameter('m6_web_amqp.envelope.class'))
+                ->isEqualTo('AMQPEnvelope');
+    }
 }

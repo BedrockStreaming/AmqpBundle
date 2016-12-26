@@ -27,6 +27,15 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
                 ->booleanNode('event_dispatcher')->defaultTrue()->end()
                 ->booleanNode('prototype')->defaultFalse()->end()
+                ->arrayNode('sandbox')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')
+                            ->defaultFalse()
+                            ->info('Sandbox mode do not establish connections but mocks them via in-memory queue. Useful for tests')
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         $this->addConnections($rootNode);

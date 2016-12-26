@@ -1,5 +1,7 @@
 m6_web_amqp:
     prototype: true
+    sandbox:
+        enabled: true
     connections:
         default:
             host:     'localhost'
