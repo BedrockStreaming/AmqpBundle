@@ -4,6 +4,10 @@ namespace M6Web\Bundle\AmqpBundle\Tests\Units\Amqp;
 
 use atoum;
 use M6Web\Bundle\AmqpBundle\Amqp\Consumer as Base;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullChannel;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullConnection;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullEnvelope;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullQueue;
 
 /**
  * Consumer
@@ -263,6 +267,27 @@ class Consumer extends atoum
 
                 ->integer($queue->getFlags())
                     ->isEqualTo($msgList['flags']);
+    }
+
+    public function testConsumerWithNullQueue()
+    {
+        $this
+            ->if($connection = new NullConnection())
+                ->and($channel = new NullChannel($connection))
+                ->and($queue = new NullQueue($channel))
+                ->and($consumer = new Base($queue, []))
+            ->then
+                ->boolean($consumer->getMessage())->isFalse()
+                ->integer($consumer->getCurrentMessageCount())->isEqualTo(0)
+        ;
+
+        $this
+            ->if($envelope = new NullEnvelope())
+                ->and($queue->enqueue($envelope))
+            ->then
+                ->integer($consumer->getCurrentMessageCount())->isEqualTo(1)
+                ->object($consumer->getMessage())->isEqualTo($envelope)
+        ;
     }
 
     protected function getQueue(&$msgList = [])

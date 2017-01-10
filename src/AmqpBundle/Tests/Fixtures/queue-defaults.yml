@@ -1,0 +1,5 @@
+m6_web_amqp:
+    connections:
+        default:
+            host:     'localhost'
+            lazy:     true

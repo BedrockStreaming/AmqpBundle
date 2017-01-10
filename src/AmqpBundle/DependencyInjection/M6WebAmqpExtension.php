@@ -31,6 +31,10 @@ class M6WebAmqpExtension extends Extension
             $loader->load('data_collector.yml');
         }
 
+        if ($config['sandbox']['enabled']) {
+            $loader->load('sandbox_services.yml');
+        }
+
         $this->loadConnections($container, $config);
         $this->loadProducers($container, $config);
         $this->loadConsumers($container, $config);

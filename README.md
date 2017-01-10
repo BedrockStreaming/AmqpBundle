@@ -23,7 +23,7 @@ When you want to consume a message out of a queue :
 $msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
 ```
 
-The AmQPBundle does not provide a daemon mode to run AMQP consumers and will not. You can do it with the [M6Web/DaemonBundle](https://github.com/M6Web/DaemonBundle).
+The AmqpBundle does not provide a daemon mode to run AMQP consumers and will not. You can do it with the [M6Web/DaemonBundle](https://github.com/M6Web/DaemonBundle).
 
 ## Installation ##
 
@@ -67,12 +67,14 @@ By default, the sf2 event dispatcher will throw an event on each command (the ev
 ```yaml
 m6_web_amqp:
    event_dispatcher: false
-```   
+```
 
-Here a configuration example: 
+Here a configuration example:
 
 ```yaml
 m6_web_amqp:
+    sandbox:
+        enabled: false #optional - default false
     connections:
         default:
             host:     'localhost'  # optional - default 'localhost'
@@ -149,7 +151,7 @@ If you need to add option default publish attributes for each message, publish_a
 publish_attributes: { 'content_type' : 'application/json', 'delivery_mode': 'persistent', 'priority': 8,  'expiration': '3200'}
 ```
 
-If you don't want to use the configuration to define the __routing key__ (for instance, if it should be computed for each message), 
+If you don't want to use the configuration to define the __routing key__ (for instance, if it should be computed for each message),
 you can define it during the call to `publishMessage()` :
 
 ```php
@@ -170,8 +172,8 @@ $msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
 The consumer does not wait for a message : getMessage will return null immediately if no message is available or return a AMQPEnvelope object if a message can be consumed.
 The "flags" argument of getMessage accepts AMQP_AUTOACK (auto acknowledge by default) or AMQP_NOPARAM (manual acknowledge).
 
-To manually acknowledge a message, use the consumer's ackMessage/nackMessage methods with a delivery_tag argument's value from the AMQPEnvelope object. 
-If you choose to not acknowledge the message, the second parameter of nackMessage accepts AMQP_REQUEUE to requeue the message or AMQP_NOPARAM to forget it. 
+To manually acknowledge a message, use the consumer's ackMessage/nackMessage methods with a delivery_tag argument's value from the AMQPEnvelope object.
+If you choose to not acknowledge the message, the second parameter of nackMessage accepts AMQP_REQUEUE to requeue the message or AMQP_NOPARAM to forget it.
 
 Be careful with qos parameters, you should know that it can hurt your performances. Please [read this](http://www.rabbitmq.com/blog/2012/05/11/some-queuing-theory-throughput-latency-and-bandwidth/).
 Also be aware that currently there is no `global` parameter available within PHP `amqp` extension.
@@ -214,3 +216,15 @@ rabbitmq:
         - "15672:15672"
         - "5672:5672"
 ```
+
+# Testing
+
+If you use this library in your application tests you will need rabbitmq instance running. If you don't want to test rabbitmq producers and consumers you can enable sandbox mode:
+
+```yaml
+m6_web_amqp:
+    sandbox:
+        enabled: true
+```
+
+In this mode there will be no connection established to rabbitmq server. Producers silently accept message, consumers silently assume there are no messages available.
