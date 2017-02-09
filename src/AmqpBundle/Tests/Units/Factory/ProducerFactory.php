@@ -6,13 +6,12 @@ use atoum;
 use M6Web\Bundle\AmqpBundle\Factory\ProducerFactory as Base;
 
 /**
- * ProducerFactory
+ * ProducerFactory.
  */
 class ProducerFactory extends atoum
 {
     public function testConstruct()
     {
-
         $this
             ->if($channelClass = '\AMQPChannel')
             ->and($exchangeClass = '\AMQPExchange')
@@ -25,7 +24,7 @@ class ProducerFactory extends atoum
             ->and($exchangeClass = '\AMQPExchange')
             ->and($queueClass = '\AMQPQueue')
                 ->exception(
-                     function() use($channelClass, $exchangeClass, $queueClass) {
+                     function () use ($channelClass, $exchangeClass, $queueClass) {
                          $factory = new Base($channelClass, $exchangeClass, $queueClass);
                      }
                  )
@@ -37,7 +36,7 @@ class ProducerFactory extends atoum
             ->and($exchangeClass = '\DateTime')
             ->and($queueClass = '\AMQPQueue')
                 ->exception(
-                     function() use($channelClass, $exchangeClass, $queueClass) {
+                     function () use ($channelClass, $exchangeClass, $queueClass) {
                          $factory = new Base($channelClass, $exchangeClass, $queueClass);
                      }
                  )
@@ -49,7 +48,7 @@ class ProducerFactory extends atoum
             ->and($exchangeClass = '\AMQPExchange')
             ->and($queueClass = '\DateTime')
             ->exception(
-                function() use($channelClass, $exchangeClass, $queueClass) {
+                function () use ($channelClass, $exchangeClass, $queueClass) {
                     $factory = new Base($channelClass, $exchangeClass, $queueClass);
                 }
             )
@@ -83,12 +82,11 @@ class ProducerFactory extends atoum
                 'passive' => false,
                 'durable' => true,
                 'auto_delete' => false,
-                'arguments'   => [],
-                'routing_keys' => []
+                'arguments' => [],
+                'routing_keys' => [],
             ])
             ->and($factory = new Base($channelClass, $exchangeClass, $queueClass))
                 ->object($factory->get($producerClass, $connexion, $exchangeOptions, $queueOptions))
                     ->isInstanceOf($producerClass);
     }
-
 }

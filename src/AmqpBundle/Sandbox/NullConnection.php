@@ -3,7 +3,7 @@
 namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
- * Connection that does not connect to anything
+ * Connection that does not connect to anything.
  */
 class NullConnection extends \AMQPConnection
 {

@@ -5,7 +5,7 @@ namespace M6Web\Bundle\AmqpBundle\Factory;
 use M6Web\Bundle\AmqpBundle\Amqp\Producer;
 
 /**
- * ProducerFactory
+ * ProducerFactory.
  */
 class ProducerFactory extends AMQPFactory
 {
@@ -25,7 +25,7 @@ class ProducerFactory extends AMQPFactory
     protected $queueClass;
 
     /**
-     * __construct
+     * __construct.
      *
      * @param string $channelClass  Channel class name
      * @param string $exchangeClass Exchange class name
@@ -53,13 +53,13 @@ class ProducerFactory extends AMQPFactory
             );
         }
 
-        $this->channelClass  = $channelClass;
+        $this->channelClass = $channelClass;
         $this->exchangeClass = $exchangeClass;
-        $this->queueClass    = $queueClass;
+        $this->queueClass = $queueClass;
     }
 
     /**
-     * build the producer class
+     * build the producer class.
      *
      * @param string          $class           Provider class name
      * @param \AMQPConnection $connexion       AMQP connexion
@@ -84,7 +84,7 @@ class ProducerFactory extends AMQPFactory
         }
 
         // Open a new channel
-        $channel  = new $this->channelClass($connexion);
+        $channel = new $this->channelClass($connexion);
         $exchange = $this->createExchange($this->exchangeClass, $channel, $exchangeOptions);
 
         if (isset($queueOptions['name'])) {

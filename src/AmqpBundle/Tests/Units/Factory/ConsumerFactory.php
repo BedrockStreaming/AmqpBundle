@@ -6,13 +6,12 @@ use atoum;
 use M6Web\Bundle\AmqpBundle\Factory\ConsumerFactory as Base;
 
 /**
- * ConsumerFactory
+ * ConsumerFactory.
  */
 class ConsumerFactory extends atoum
 {
     public function testConstruct()
     {
-
         $this
             ->if($channelClass = '\AMQPChannel')
             ->and($queueClass = '\AMQPQueue')
@@ -25,7 +24,7 @@ class ConsumerFactory extends atoum
             ->and($queueClass = '\AMQPQueue')
             ->and($exchangeClass = '\AMQPExchange')
                 ->exception(
-                     function() use($channelClass, $queueClass, $exchangeClass) {
+                     function () use ($channelClass, $queueClass, $exchangeClass) {
                          $factory = new Base($channelClass, $queueClass, $exchangeClass);
                      }
                  )
@@ -37,7 +36,7 @@ class ConsumerFactory extends atoum
             ->and($queueClass = '\DateTime')
             ->and($exchangeClass = '\AMQPExchange')
                 ->exception(
-                     function() use($channelClass, $queueClass, $exchangeClass) {
+                     function () use ($channelClass, $queueClass, $exchangeClass) {
                          $factory = new Base($channelClass, $queueClass, $exchangeClass);
                      }
                  )
@@ -49,7 +48,7 @@ class ConsumerFactory extends atoum
             ->and($queueClass = '\AMQPQueue')
             ->and($exchangeClass = '\DateTime')
             ->exception(
-                function() use($channelClass, $queueClass, $exchangeClass) {
+                function () use ($channelClass, $queueClass, $exchangeClass) {
                     $factory = new Base($channelClass, $queueClass, $exchangeClass);
                 }
             )
@@ -85,15 +84,14 @@ class ConsumerFactory extends atoum
                 'durable' => true,
                 'exclusive' => true,
                 'auto_delete' => false,
-                'routing_keys' => ['key']
+                'routing_keys' => ['key'],
             ])
             ->and($qosOptions = [
-                'prefetch_size'  => 0,
+                'prefetch_size' => 0,
                 'prefetch_count' => 0,
             ])
             ->and($factory = new Base($channelClass, $queueClass, $exchangeClass))
                 ->object($factory->get($consumerClass, $connexion, $exchangeOptions, $queueOptions, $qosOptions))
                     ->isInstanceOf($consumerClass);
     }
-
 }

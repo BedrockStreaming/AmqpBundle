@@ -5,12 +5,12 @@ namespace M6Web\Bundle\AmqpBundle\Event;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
 /**
- * Command Event
+ * Command Event.
  */
 class Command extends SymfonyEvent implements DispatcherInterface
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $executionTime = 0;
 
@@ -30,7 +30,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     protected $return;
 
     /**
-     * Set the command associated with this event
+     * Set the command associated with this event.
      *
      * @param string $command The command
      *
@@ -44,7 +44,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * Get the command associated with this event
+     * Get the command associated with this event.
      *
      * @return string the command
      */
@@ -54,7 +54,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * set the arguments
+     * set the arguments.
      *
      * @param array $v argus
      *
@@ -68,7 +68,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * get the arguments
+     * get the arguments.
      *
      * @return array
      */
@@ -78,7 +78,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * set the return value
+     * set the return value.
      *
      * @param mixed $v value
      *
@@ -92,7 +92,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * get the return value
+     * get the return value.
      *
      * @return mixed
      */
@@ -102,7 +102,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * set the exec time
+     * set the exec time.
      *
      * @param float $v temps
      *
@@ -116,7 +116,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * return the exec time
+     * return the exec time.
      *
      * @return float $v temps
      */
@@ -127,7 +127,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
 
     /**
      * Alias of getExecutionTime for the statsd bundle
-     * In ms
+     * In ms.
      *
      * @return float
      */

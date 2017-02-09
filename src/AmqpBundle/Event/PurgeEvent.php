@@ -5,7 +5,7 @@ namespace M6Web\Bundle\AmqpBundle\Event;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
 /**
- * Purge queue event
+ * Purge queue event.
  */
 class PurgeEvent extends SymfonyEvent
 {
@@ -17,7 +17,7 @@ class PurgeEvent extends SymfonyEvent
     private $queue;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \AMQPQueue $queue
      */

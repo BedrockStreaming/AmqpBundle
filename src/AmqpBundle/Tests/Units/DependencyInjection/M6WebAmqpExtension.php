@@ -1,19 +1,16 @@
 <?php
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\DependencyInjection;
 
 use M6Web\Bundle\AmqpBundle\DependencyInjection\M6WebAmqpExtension as Base;
-
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-
 use atoum\test;
 
 /**
- * Class M6WebAmqpExtension
- *
- * @package M6Web\Bundle\AmqpBundle\Tests\Units\DependencyInjection
+ * Class M6WebAmqpExtension.
  */
 class M6WebAmqpExtension extends test
 {

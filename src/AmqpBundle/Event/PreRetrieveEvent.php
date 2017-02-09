@@ -6,7 +6,7 @@ use AMQPEnvelope;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
 /**
- * Pre retrieve message event
+ * Pre retrieve message event.
  */
 class PreRetrieveEvent extends SymfonyEvent
 {

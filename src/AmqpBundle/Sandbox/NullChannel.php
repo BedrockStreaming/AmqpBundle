@@ -5,7 +5,7 @@ namespace M6Web\Bundle\AmqpBundle\Sandbox;
 use AMQPConnection;
 
 /**
- * Channel which does not do anything with connection
+ * Channel which does not do anything with connection.
  */
 class NullChannel extends \AMQPChannel
 {

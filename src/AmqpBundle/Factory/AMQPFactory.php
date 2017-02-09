@@ -3,12 +3,12 @@
 namespace M6Web\Bundle\AmqpBundle\Factory;
 
 /**
- * Common code for both producer and consumer factories (channel, exchange declaration and binding)
+ * Common code for both producer and consumer factories (channel, exchange declaration and binding).
  */
 abstract class AMQPFactory
 {
     /**
-     * Create and declare exchange
+     * Create and declare exchange.
      *
      * @param string       $exchangeClass
      * @param \AMQPChannel $channel

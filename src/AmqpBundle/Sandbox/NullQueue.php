@@ -3,12 +3,12 @@
 namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
- * Queue which does nothing
+ * Queue which does nothing.
  */
 class NullQueue extends \AMQPQueue
 {
     /**
-     * List of envelopes to return
+     * List of envelopes to return.
      *
      * @var \AMQPEnvelope[]|\SplQueue
      */
@@ -23,7 +23,7 @@ class NullQueue extends \AMQPQueue
     }
 
     /**
-     * Enqueue message or no message
+     * Enqueue message or no message.
      *
      * @param \AMQPEnvelope|null $envelope
      */
