@@ -5,7 +5,7 @@ namespace M6Web\Bundle\AmqpBundle\Event;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
 /**
- * Acknowledged message event
+ * Acknowledged message event.
  */
 class AckEvent extends SymfonyEvent
 {

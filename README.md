@@ -10,7 +10,7 @@ The AmqpBundle incorporates messaging in your application using the [php-amqp ex
 It can communicate with any AMQP spec 0-9-1 compatible server, such as RabbitMQ, OpenAMQP and Qpid,
 giving you the ability to publish to any exchange and consume from any queue.
 
-Publishing messages to AMQP Server from a Symfony2 controller is as easy as:
+Publishing messages to AMQP Server from a Symfony controller is as easy as:
 
 ```php
 $msg = ["key" => "value"];
@@ -62,7 +62,7 @@ $ composer update m6web/amqp-bundle
 
 Add the `m6_web_amqp` section in your configuration file.
 
-By default, the sf2 event dispatcher will throw an event on each command (the event contains the AMQP command and the time used to execute it). To disable this feature, as well as other events' dispatching:
+By default, the Symfony event dispatcher will throw an event on each command (the event contains the AMQP command and the time used to execute it). To disable this feature, as well as other events' dispatching:
 
 ```yaml
 m6_web_amqp:

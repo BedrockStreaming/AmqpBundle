@@ -1,10 +1,11 @@
 <?php
 
 namespace M6Web\Bundle\AmqpBundle\Sandbox;
+
 use AMQPChannel;
 
 /**
- * Exchange that does not publish anything
+ * Exchange that does not publish anything.
  */
 class NullExchange extends \AMQPExchange
 {
@@ -24,8 +25,7 @@ class NullExchange extends \AMQPExchange
         $routingKey = null,
         $flags = AMQP_NOPARAM,
         array $attributes = array()
-    )
-    {
+    ) {
         //noop
     }
 

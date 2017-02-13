@@ -10,19 +10,19 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
 class M6WebAmqpExtension extends Extension
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
@@ -98,7 +98,7 @@ class M6WebAmqpExtension extends Extension
             // Use a factory to build the producer
             $producerDefinition->setFactory([
                 new Reference('m6_web_amqp.producer_factory'),
-                'get'
+                'get',
             ]);
 
             if ($config['prototype']) {
@@ -126,7 +126,6 @@ class M6WebAmqpExtension extends Extension
      */
     protected function loadConsumers(ContainerBuilder $container, array $config)
     {
-
         foreach ($config['consumers'] as $key => $consumer) {
             $lazy = $config['connections'][$consumer['connection']]['lazy'];
 
@@ -148,7 +147,7 @@ class M6WebAmqpExtension extends Extension
             // Use a factory to build the consumer
             $consumerDefinition->setFactory([
                 new Reference('m6_web_amqp.consumer_factory'),
-                'get'
+                'get',
             ]);
 
             if ($config['prototype']) {
@@ -183,10 +182,9 @@ class M6WebAmqpExtension extends Extension
                 'setEventDispatcher',
                 [
                     new Reference('event_dispatcher'),
-                    $container->getParameter('m6_web_amqp.event.command.class')
+                    $container->getParameter('m6_web_amqp.event.command.class'),
                 ]
             );
         }
     }
-
 }

@@ -6,13 +6,12 @@ use atoum;
 use M6Web\Bundle\AmqpBundle\Amqp\Producer as Base;
 
 /**
- * Producer
+ * Producer.
  */
 class Producer extends atoum
 {
     public function testConstruct()
     {
-
         $this
             ->if($exchange = $this->getExchange())
             ->if($exchangeOptions = ['options' => 'test'])
@@ -45,7 +44,7 @@ class Producer extends atoum
             ->and($exchange = $this->getExchange($msgList))
             ->and($exchangeOptions = [
                 'publish_attributes' => ['attr_test' => 'value'],
-                'routing_keys' => ['routing_test']
+                'routing_keys' => ['routing_test'],
             ])
             ->and($producer = new Base($exchange, $exchangeOptions))
                 ->boolean($producer->publishMessage('message1'))
@@ -68,7 +67,7 @@ class Producer extends atoum
             ->and($exchange = $this->getExchange($msgList))
             ->and($exchangeOptions = [
                 'publish_attributes' => ['attr_test' => 'value'],
-                'routing_keys' => ['routing_test', 'error']
+                'routing_keys' => ['routing_test', 'error'],
             ])
             ->and($producer = new Base($exchange, $exchangeOptions))
                 ->boolean($producer->publishMessage('message1'))
@@ -94,7 +93,7 @@ class Producer extends atoum
             ->and($exchange = $this->getExchange($msgList))
             ->and($exchangeOptions = [
                 'publish_attributes' => ['attr1' => 'value', 'attr2' => 'value2'],
-                'routing_keys' => ['routing_test', 'routing_test2']
+                'routing_keys' => ['routing_test', 'routing_test2'],
             ])
             ->and($msgAttr = ['attr2' => 'overload', 'attr3' => 'value3'])
             ->and($msgAttrMerged = ['attr1' => 'value', 'attr2' => 'overload', 'attr3' => 'value3'])
@@ -134,7 +133,7 @@ class Producer extends atoum
             ->if($msgList = [])
             ->and($exchange = $this->getExchange($msgList))
             ->and($exchangeOptions = [
-                'routing_keys' => ['routing_test', 'routing_test2']
+                'routing_keys' => ['routing_test', 'routing_test2'],
             ])
 
             ->and($producer = new Base($exchange, $exchangeOptions))
@@ -160,7 +159,7 @@ class Producer extends atoum
             ->and($exchange = $this->getExchange($msgList))
             ->and($exchangeOptions = [
                 'publish_attributes' => ['attr_test' => 'value'],
-                'routing_keys' => []
+                'routing_keys' => [],
             ])
             ->and($producer = new Base($exchange, $exchangeOptions))
                 ->boolean($producer->publishMessage('message1'))
@@ -181,12 +180,12 @@ class Producer extends atoum
 
         $exchange = new \mock\AMQPExchange();
 
-        $exchange->getMockController()->publish = function($message, $routing_key, $flags = AMQP_NOPARAM, array $attributes = []) use (&$msgList) {
+        $exchange->getMockController()->publish = function ($message, $routing_key, $flags = AMQP_NOPARAM, array $attributes = []) use (&$msgList) {
             if (($message == 'error') && ($routing_key == 'error')) {
                 return false;
             }
 
-            $msgList[] = [$message, $routing_key, $flags , $attributes];
+            $msgList[] = [$message, $routing_key, $flags, $attributes];
 
             return true;
         };

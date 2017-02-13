@@ -1,10 +1,11 @@
 <?php
 
 namespace M6Web\Bundle\AmqpBundle\Amqp;
+
 use M6Web\Bundle\AmqpBundle\Event\PrePublishEvent;
 
 /**
- * Producer
+ * Producer.
  */
 class Producer extends AbstractAmqp
 {
@@ -19,30 +20,30 @@ class Producer extends AbstractAmqp
     protected $exchangeOptions = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \AMQPExchange $exchange        Amqp Exchange
      * @param array         $exchangeOptions Exchange options
      */
-    public function __construct(\AMQPExchange $exchange, Array $exchangeOptions)
+    public function __construct(\AMQPExchange $exchange, array $exchangeOptions)
     {
         $this->setExchange($exchange);
         $this->setExchangeOptions($exchangeOptions);
     }
 
     /**
-     * @param string $message     The message to publish.
-     * @param int    $flags       One or more of AMQP_MANDATORY and AMQP_IMMEDIATE.
-     * @param array  $attributes  One of content_type, content_encoding,
+     * @param string $message     the message to publish
+     * @param int    $flags       one or more of AMQP_MANDATORY and AMQP_IMMEDIATE
+     * @param array  $attributes  one of content_type, content_encoding,
      *                            message_id, user_id, app_id, delivery_mode, priority,
-     *                            timestamp, expiration, type or reply_to.
+     *                            timestamp, expiration, type or reply_to
      * @param array  $routingKeys If set, overrides the Producer 'routing_keys' for this message
      *
-     * @return boolean          TRUE on success or FALSE on failure.
+     * @return bool tRUE on success or FALSE on failure
      *
-     * @throws \AMQPExchangeException On failure.
-     * @throws \AMQPChannelException If the channel is not open.
-     * @throws \AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPExchangeException   on failure
+     * @throws \AMQPChannelException    if the channel is not open
+     * @throws \AMQPConnectionException if the connection to the broker was lost
      */
     public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = [], array $routingKeys = [])
     {
@@ -73,7 +74,7 @@ class Producer extends AbstractAmqp
             $success &= $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), $routingKey, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
         }
 
-        return (boolean) $success;
+        return (bool) $success;
     }
 
     /**
@@ -109,7 +110,7 @@ class Producer extends AbstractAmqp
      *
      * @return \M6Web\Bundle\AmqpBundle\Amqp\Consumer
      */
-    public function setExchangeOptions(Array $exchangeOptions)
+    public function setExchangeOptions(array $exchangeOptions)
     {
         $this->exchangeOptions = $exchangeOptions;
 

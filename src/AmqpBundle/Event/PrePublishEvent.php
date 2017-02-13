@@ -5,7 +5,7 @@ namespace M6Web\Bundle\AmqpBundle\Event;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
 /**
- * PrePublishEvent
+ * PrePublishEvent.
  */
 class PrePublishEvent extends SymfonyEvent
 {
@@ -37,7 +37,7 @@ class PrePublishEvent extends SymfonyEvent
     private $canPublish;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $message
      * @param array  $routingKeys
@@ -62,7 +62,7 @@ class PrePublishEvent extends SymfonyEvent
     }
 
     /**
-     * Allow publish
+     * Allow publish.
      */
     public function allowPublish()
     {
@@ -70,7 +70,7 @@ class PrePublishEvent extends SymfonyEvent
     }
 
     /**
-     * Deny publish
+     * Deny publish.
      */
     public function denyPublish()
     {

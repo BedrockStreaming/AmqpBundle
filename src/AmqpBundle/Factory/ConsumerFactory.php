@@ -5,7 +5,7 @@ namespace M6Web\Bundle\AmqpBundle\Factory;
 use M6Web\Bundle\AmqpBundle\Amqp\Consumer;
 
 /**
- * ConsumerFactory
+ * ConsumerFactory.
  */
 class ConsumerFactory extends AMQPFactory
 {
@@ -25,7 +25,7 @@ class ConsumerFactory extends AMQPFactory
     protected $exchangeClass;
 
     /**
-     * __construct
+     * __construct.
      *
      * @param string $channelClass  Channel class name
      * @param string $queueClass    Queue class name
@@ -33,31 +33,31 @@ class ConsumerFactory extends AMQPFactory
      */
     public function __construct($channelClass, $queueClass, $exchangeClass)
     {
-        if (!class_exists($channelClass) || !is_a($channelClass, "AMQPChannel", true)) {
+        if (!class_exists($channelClass) || !is_a($channelClass, 'AMQPChannel', true)) {
             throw new \InvalidArgumentException(
                 sprintf("channelClass '%s' doesn't exist or not a AMQPChannel", $channelClass)
             );
         }
 
-        if (!class_exists($queueClass) || !is_a($queueClass, "AMQPQueue", true)) {
+        if (!class_exists($queueClass) || !is_a($queueClass, 'AMQPQueue', true)) {
             throw new \InvalidArgumentException(
                 sprintf("exchangeClass '%s' doesn't exist or not a AMQPQueue", $queueClass)
             );
         }
 
-        if (!class_exists($exchangeClass) || !is_a($exchangeClass, "AMQPExchange", true)) {
+        if (!class_exists($exchangeClass) || !is_a($exchangeClass, 'AMQPExchange', true)) {
             throw new \InvalidArgumentException(
                 sprintf("exchangeClass '%s' doesn't exist or not a AMQPExchange", $exchangeClass)
             );
         }
 
-        $this->channelClass  = $channelClass;
+        $this->channelClass = $channelClass;
         $this->queueClass = $queueClass;
         $this->exchangeClass = $exchangeClass;
     }
 
     /**
-     * build the consumer class
+     * build the consumer class.
      *
      * @param string          $class           Consumer class name
      * @param \AMQPConnection $connexion       AMQP connexion

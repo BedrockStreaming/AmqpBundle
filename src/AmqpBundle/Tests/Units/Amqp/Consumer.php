@@ -10,13 +10,12 @@ use M6Web\Bundle\AmqpBundle\Sandbox\NullEnvelope;
 use M6Web\Bundle\AmqpBundle\Sandbox\NullQueue;
 
 /**
- * Consumer
+ * Consumer.
  */
 class Consumer extends atoum
 {
     public function testConstruct()
     {
-
         $this
             ->if($queue = $this->getQueue())
             ->if($queueOptions = [])
@@ -245,8 +244,8 @@ class Consumer extends atoum
     {
         $this
             ->if($msgList = [
-                'wait' => ['m1' => 'message1', 'm2' => "message2"],
-                'flags' => AMQP_DURABLE | AMQP_EXCLUSIVE | AMQP_AUTODELETE
+                'wait' => ['m1' => 'message1', 'm2' => 'message2'],
+                'flags' => AMQP_DURABLE | AMQP_EXCLUSIVE | AMQP_AUTODELETE,
             ])
             ->and($queue = $this->getQueue($msgList))
             ->and($consumer = new Base($queue, []))
@@ -310,7 +309,7 @@ class Consumer extends atoum
 
         $queue = new \mock\AMQPQueue();
 
-        $queue->getMockController()->get = function($flags = AMQP_AUTOACK) use (&$msgList) {
+        $queue->getMockController()->get = function ($flags = AMQP_AUTOACK) use (&$msgList) {
             // Simulate a simple queue
             reset($msgList['wait']);
             $key = key($msgList['wait']);
@@ -329,28 +328,29 @@ class Consumer extends atoum
             // Message
             $message = new \mock\AMQPEnvelope();
 
-            $message->getMockController()->getBody = function()  use ($key, $msg) {
+            $message->getMockController()->getBody = function () use ($key, $msg) {
                 return $msg;
             };
 
-            $message->getMockController()->getDeliveryTag = function()  use ($key, $msg) {
+            $message->getMockController()->getDeliveryTag = function () use ($key, $msg) {
                 return $key;
             };
 
             return $message;
         };
 
-        $queue->getMockController()->ack = function($delivery_tag) use (&$msgList) {
+        $queue->getMockController()->ack = function ($delivery_tag) use (&$msgList) {
             if (isset($msgList['unack'][$delivery_tag])) {
                 $msgList['ack'][$delivery_tag] = $msgList['unack'][$delivery_tag];
                 unset($msgList['unack'][$delivery_tag]);
+
                 return true;
             }
 
             return false;
         };
 
-        $queue->getMockController()->nack = function($delivery_tag, $flags = AMQP_NOPARAM) use (&$msgList) {
+        $queue->getMockController()->nack = function ($delivery_tag, $flags = AMQP_NOPARAM) use (&$msgList) {
             if (isset($msgList['unack'][$delivery_tag])) {
                 if ($flags & AMQP_REQUEUE) {
                     $msgList['wait'][$delivery_tag] = $msgList['unack'][$delivery_tag];
@@ -363,23 +363,23 @@ class Consumer extends atoum
             return false;
         };
 
-        $queue->getMockController()->purge = function() use (&$msgList) {
+        $queue->getMockController()->purge = function () use (&$msgList) {
             $msgList['wait'] = [];
 
             return true;
         };
 
-        $queue->getMockController()->setFlags = function($flags) use (&$msgList) {
+        $queue->getMockController()->setFlags = function ($flags) use (&$msgList) {
             $msgList['flags'] = $flags;
 
             return $this;
         };
 
-        $queue->getMockController()->getFlags = function() use (&$msgList) {
+        $queue->getMockController()->getFlags = function () use (&$msgList) {
             return $msgList['flags'];
         };
 
-        $queue->getMockController()->declareQueue = function() use (&$msgList) {
+        $queue->getMockController()->declareQueue = function () use (&$msgList) {
             return count($msgList['wait']);
         };
 

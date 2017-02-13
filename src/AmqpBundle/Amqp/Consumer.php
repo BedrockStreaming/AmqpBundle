@@ -1,13 +1,14 @@
 <?php
 
 namespace M6Web\Bundle\AmqpBundle\Amqp;
+
 use M6Web\Bundle\AmqpBundle\Event\AckEvent;
 use M6Web\Bundle\AmqpBundle\Event\NackEvent;
 use M6Web\Bundle\AmqpBundle\Event\PreRetrieveEvent;
 use M6Web\Bundle\AmqpBundle\Event\PurgeEvent;
 
 /**
- * Consumer
+ * Consumer.
  */
 class Consumer extends AbstractAmqp
 {
@@ -25,9 +26,9 @@ class Consumer extends AbstractAmqp
      * @param \AMQPQueue $queue        Amqp Queue
      * @param array      $queueOptions Queue options
      */
-    public function __construct(\AMQPQueue $queue, Array $queueOptions)
+    public function __construct(\AMQPQueue $queue, array $queueOptions)
     {
-        $this->queue        = $queue;
+        $this->queue = $queue;
         $this->queueOptions = $queueOptions;
     }
 
@@ -36,10 +37,10 @@ class Consumer extends AbstractAmqp
      *
      * @param int $flags MQP_AUTOACK or AMQP_NOPARAM
      *
-     * @throws \AMQPChannelException If the channel is not open.
-     * @throws \AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException    if the channel is not open
+     * @throws \AMQPConnectionException if the connection to the broker was lost
      *
-     * @return \AMQPEnvelope|boolean
+     * @return \AMQPEnvelope|bool
      */
     public function getMessage($flags = AMQP_AUTOACK)
     {
@@ -57,13 +58,13 @@ class Consumer extends AbstractAmqp
     /**
      * Acknowledge the receipt of a message.
      *
-     * @param string  $deliveryTag Delivery tag of last message to ack.
-     * @param integer $flags       AMQP_MULTIPLE or AMQP_NOPARAM
+     * @param string $deliveryTag delivery tag of last message to ack
+     * @param int    $flags       AMQP_MULTIPLE or AMQP_NOPARAM
      *
-     * @return boolean
+     * @return bool
      *
-     * @throws \AMQPChannelException If the channel is not open.
-     * @throws \AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException    if the channel is not open
+     * @throws \AMQPConnectionException if the connection to the broker was lost
      */
     public function ackMessage($deliveryTag, $flags = AMQP_NOPARAM)
     {
@@ -79,13 +80,13 @@ class Consumer extends AbstractAmqp
     /**
      * Mark a message as explicitly not acknowledged.
      *
-     * @param string  $deliveryTag Delivery tag of last message to nack.
-     * @param integer $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s).
+     * @param string $deliveryTag delivery tag of last message to nack
+     * @param int    $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s)
      *
-     * @throws \AMQPChannelException If the channel is not open.
-     * @throws \AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException    if the channel is not open
+     * @throws \AMQPConnectionException if the connection to the broker was lost
      *
-     * @return boolean
+     * @return bool
      */
     public function nackMessage($deliveryTag, $flags = AMQP_NOPARAM)
     {
@@ -101,10 +102,10 @@ class Consumer extends AbstractAmqp
     /**
      * Purge the contents of the queue.
      *
-     * @throws \AMQPChannelException If the channel is not open.
-     * @throws \AMQPConnectionException If the connection to the broker was lost.
+     * @throws \AMQPChannelException    if the channel is not open
+     * @throws \AMQPConnectionException if the connection to the broker was lost
      *
-     * @return boolean
+     * @return bool
      */
     public function purge()
     {
@@ -118,9 +119,9 @@ class Consumer extends AbstractAmqp
     }
 
     /**
-     * Get the current message count
+     * Get the current message count.
      *
-     * @return integer
+     * @return int
      */
     public function getCurrentMessageCount()
     {

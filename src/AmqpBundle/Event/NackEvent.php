@@ -5,7 +5,7 @@ namespace M6Web\Bundle\AmqpBundle\Event;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
 /**
- * Not acknowledged message event
+ * Not acknowledged message event.
  */
 class NackEvent extends SymfonyEvent
 {

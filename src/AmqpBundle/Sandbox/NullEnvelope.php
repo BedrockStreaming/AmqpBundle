@@ -3,7 +3,7 @@
 namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
- * Envelope being created from array
+ * Envelope being created from array.
  */
 class NullEnvelope extends \AMQPEnvelope
 {

@@ -9,19 +9,19 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 /**
- * This is the class that validates and merges configuration from your app/config files
+ * This is the class that validates and merges configuration from your app/config files.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('m6_web_amqp');
+        $rootNode = $treeBuilder->root('m6_web_amqp');
         $rootNode
             ->children()
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
@@ -167,7 +167,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Exchange options for both consumer and producer
+     * Exchange options for both consumer and producer.
      *
      * @return NodeDefinition
      */
