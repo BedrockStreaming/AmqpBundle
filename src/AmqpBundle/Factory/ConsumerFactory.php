@@ -97,7 +97,9 @@ class ConsumerFactory extends AMQPFactory
 
         /** @var \AMQPQueue $queue */
         $queue = new $this->queueClass($channel);
-        $queue->setName($queueOptions['name']);
+        if (!empty($queueOptions['name'])) {
+            $queue->setName($queueOptions['name']);
+        }
         $queue->setArguments($queueOptions['arguments']);
         $queue->setFlags(
             ($queueOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
