@@ -91,6 +91,23 @@ class M6WebAmqpExtension extends test
                 ->hasSize(1)
             ->integer($connectionArguments[0]['heartbeat'])
                 ->isEqualTo(1);
+        $this
+            ->boolean($container->has('m6_web_amqp.connection.with_read_timeout_and_timeout'))
+                ->isTrue()
+            ->array($connectionArguments = $container->getDefinition('m6_web_amqp.connection.with_read_timeout_and_timeout')->getArguments())
+                ->hasSize(1)
+            ->integer($connectionArguments[0]['read_timeout'])
+                ->isEqualTo(100)
+            ->integer($connectionArguments[0]['write_timeout'])
+                ->isEqualTo(50);
+
+        $this
+            ->boolean($container->has('m6_web_amqp.connection.with_read_timeout_only'))
+                ->isTrue()
+            ->array($connectionArguments = $container->getDefinition('m6_web_amqp.connection.with_read_timeout_only')->getArguments())
+                ->hasSize(1)
+            ->integer($connectionArguments[0]['read_timeout'])
+                ->isEqualTo(100);
     }
 
     public function testSandboxClasses()
