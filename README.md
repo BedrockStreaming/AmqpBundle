@@ -31,7 +31,7 @@ The AmqpBundle does not provide a daemon mode to run AMQP consumers and will not
 
 Require the bundle in your composer.json file:
 
-````
+```
 {
     "require": {
         "m6web/amqp-bundle": "~1.0",
