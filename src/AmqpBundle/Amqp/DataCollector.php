@@ -102,6 +102,6 @@ class DataCollector extends SymfonyDataCollector
      */
     public function reset()
     {
-        $this->data = [['commands' => []];
+        $this->data = ['commands' => []];
     }
 }
