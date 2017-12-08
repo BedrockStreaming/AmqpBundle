@@ -29,7 +29,7 @@ class DataCollector extends SymfonyDataCollector
     public function __construct($name)
     {
         $this->name = $name;
-        $this->data['commands'] = array();
+        $this->reset();
     }
 
     /**
@@ -44,7 +44,7 @@ class DataCollector extends SymfonyDataCollector
     }
 
     /**
-     * Listen for aws command event.
+     * Listen for command event.
      *
      * @param object $event The event object
      */
@@ -62,7 +62,7 @@ class DataCollector extends SymfonyDataCollector
      *
      * @return array The command list and number of times called
      */
-    public function getCommands()
+    public function getCommands(): array
     {
         return $this->data['commands'];
     }
@@ -72,33 +72,36 @@ class DataCollector extends SymfonyDataCollector
      *
      * @return string data collector name
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Temps total d'exec des commandes.
+     * Return total command execution time.
      *
      * @return float
      */
-    public function getTotalExecutionTime()
+    public function getTotalExecutionTime(): float
     {
-        $ret = 0;
-        foreach ($this->data['commands'] as $command) {
-            $ret += $command['executiontime'];
-        }
-
-        return $ret;
+        return (float) array_sum(array_column($this->data['commands'], 'executiontime'));
     }
 
     /**
-     * Temps moyen d'exec.
+     * Get average execution time.
      *
      * @return float
      */
-    public function getAvgExecutionTime()
+    public function getAvgExecutionTime(): float
     {
-        return ($this->getTotalExecutionTime()) ? ($this->getTotalExecutionTime() / count($this->data['commands'])) : 0;
+        return $this->getTotalExecutionTime() ? ($this->getTotalExecutionTime() / \count($this->data['commands'])) : (float) 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->data = [['commands' => []];
     }
 }
