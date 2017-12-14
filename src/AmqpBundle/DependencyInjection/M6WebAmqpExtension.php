@@ -93,6 +93,7 @@ class M6WebAmqpExtension extends Extension
                 ]
             );
 
+            $producerDefinition->setPublic(true);
             $this->setEventDispatcher($container, $config['event_dispatcher'], $producerDefinition);
 
             // Use a factory to build the producer
@@ -142,6 +143,7 @@ class M6WebAmqpExtension extends Extension
                 ]
             );
 
+            $consumerDefinition->setPublic(true);
             $this->setEventDispatcher($container, $config['event_dispatcher'], $consumerDefinition);
 
             // Use a factory to build the consumer
@@ -161,6 +163,7 @@ class M6WebAmqpExtension extends Extension
 
                 $consumerDefinition->setLazy(true);
             }
+
 
             $container->setDefinition(
                 sprintf('m6_web_amqp.consumer.%s', $key),
