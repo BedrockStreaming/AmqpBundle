@@ -92,7 +92,10 @@ class DataCollector extends SymfonyDataCollector
      */
     public function reset()
     {
-        // Reset the collected commands, and keep the 'name' intact.
-        $this->data['commands'] = [];
+        // Reset the current data, while keeping the 'name' intact.
+        $this->data = [
+            'name' => $this->data['name'],
+            'commands' => [],
+        ];
     }
 }
