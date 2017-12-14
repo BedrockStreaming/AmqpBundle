@@ -12,23 +12,13 @@ use Symfony\Component\HttpFoundation\Request;
 class DataCollector extends SymfonyDataCollector
 {
     /**
-     * @var array
-     */
-    protected $commands;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
      * @param string $name
      *
      * Construct the data collector
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
-        $this->name = $name;
+        $this->data['name'] = $name;
         $this->reset();
     }
 
@@ -74,7 +64,7 @@ class DataCollector extends SymfonyDataCollector
      */
     public function getName(): string
     {
-        return $this->name;
+        return $this->data['name'];
     }
 
     /**
@@ -102,6 +92,7 @@ class DataCollector extends SymfonyDataCollector
      */
     public function reset()
     {
-        $this->data = ['commands' => []];
+        // Reset the collected commands, and keep the 'name' intact.
+        $this->data['commands'] = [];
     }
 }
