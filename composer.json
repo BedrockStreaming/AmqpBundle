@@ -2,7 +2,7 @@
     "name" : "m6web/amqp-bundle",
     "description" : "Bundle AMQP",
     "autoload" : {
-        "psr-4": { "M6Web\\Bundle\\": "src/" }
+        "psr-4": { "M6Web\\Bundle\\AmqpBundle\\": "src/" }
     },
     "config": {
         "bin-dir": "bin/"
