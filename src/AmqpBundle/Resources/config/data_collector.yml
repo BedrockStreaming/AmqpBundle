@@ -3,7 +3,7 @@ services:
         class: M6Web\Bundle\AmqpBundle\Amqp\DataCollector
         arguments: ['amqp']
         tags:
-            - { name: data_collector, template: 'M6WebAmqpBundle:Collector:amqp', id: 'amqp' }
+            - { name: data_collector, template: '@M6WebAmqpBundle/Collector/amqp.html.twig', id: 'amqp' }
             - { name: kernel.event_listener, event: amqp.command, method: onCommand }
 
 
