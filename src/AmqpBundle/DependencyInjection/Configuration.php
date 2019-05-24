@@ -20,8 +20,15 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('m6_web_amqp');
+        $treeBuilder = new TreeBuilder('m6_web_amqp');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // symfony < 4.2 support
+            $rootNode = $treeBuilder->root('m6_web_amqp');
+        }
+
         $rootNode
             ->children()
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
