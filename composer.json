@@ -5,16 +5,16 @@
         "psr-4": { "M6Web\\Bundle\\": "src/" }
     },
     "require" : {
-        "php" : "~7",
-        "ext-amqp" : "*",
-        "symfony/framework-bundle" : "^3.4 || ^4.3 || ^5.0",
+        "php": "~7",
+        "ext-amqp": "*",
+        "symfony/framework-bundle": "^3.4 || ^4.3 || ^5.0",
         "symfony/yaml": "^3.4 || ^4.3 || ^5.0",
         "twig/twig": "^1.31 || ^2.0 || ^3.0"
     },
     "require-dev" : {
-        "atoum/atoum-bundle" : "^2.0",
-        "m6web/coke" : "^2.2",
-        "m6web/symfony2-coding-standard" : "^3.3"
+        "atoum/atoum": "^3.4.1",
+        "m6web/coke": "^2.2",
+        "m6web/symfony2-coding-standard": "^3.3"
     },
     "suggest": {
         "ocramius/proxy-manager": "Required for lazy connections"
