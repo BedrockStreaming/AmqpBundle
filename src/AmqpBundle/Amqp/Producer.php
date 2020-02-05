@@ -54,24 +54,28 @@ class Producer extends AbstractAmqp
 
         $routingKeys = !empty($routingKeys) ? $routingKeys : $this->exchangeOptions['routing_keys'];
 
-        $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
-
         if ($this->eventDispatcher) {
+            $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
             $this->eventDispatcher->dispatch(PrePublishEvent::NAME, $prePublishEvent);
+
+            if (!$prePublishEvent->canPublish()) {
+                return true;
+            }
+
+            $routingKeys = $prePublishEvent->getRoutingKeys();
+            $message = $prePublishEvent->getMessage();
+            $flags = $prePublishEvent->getFlags();
+            $attributes = $prePublishEvent->getAttributes();
         }
 
-        if (!$prePublishEvent->canPublish()) {
-            return true;
-        }
-
-        if (!$routingKeys = $prePublishEvent->getRoutingKeys()) {
-            return $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), null, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
+        if (!$routingKeys) {
+            return $this->call($this->exchange, 'publish', [$message, null, $flags, $attributes]);
         }
 
         // Publish the message for each routing keys
         $success = true;
         foreach ($routingKeys as $routingKey) {
-            $success &= $this->call($this->exchange, 'publish', [$prePublishEvent->getMessage(), $routingKey, $prePublishEvent->getFlags(), $prePublishEvent->getAttributes()]);
+            $success &= $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
         }
 
         return (bool) $success;
