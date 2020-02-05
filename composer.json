@@ -4,26 +4,24 @@
     "autoload" : {
         "psr-4": { "M6Web\\Bundle\\": "src/" }
     },
-    "config": {
-        "bin-dir": "bin/"
-    },
-    "minimum-stability" : "dev",
-    "prefer-stable" : true,
     "require" : {
         "php" : "~7",
-        "ext-amqp" : "*"
+        "ext-amqp" : "*",
+        "symfony/framework-bundle" : "^3.4 || ^4.3 || ^5.0",
+        "symfony/yaml": "^3.4 || ^4.3 || ^5.0",
+        "twig/twig": "^1.31 || ^2.0 || ^3.0"
     },
     "require-dev" : {
-        "atoum/atoum-bundle" : "dev-master",
-        "m6web/coke" : "~1.2",
-        "m6web/symfony2-coding-standard" : "~1.1",
-        "symfony/framework-bundle" : "^2.8 || ^3.0",
-        "symfony/yaml": "^2.8 || ^3.0"
-    },
-    "conflict": {
-        "symfony/yaml": "<2.8"
+        "atoum/atoum-bundle" : "^2.0",
+        "m6web/coke" : "^2.2",
+        "m6web/symfony2-coding-standard" : "^3.3"
     },
     "suggest": {
         "ocramius/proxy-manager": "Required for lazy connections"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.x-dev"
+        }
     }
 }
