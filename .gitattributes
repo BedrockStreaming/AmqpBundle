@@ -1,0 +1,11 @@
+/.atoum.php           export-ignore
+/.bootstrap.atoum.php export-ignore
+/.coke                export-ignore
+/.gitattributes       export-ignore
+/.gitignore           export-ignore
+/.travis.yml          export-ignore
+/bin                  export-ignore
+/Dockerfile           export-ignore
+/docker               export-ignore
+/docker-compose.yml   export-ignore
+/travis               export-ignore
