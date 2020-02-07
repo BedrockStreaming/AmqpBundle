@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Parser;
 use atoum\test;
 
 /**
@@ -14,17 +15,20 @@ use atoum\test;
  */
 class M6WebAmqpExtension extends test
 {
-    protected function getContainerForConfiguration($fixtureName)
+    /**
+     * @return ContainerBuilder
+     */
+    protected function getContainerForConfiguration(string $fixtureName)
     {
         $extension = new Base();
 
         $parameterBag = new ParameterBag(array('kernel.debug' => true));
         $container = new ContainerBuilder($parameterBag);
-        $container->set('event_dispatcher', new \mock\Symfony\Component\EventDispatcher\EventDispatcherInterface());
-        $container->registerExtension($extension);
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../Fixtures/'));
-        $loader->load($fixtureName.'.yml');
+        $parser = new Parser();
+        $config = $parser->parseFile(__DIR__.'/../../Fixtures/'.$fixtureName.'.yml');
+
+        $extension->load($config, $container);
 
         return $container;
     }
@@ -32,11 +36,10 @@ class M6WebAmqpExtension extends test
     public function testQueueArgumentsConfig()
     {
         $container = $this->getContainerForConfiguration('queue-arguments-config');
-        $container->compile();
 
         // test producer queue options
         $this
-            ->boolean($container->has('m6_web_amqp.producer.producer_2'))
+            ->boolean($container->hasDefinition('m6_web_amqp.producer.producer_2'))
                 ->isTrue()
             ->boolean($container->getDefinition('m6_web_amqp.producer.producer_2')->isShared())
                 ->isFalse()
@@ -60,7 +63,7 @@ class M6WebAmqpExtension extends test
 
         // test consumer queue options
         $this
-            ->boolean($container->has('m6_web_amqp.consumer.consumer_1'))
+            ->boolean($container->hasDefinition('m6_web_amqp.consumer.consumer_1'))
                 ->isTrue()
             ->boolean($container->getDefinition('m6_web_amqp.consumer.consumer_1')->isShared())
                 ->isFalse()
@@ -85,7 +88,7 @@ class M6WebAmqpExtension extends test
 
         //test connection options
         $this
-            ->boolean($container->has('m6_web_amqp.connection.with_heartbeat'))
+            ->boolean($container->hasDefinition('m6_web_amqp.connection.with_heartbeat'))
                 ->isTrue()
             ->array($connectionArguments = $container->getDefinition('m6_web_amqp.connection.with_heartbeat')->getArguments())
                 ->hasSize(1)
@@ -96,7 +99,6 @@ class M6WebAmqpExtension extends test
     public function testSandboxClasses()
     {
         $container = $this->getContainerForConfiguration('queue-arguments-config');
-        $container->compile();
 
         $this
             ->string($container->getParameter('m6_web_amqp.exchange.class'))
@@ -114,7 +116,6 @@ class M6WebAmqpExtension extends test
     public function testDefaultConfiguration()
     {
         $container = $this->getContainerForConfiguration('queue-defaults');
-        $container->compile();
 
         //sandbox is off by default, check indirectly via classes definition
         $this

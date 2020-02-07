@@ -46,13 +46,14 @@ class Consumer extends AbstractAmqp
     {
         $envelope = $this->call($this->queue, 'get', [$flags]);
 
-        $preRetrieveEvent = new PreRetrieveEvent($envelope);
-
         if ($this->eventDispatcher) {
+            $preRetrieveEvent = new PreRetrieveEvent($envelope);
             $this->eventDispatcher->dispatch(PreRetrieveEvent::NAME, $preRetrieveEvent);
+
+            return $preRetrieveEvent->getEnvelope();
         }
 
-        return $preRetrieveEvent->getEnvelope();
+        return $envelope;
     }
 
     /**
