@@ -14,51 +14,36 @@ Publishing messages to AMQP Server from a Symfony controller is as easy as:
 
 ```php
 $msg = ["key" => "value"];
-$this->get('m6_web_amqp.producer.myproducer')->publishMessage(serialize($msg));
+$this->myProducer->publishMessage(serialize($msg)); // where "myProducer" refers to a configured producer (see producers documentation below)
 ```
 
-When you want to consume a message out of a queue :
+When you want to consume a message out of a queue:
 
 ```php
-$msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
+$msg = $this->myConsumer->getMessage(); // where "myConsumer" refers to a configured consumer (see consumers documentation below)
 ```
 
 The AmqpBundle does not provide a daemon mode to run AMQP consumers and will not. You can do it with the [M6Web/DaemonBundle](https://github.com/M6Web/DaemonBundle).
 
-## Installation ##
+## Installation
 
-### For Symfony >= 2.1.* ###
+Use composer:
 
-Require the bundle in your composer.json file:
-
-```
-{
-    "require": {
-        "m6web/amqp-bundle": "~1.0",
-    }
-}
+```shell
+composer require m6web/amqp-bundle
 ```
 
-Register the bundle:
+Then make sure the bundle is registered in your application:
 
 ```php
-// app/AppKernel.php
+// config/bundles.php
 
-public function registerBundles()
-{
-    $bundles = array(
-        new M6Web\Bundle\AmqpBundle\M6WebAmqpBundle(),
-    );
-}
+return [
+    M6Web\Bundle\AmqpBundle\M6WebAmqpBundle::class => ['all' => true],
+];
 ```
 
-Install the bundle:
-
-```
-$ composer update m6web/amqp-bundle
-```
-
-## Usage ##
+## Usage
 
 Add the `m6_web_amqp` section in your configuration file.
 
@@ -101,7 +86,7 @@ m6_web_amqp:
                 auto_delete: bool                                  # optional - defaut false
                 arguments: { key: value }                          # optional - default { } - Please refer to the documentation of your broker for information about the arguments.
                 routing_keys: ['routingkey', 'routingkey2']        # optional - default { }
-                publish_attributes: { key: value }                 # optional - default { } - possible keys : content_type, content_encoding, message_id, user_id, app_id, delivery_mode,
+                publish_attributes: { key: value }                 # optional - default { } - possible keys: content_type, content_encoding, message_id, user_id, app_id, delivery_mode,
                                                                    #                          priority, timestamp, expiration, type, reply_to, headers.
 
     consumers:
@@ -117,7 +102,7 @@ m6_web_amqp:
                 exclusive: bool                               # optional - defaut false
                 auto_delete: bool                             # optional - defaut false
                 arguments: { key: value }                     # optional - default { } - Please refer to the documentation of your broker for information about the arguments.
-                                                              #                          RabbitMQ ex : {'x-ha-policy': 'all', 'x-dead-letter-routing-key': 'async.dead',
+                                                              #                          RabbitMQ ex: {'x-ha-policy': 'all', 'x-dead-letter-routing-key': 'async.dead',
                                                               #                                      'x-dead-letter-exchange': 'async_dead', 'x-message-ttl': 20000}
                 routing_keys: ['routingkey', 'routingkey2']   # optional - default { }
             qos_options:
@@ -127,32 +112,42 @@ m6_web_amqp:
 
 Here we configure the connection service and the message endpoints that our application will have.
 
-In this example your service container will contain the service `m6_web_amqp.producer.myproducer` and `m6_web_amqp.consumer.myconsumer`.
+In this example your service container will contain the services `m6_web_amqp.producer.myproducer` and `m6_web_amqp.consumer.myconsumer`.
 
 ### Producer
 
 A producer will be used to send messages to the server.
 
-In the AMQP Model, messages are sent to an __exchange__, this means that in the configuration for a producer
-you will have to specify the connection options along with the exchange options.
-
-Let's say that you want to publish a message :
-
-```php
-$msg = ["key" => "value"];
-$this->get('m6_web_amqp.producer.myproducer')->publishMessage(serialize($msg));
-```
-
-For a producer called __myproducer__, you will have in the service container a service called __m6\_web\_amqp.producer.myproducer__.
-
-If you need to add option default publish attributes for each message, publish_attributes options can be something like this :
+Let's say that you want to publish a message and you've already configured a producer named `myproducer` (just like above), then you'll just have to inject the `m6_web_amqp.producer.myproducer` service wherever you wan't to use it:
 
 ```yaml
-publish_attributes: { 'content_type' : 'application/json', 'delivery_mode': 'persistent', 'priority': 8,  'expiration': '3200'}
+App\TheClassWhereIWantToInjectMyProducer:
+    arguments: ['@m6_web_amqp.producer.myproducer']
 ```
 
-If you don't want to use the configuration to define the __routing key__ (for instance, if it should be computed for each message),
-you can define it during the call to `publishMessage()` :
+```php
+private $myProducer;
+
+public function __construct(\M6Web\Bundle\AmqpBundle\Amqp\Producer $myProducer) {
+    $this->myProducer = $myProducer;
+}
+
+public function myFunction() {
+    $msg = ["key" => "value"];
+    $this->myProducer->publishMessage(serialize($msg));
+}
+```
+
+In the AMQP Model, messages are sent to an __exchange__, this means that in the configuration for a producer
+you will have to specify the connection options along with the `exchange_options`.
+
+If you need to add default publishing attributes for each message, `publish_attributes` options can be something like this:
+
+```yaml
+publish_attributes: { 'content_type': 'application/json', 'delivery_mode': 'persistent', 'priority': 8,  'expiration': '3200'}
+```
+
+If you don't want to use the configuration to define the __routing key__ (for instance, if it should be computed for each message), you can define it during the call to `publishMessage()`:
 
 ```php
 $routingKey = $this->computeRoutingKey($message);
@@ -163,13 +158,26 @@ $this->get('m6_web_amqp.producer.myproducer')->publishMessage($message, AMQP_NOP
 
 A consumer will be used to get a message from the queue.
 
-Let's say that you want to get a message :
+Let's say that you want to consume a message and you've already configured a consumer named `myconsumer` (just like above), then you'll just have to inject the `m6_web_amqp.consumer.myconsumer` service wherever you wan't to use it:
 
-```php
-$msg = $this->get('m6_web_amqp.consumer.myconsumer')->getMessage();
+```yaml
+App\TheClassWhereIWantToInjectMyConsumer:
+    arguments: ['@m6_web_amqp.consumer.myconsumer']
 ```
 
-The consumer does not wait for a message : getMessage will return null immediately if no message is available or return a AMQPEnvelope object if a message can be consumed.
+```php
+private $myConsumer;
+
+public function __construct(\M6Web\Bundle\AmqpBundle\Amqp\Consumer $myConsumer) {
+    $this->myConsumer = $myConsumer;
+}
+
+public function myFunction() {
+    $this->myConsumer->getMessage();
+}
+```
+
+The consumer does not wait for a message: getMessage will return null immediately if no message is available or return a AMQPEnvelope object if a message can be consumed.
 The "flags" argument of getMessage accepts AMQP_AUTOACK (auto acknowledge by default) or AMQP_NOPARAM (manual acknowledge).
 
 To manually acknowledge a message, use the consumer's ackMessage/nackMessage methods with a delivery_tag argument's value from the AMQPEnvelope object.
@@ -186,21 +194,14 @@ If you want lazy connections, you have to add ```"ocramius/proxy-manager": "~1.0
 
 ### DataCollector
 
-DataCollector is enabled by default if kernel.debug is set. Typically in the dev environment.
+DataCollector is enabled by default if `kernel.debug` is `true`. Typically in the dev environment.
 
-# Unit tests :
-
-```
-    composer install
-    ./bin/atoum
-```
-
-# Docker
+## Docker
 
 If you have a multi-containers apps, we provide a Dockerfile for a container with rabbitmq-server.
 This container is for testing only.
 
-Example of docker-compose.yml :
+Example of docker-compose.yml:
 
 ```
 web:
@@ -217,7 +218,7 @@ rabbitmq:
         - "5672:5672"
 ```
 
-# Testing
+## Testing
 
 If you use this library in your application tests you will need rabbitmq instance running. If you don't want to test rabbitmq producers and consumers you can enable sandbox mode:
 
