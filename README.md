@@ -43,7 +43,7 @@ return [
 ];
 ```
 
-## Usage ##
+## Usage
 
 Add the `m6_web_amqp` section in your configuration file.
 
