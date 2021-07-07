@@ -113,6 +113,7 @@ class M6WebAmqpExtension extends Extension
                 $producerDefinition->setLazy(true);
             }
 
+            $producerDefinition->addTag('m6_web_amqp.producers');
             $container->setDefinition(
                 sprintf('m6_web_amqp.producer.%s', $key),
                 $producerDefinition
@@ -162,6 +163,7 @@ class M6WebAmqpExtension extends Extension
                 $consumerDefinition->setLazy(true);
             }
 
+            $consumerDefinition->addTag('m6_web_amqp.consumers');
             $container->setDefinition(
                 sprintf('m6_web_amqp.consumer.%s', $key),
                 $consumerDefinition
