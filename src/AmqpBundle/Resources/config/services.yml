@@ -4,11 +4,12 @@ parameters:
     m6_web_amqp.exchange.class : AMQPExchange
     m6_web_amqp.queue.class: AMQPQueue
     m6_web_amqp.envelope.class: AMQPEnvelope
-    
+
     m6_web_amqp.event.command.class: M6Web\Bundle\AmqpBundle\Event\Command
 
     m6_web_amqp.producer.class: M6Web\Bundle\AmqpBundle\Amqp\Producer
     m6_web_amqp.consumer.class: M6Web\Bundle\AmqpBundle\Amqp\Consumer
+    m6_web_amqp.locator.class:  M6Web\Bundle\AmqpBundle\Amqp\Locator
 
     m6_web_amqp.producer_factory.class: M6Web\Bundle\AmqpBundle\Factory\ProducerFactory
     m6_web_amqp.consumer_factory.class: M6Web\Bundle\AmqpBundle\Factory\ConsumerFactory
@@ -20,10 +21,15 @@ services:
             - "%m6_web_amqp.channel.class%"
             - "%m6_web_amqp.exchange.class%"
             - "%m6_web_amqp.queue.class%"
-            
+
     m6_web_amqp.consumer_factory:
         class: "%m6_web_amqp.consumer_factory.class%"
         arguments:
             - "%m6_web_amqp.channel.class%"
             - "%m6_web_amqp.queue.class%"
             - "%m6_web_amqp.exchange.class%"
+
+    m6_web_amqp.locator:
+        class: "%m6_web_amqp.locator.class%"
+        lazy: true
+        public: true

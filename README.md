@@ -112,6 +112,8 @@ m6_web_amqp:
 
 Here we configure the connection service and the message endpoints that our application will have.
 
+Producer and Consumer services are retrievable using `m6_web_amqp.locator` using getConsumer and getProducer.
+
 In this example your service container will contain the services `m6_web_amqp.producer.myproducer` and `m6_web_amqp.consumer.myconsumer`.
 
 ### Producer
@@ -138,6 +140,24 @@ public function myFunction() {
 }
 ```
 
+**Otherwise, you could use `m6_web_amqp.locator`**
+
+```yaml
+App\TheClassWhereIWantToRetriveMyConsumer:
+    arguments: ['@m6_web_amqp.locator']
+```
+
+```php
+private $myProducer;
+
+public function __construct(\M6Web\Bundle\AmqpBundle\Amqp\Locator $locator) {
+    $this->locator = $locator;
+}
+
+public function myFunction() {
+    $this->locator->getProducer('m6_web_amqp.produer.myproducer');
+}
+```
 In the AMQP Model, messages are sent to an __exchange__, this means that in the configuration for a producer
 you will have to specify the connection options along with the `exchange_options`.
 
@@ -174,6 +194,25 @@ public function __construct(\M6Web\Bundle\AmqpBundle\Amqp\Consumer $myConsumer) 
 
 public function myFunction() {
     $this->myConsumer->getMessage();
+}
+```
+
+**Otherwise, you could use `m6_web_amqp.locator`**
+
+```yaml
+App\TheClassWhereIWantToRetriveMyConsumer:
+    arguments: ['@m6_web_amqp.locator']
+```
+
+```php
+private $myConsumer;
+
+public function __construct(\M6Web\Bundle\AmqpBundle\Amqp\Locator $locator) {
+    $this->locator = $locator;
+}
+
+public function myFunction() {
+    $this->locator->getConsumer('m6_web_amqp.consumer.myconsumer');
 }
 ```
 
