@@ -9,6 +9,7 @@ jobs:
       matrix:
         php-version: [ '7.2', '7.3', '7.4', '8.0', '8.1' ]
         symfony-version: ['^3.4', '^4.4', '^5.0']
+      fail-fast: false
     steps:
       - uses: actions/checkout@master
       - uses: shivammathur/setup-php@v2

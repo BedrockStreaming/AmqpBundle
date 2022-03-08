@@ -8,12 +8,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Yaml\Parser;
-use atoum\test;
+use atoum;
 
 /**
  * Class M6WebAmqpExtension.
  */
-class M6WebAmqpExtension extends test
+class M6WebAmqpExtension extends atoum
 {
     /**
      * @return ContainerBuilder
