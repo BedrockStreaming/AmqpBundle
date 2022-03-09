@@ -1,6 +1,6 @@
 # AmQPBundle
 
-[![Build Status](https://travis-ci.org/M6Web/AmqpBundle.svg?branch=master)](https://travis-ci.org/M6Web/AmqpBundle)
+[![Build Status](https://github.com/BedrockStreaming/AmqpBundle/actions/workflows/ci.yml/badge.svg)](https://github.com/BedrockStreaming/AmqpBundle/actions/workflows/ci.yml) [![Total Downloads](https://poser.pugx.org/m6web/amqp-bundle/downloads.svg)](https://packagist.org/packages/m6web/amqp-bundle) [![License](http://poser.pugx.org/m6web/amqp-bundle/license)](https://packagist.org/packages/m6web/amqp-bundle) [![PHP Version Require](http://poser.pugx.org/m6web/amqp-bundle/require/php)](https://packagist.org/packages/m6web/amqp-bundle)
 
 The configuration and documentation are inspired from [videlalvaro/RabbitMqBundle](https://github.com/videlalvaro/RabbitMqBundle).
 
