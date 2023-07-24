@@ -2,20 +2,18 @@
 
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Abstract AMQP.
  */
 abstract class AbstractAmqp
 {
-    /**
-     * Event dispatcher.
-     *
-     * @var object
-     */
-    protected $eventDispatcher = null;
+    protected ?EventDispatcherInterface $eventDispatcher = null;
 
     /**
      * Class of the event notifier.
+     * @var ?class-string $eventClass
      */
     protected ?string $eventClass = null;
 
@@ -36,7 +34,7 @@ abstract class AbstractAmqp
                   ->setReturn($return)
                   ->setExecutionTime($time);
 
-            $this->eventDispatcher->dispatch('amqp.command', $event);
+            $this->eventDispatcher->dispatch($event, 'amqp.command');
         }
     }
 
@@ -49,7 +47,7 @@ abstract class AbstractAmqp
      *
      * @return mixed
      */
-    protected function call($object, string $name, array $arguments = [])
+    protected function call(object $object, string $name, array $arguments = [])
     {
         $start = microtime(true);
 
@@ -63,17 +61,13 @@ abstract class AbstractAmqp
     /**
      * Set an event dispatcher to notify amqp command.
      *
-     * @param object $eventDispatcher The eventDispatcher object, which implement the notify method
-     * @param string $eventClass      The event class used to create an event and send it to the event dispatcher
+     * @param EventDispatcherInterface $eventDispatcher The eventDispatcher object, which implement the notify method
+     * @param string                   $eventClass      The event class used to create an event and send it to the event dispatcher
      *
      * @throws \Exception
      */
-    public function setEventDispatcher($eventDispatcher, string $eventClass)
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher, string $eventClass)
     {
-        if (!is_object($eventDispatcher) || !method_exists($eventDispatcher, 'dispatch')) {
-            throw new Exception('The EventDispatcher must be an object and implement a dispatch method');
-        }
-
         $class = new \ReflectionClass($eventClass);
         if (!$class->implementsInterface('\M6Web\Bundle\AmqpBundle\Event\DispatcherInterface')) {
             throw new Exception('The Event class : '.$eventClass.' must implement DispatcherInterface');
