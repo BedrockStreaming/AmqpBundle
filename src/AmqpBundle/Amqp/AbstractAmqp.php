@@ -23,9 +23,9 @@ abstract class AbstractAmqp
      * @param string $command   The command name
      * @param array  $arguments Args of the command
      * @param mixed  $return    Return value of the command
-     * @param int $time      Exec time
+     * @param float $time      Exec time
      */
-    protected function notifyEvent(string $command, array $arguments, $return, int $time = 0)
+    protected function notifyEvent(string $command, array $arguments, $return, float $time = 0)
     {
         if ($this->eventDispatcher) {
             $event = new $this->eventClass();

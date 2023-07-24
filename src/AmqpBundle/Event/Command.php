@@ -9,7 +9,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class Command extends Event implements DispatcherInterface
 {
-    protected int $executionTime = 0;
+    protected float $executionTime = 0.0;
     protected string $command;
     protected array $arguments;
 

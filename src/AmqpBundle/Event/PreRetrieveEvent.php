@@ -12,19 +12,19 @@ class PreRetrieveEvent extends Event
 {
     const NAME = 'amqp.pre_retrieve';
 
-    private AMQPEnvelope $envelope;
+    private ?AMQPEnvelope $envelope;
 
-    public function __construct(AMQPEnvelope $envelope)
+    public function __construct(?AMQPEnvelope $envelope)
     {
         $this->envelope = $envelope;
     }
 
-    public function getEnvelope(): AMQPEnvelope
+    public function getEnvelope(): ?AMQPEnvelope
     {
         return $this->envelope;
     }
 
-    public function setEnvelope(AMQPEnvelope $envelope)
+    public function setEnvelope(?AMQPEnvelope $envelope)
     {
         $this->envelope = $envelope;
     }

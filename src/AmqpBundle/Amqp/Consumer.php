@@ -34,15 +34,16 @@ class Consumer extends AbstractAmqp
     public function getMessage(int $flags = AMQP_AUTOACK): ?\AMQPEnvelope
     {
         $envelope = $this->call($this->queue, 'get', [$flags]);
+        $envelope = $envelope === false ? null : $envelope;
 
         if ($this->eventDispatcher) {
             $preRetrieveEvent = new PreRetrieveEvent($envelope);
-            $this->eventDispatcher->dispatch( $preRetrieveEvent, PreRetrieveEvent::NAME);
+            $this->eventDispatcher->dispatch($preRetrieveEvent, PreRetrieveEvent::NAME);
 
             return $preRetrieveEvent->getEnvelope();
         }
 
-        return $envelope === false ? null : $envelope;
+        return $envelope;
     }
 
     /**
