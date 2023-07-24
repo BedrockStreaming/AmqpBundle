@@ -2,34 +2,23 @@
 
 namespace M6Web\Bundle\AmqpBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Purge queue event.
  */
-class PurgeEvent extends SymfonyEvent
+class PurgeEvent extends Event
 {
     const NAME = 'amqp.purge';
 
-    /**
-     * @var \AMQPQueue
-     */
-    private $queue;
+    private \AMQPQueue $queue;
 
-    /**
-     * Constructor.
-     *
-     * @param \AMQPQueue $queue
-     */
-    public function __construct($queue)
+    public function __construct(\AMQPQueue $queue)
     {
         $this->queue = $queue;
     }
 
-    /**
-     * @return \AMQPQueue
-     */
-    public function getQueue()
+    public function getQueue(): \AMQPQueue
     {
         return $this->queue;
     }

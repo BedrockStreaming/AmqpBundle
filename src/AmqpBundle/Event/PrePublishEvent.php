@@ -2,49 +2,22 @@
 
 namespace M6Web\Bundle\AmqpBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * PrePublishEvent.
  */
-class PrePublishEvent extends SymfonyEvent
+class PrePublishEvent extends Event
 {
     const NAME = 'amqp.pre_publish';
 
-    /**
-     * @var string
-     */
-    private $message;
+    private string $message;
+    private array $routingKeys;
+    private int $flags;
+    private array $attributes;
+    private bool $canPublish;
 
-    /**
-     * @var array
-     */
-    private $routingKeys;
-
-    /**
-     * @var int
-     */
-    private $flags;
-
-    /**
-     * @var array
-     */
-    private $attributes;
-
-    /**
-     * @var bool
-     */
-    private $canPublish;
-
-    /**
-     * Constructor.
-     *
-     * @param string $message
-     * @param array  $routingKeys
-     * @param int    $flags
-     * @param array  $attributes
-     */
-    public function __construct($message, $routingKeys, $flags, $attributes)
+    public function __construct(string $message, array $routingKeys, int $flags, array $attributes)
     {
         $this->message = $message;
         $this->routingKeys = $routingKeys;
@@ -53,90 +26,57 @@ class PrePublishEvent extends SymfonyEvent
         $this->canPublish = true;
     }
 
-    /**
-     * @return bool
-     */
-    public function canPublish()
+    public function canPublish(): bool
     {
         return $this->canPublish;
     }
 
-    /**
-     * Allow publish.
-     */
     public function allowPublish()
     {
         $this->canPublish = true;
     }
 
-    /**
-     * Deny publish.
-     */
     public function denyPublish()
     {
         $this->canPublish = false;
     }
 
-    /**
-     * @return string
-     */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @param string $message
-     */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
     }
 
-    /**
-     * @return array
-     */
-    public function getRoutingKeys()
+    public function getRoutingKeys(): array
     {
         return $this->routingKeys;
     }
 
-    /**
-     * @param array $routingKeys
-     */
-    public function setRoutingKeys($routingKeys)
+    public function setRoutingKeys(array $routingKeys)
     {
         $this->routingKeys = $routingKeys;
     }
 
-    /**
-     * @return int
-     */
-    public function getFlags()
+    public function getFlags(): int
     {
         return $this->flags;
     }
 
-    /**
-     * @param int $flags
-     */
-    public function setFlags($flags)
+    public function setFlags(int $flags)
     {
         $this->flags = $flags;
     }
 
-    /**
-     * @return array
-     */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    /**
-     * @param array $attributes
-     */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
     }

@@ -16,10 +16,8 @@ abstract class AbstractAmqp
 
     /**
      * Class of the event notifier.
-     *
-     * @var string
      */
-    protected $eventClass = null;
+    protected ?string $eventClass = null;
 
     /**
      * Notify an event to the event dispatcher.
@@ -27,9 +25,9 @@ abstract class AbstractAmqp
      * @param string $command   The command name
      * @param array  $arguments Args of the command
      * @param mixed  $return    Return value of the command
-     * @param int    $time      Exec time
+     * @param int $time      Exec time
      */
-    protected function notifyEvent($command, $arguments, $return, $time = 0)
+    protected function notifyEvent(string $command, array $arguments, $return, int $time = 0)
     {
         if ($this->eventDispatcher) {
             $event = new $this->eventClass();
@@ -51,7 +49,7 @@ abstract class AbstractAmqp
      *
      * @return mixed
      */
-    protected function call($object, $name, array $arguments = [])
+    protected function call($object, string $name, array $arguments = [])
     {
         $start = microtime(true);
 
@@ -70,7 +68,7 @@ abstract class AbstractAmqp
      *
      * @throws \Exception
      */
-    public function setEventDispatcher($eventDispatcher, $eventClass)
+    public function setEventDispatcher($eventDispatcher, string $eventClass)
     {
         if (!is_object($eventDispatcher) || !method_exists($eventDispatcher, 'dispatch')) {
             throw new Exception('The EventDispatcher must be an object and implement a dispatch method');

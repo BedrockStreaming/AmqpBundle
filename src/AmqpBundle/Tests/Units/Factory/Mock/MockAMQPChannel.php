@@ -14,4 +14,12 @@ class MockAMQPChannel extends \AMQPChannel
     public function qos($prefetchSize, $prefetchCount, $global = NULL)
     {
     }
+
+    public function setPrefetchSize($count){
+
+    }
+
+    public function setPrefetchCount($count){
+
+    }
 }

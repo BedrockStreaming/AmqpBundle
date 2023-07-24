@@ -2,49 +2,30 @@
 
 namespace M6Web\Bundle\AmqpBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Not acknowledged message event.
  */
-class NackEvent extends SymfonyEvent
+class NackEvent extends Event
 {
     const NAME = 'amqp.nack';
 
-    /**
-     * @var string
-     */
-    private $deliveryTag;
+    private string $deliveryTag;
+    private int $flags;
 
-    /**
-     * @var int
-     */
-    private $flags;
-
-    /**
-     * Constructor.
-     *
-     * @param string $deliveryTag
-     * @param int    $flags
-     */
-    public function __construct($deliveryTag, $flags)
+    public function __construct(string $deliveryTag, int $flags)
     {
         $this->deliveryTag = $deliveryTag;
         $this->flags = $flags;
     }
 
-    /**
-     * @return string
-     */
-    public function getDeliveryTag()
+    public function getDeliveryTag(): string
     {
         return $this->deliveryTag;
     }
 
-    /**
-     * @return int
-     */
-    public function getFlags()
+    public function getFlags(): int
     {
         return $this->flags;
     }

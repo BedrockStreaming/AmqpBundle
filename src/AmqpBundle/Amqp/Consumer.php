@@ -12,20 +12,11 @@ use M6Web\Bundle\AmqpBundle\Event\PurgeEvent;
  */
 class Consumer extends AbstractAmqp
 {
-    /**
-     * @var \AMQPQueue
-     */
-    protected $queue = null;
 
-    /**
-     * @var array
-     */
-    protected $queueOptions = [];
+    protected \AMQPQueue $queue;
 
-    /**
-     * @param \AMQPQueue $queue        Amqp Queue
-     * @param array      $queueOptions Queue options
-     */
+    protected array $queueOptions = [];
+
     public function __construct(\AMQPQueue $queue, array $queueOptions)
     {
         $this->queue = $queue;
@@ -37,12 +28,10 @@ class Consumer extends AbstractAmqp
      *
      * @param int $flags MQP_AUTOACK or AMQP_NOPARAM
      *
-     * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
-     *
-     * @return \AMQPEnvelope|bool
+     * @throws \AMQPChannelException    if the channel is not open
      */
-    public function getMessage($flags = AMQP_AUTOACK)
+    public function getMessage(int $flags = AMQP_AUTOACK): ?\AMQPEnvelope
     {
         $envelope = $this->call($this->queue, 'get', [$flags]);
 
@@ -53,7 +42,7 @@ class Consumer extends AbstractAmqp
             return $preRetrieveEvent->getEnvelope();
         }
 
-        return $envelope;
+        return $envelope === false ? null : $envelope;
     }
 
     /**
@@ -62,12 +51,10 @@ class Consumer extends AbstractAmqp
      * @param string $deliveryTag delivery tag of last message to ack
      * @param int    $flags       AMQP_MULTIPLE or AMQP_NOPARAM
      *
-     * @return bool
-     *
      * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
      */
-    public function ackMessage($deliveryTag, $flags = AMQP_NOPARAM)
+    public function ackMessage(string $deliveryTag, int $flags = AMQP_NOPARAM): bool
     {
         if ($this->eventDispatcher) {
             $ackEvent = new AckEvent($deliveryTag, $flags);
@@ -84,12 +71,10 @@ class Consumer extends AbstractAmqp
      * @param string $deliveryTag delivery tag of last message to nack
      * @param int    $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s)
      *
-     * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
-     *
-     * @return bool
+     * @throws \AMQPChannelException    if the channel is not open
      */
-    public function nackMessage($deliveryTag, $flags = AMQP_NOPARAM)
+    public function nackMessage(string $deliveryTag, int $flags = AMQP_NOPARAM): bool
     {
         if ($this->eventDispatcher) {
             $nackEvent = new NackEvent($deliveryTag, $flags);
@@ -105,10 +90,8 @@ class Consumer extends AbstractAmqp
      *
      * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
-     *
-     * @return bool
      */
-    public function purge()
+    public function purge(): bool
     {
         if ($this->eventDispatcher) {
             $purgeEvent = new PurgeEvent($this->queue);
@@ -121,10 +104,8 @@ class Consumer extends AbstractAmqp
 
     /**
      * Get the current message count.
-     *
-     * @return int
      */
-    public function getCurrentMessageCount()
+    public function getCurrentMessageCount(): int
     {
         // Save the current queue flags and setup the queue in passive mode
         $flags = $this->queue->getFlags();
@@ -139,20 +120,12 @@ class Consumer extends AbstractAmqp
         return $messagesCount;
     }
 
-    /**
-     * @return \AMQPQueue
-     */
-    public function getQueue()
+    public function getQueue(): \AMQPQueue
     {
         return $this->queue;
     }
 
-    /**
-     * @param \AMQPQueue $queue
-     *
-     * @return \M6Web\Bundle\AmqpBundle\Amqp\Consumer
-     */
-    public function setQueue(\AMQPQueue $queue)
+    public function setQueue(\AMQPQueue $queue): Consumer
     {
         $this->queue = $queue;
 

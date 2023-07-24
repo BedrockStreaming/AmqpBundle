@@ -4,36 +4,22 @@ namespace M6Web\Bundle\AmqpBundle\Factory;
 
 use M6Web\Bundle\AmqpBundle\Amqp\Producer;
 
-/**
- * ProducerFactory.
- */
 class ProducerFactory extends AMQPFactory
 {
-    /**
-     * @var string
-     */
-    protected $channelClass;
-
-    /**
-     * @var string
-     */
-    protected $exchangeClass;
-
-    /**
-     * @var string
-     */
-    protected $queueClass;
+    protected string $channelClass;
+    protected string $exchangeClass;
+    protected string $queueClass;
 
     /**
      * __construct.
      *
-     * @param string $channelClass  Channel class name
-     * @param string $exchangeClass Exchange class name
-     * @param string $queueClass    Queue class name
+     * @param class-string $channelClass  Channel class name
+     * @param class-string $exchangeClass Exchange class name
+     * @param class-string $queueClass    Queue class name
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($channelClass, $exchangeClass, $queueClass)
+    public function __construct(string $channelClass, string $exchangeClass, string $queueClass)
     {
         if (!class_exists($channelClass) || !is_a($channelClass, 'AMQPChannel', true)) {
             throw new \InvalidArgumentException(
@@ -61,7 +47,7 @@ class ProducerFactory extends AMQPFactory
     /**
      * build the producer class.
      *
-     * @param string          $class           Provider class name
+     * @param class-string     $class           Provider class name
      * @param \AMQPConnection $connexion       AMQP connexion
      * @param array           $exchangeOptions Exchange Options
      * @param array           $queueOptions    Queue Options
@@ -69,7 +55,7 @@ class ProducerFactory extends AMQPFactory
      *
      * @return Producer
      */
-    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false)
+    public function get(string $class, \AMQPConnection $connexion, array $exchangeOptions, array $queueOptions, bool $lazy = false): Producer
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
@@ -108,8 +94,6 @@ class ProducerFactory extends AMQPFactory
         }
 
         // Create the producer
-        $producer = new $class($exchange, $exchangeOptions);
-
-        return $producer;
+        return new $class($exchange, $exchangeOptions);
     }
 }

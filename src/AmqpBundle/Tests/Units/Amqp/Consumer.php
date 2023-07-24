@@ -276,7 +276,7 @@ class Consumer extends atoum
                 ->and($queue = new NullQueue($channel))
                 ->and($consumer = new Base($queue, []))
             ->then
-                ->boolean($consumer->getMessage())->isFalse()
+                ->variable($consumer->getMessage())->isNull()
                 ->integer($consumer->getCurrentMessageCount())->isEqualTo(0)
         ;
 
