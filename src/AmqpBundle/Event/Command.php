@@ -2,27 +2,16 @@
 
 namespace M6Web\Bundle\AmqpBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Command Event.
  */
-class Command extends SymfonyEvent implements DispatcherInterface
+class Command extends Event implements DispatcherInterface
 {
-    /**
-     * @var int
-     */
-    protected $executionTime = 0;
-
-    /**
-     * @var string
-     */
-    protected $command;
-
-    /**
-     * @var array
-     */
-    protected $arguments;
+    protected float $executionTime = 0.0;
+    protected string $command;
+    protected array $arguments;
 
     /**
      * @var mixed
@@ -30,13 +19,9 @@ class Command extends SymfonyEvent implements DispatcherInterface
     protected $return;
 
     /**
-     * Set the command associated with this event.
-     *
-     * @param string $command The command
-     *
-     * @return $this
+     * @inheritDoc
      */
-    public function setCommand($command)
+    public function setCommand(string $command): self
     {
         $this->command = $command;
 
@@ -45,22 +30,16 @@ class Command extends SymfonyEvent implements DispatcherInterface
 
     /**
      * Get the command associated with this event.
-     *
-     * @return string the command
      */
-    public function getCommand()
+    public function getCommand(): string
     {
         return $this->command;
     }
 
     /**
-     * set the arguments.
-     *
-     * @param array $v argus
-     *
-     * @return $this
+     * Set the arguments.
      */
-    public function setArguments($v)
+    public function setArguments(array $v): self
     {
         $this->arguments = $v;
 
@@ -68,11 +47,9 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * get the arguments.
-     *
-     * @return array
+     * Get the arguments.
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return $this->arguments;
     }
@@ -81,10 +58,8 @@ class Command extends SymfonyEvent implements DispatcherInterface
      * set the return value.
      *
      * @param mixed $v value
-     *
-     * @return $this
      */
-    public function setReturn($v)
+    public function setReturn($v): self
     {
         $this->return = $v;
 
@@ -102,13 +77,9 @@ class Command extends SymfonyEvent implements DispatcherInterface
     }
 
     /**
-     * set the exec time.
-     *
-     * @param float $v temps
-     *
-     * @return $this
+     * @inheritDoc
      */
-    public function setExecutionTime($v)
+    public function setExecutionTime(float $v): self
     {
         $this->executionTime = $v;
 
@@ -120,7 +91,7 @@ class Command extends SymfonyEvent implements DispatcherInterface
      *
      * @return float $v temps
      */
-    public function getExecutionTime()
+    public function getExecutionTime(): float
     {
         return $this->executionTime;
     }
@@ -128,10 +99,8 @@ class Command extends SymfonyEvent implements DispatcherInterface
     /**
      * Alias of getExecutionTime for the statsd bundle
      * In ms.
-     *
-     * @return float
      */
-    public function getTiming()
+    public function getTiming(): float
     {
         return $this->getExecutionTime() * 1000;
     }

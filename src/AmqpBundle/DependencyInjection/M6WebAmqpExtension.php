@@ -40,10 +40,6 @@ class M6WebAmqpExtension extends Extension
         $this->loadConsumers($container, $config);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     protected function loadConnections(ContainerBuilder $container, array $config)
     {
         foreach ($config['connections'] as $key => $connection) {
@@ -72,10 +68,6 @@ class M6WebAmqpExtension extends Extension
         }
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     protected function loadProducers(ContainerBuilder $container, array $config)
     {
         foreach ($config['producers'] as $key => $producer) {
@@ -121,10 +113,6 @@ class M6WebAmqpExtension extends Extension
         }
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     protected function loadConsumers(ContainerBuilder $container, array $config)
     {
         foreach ($config['consumers'] as $key => $consumer) {
@@ -171,12 +159,7 @@ class M6WebAmqpExtension extends Extension
         }
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param bool             $enableEventDispatcher
-     * @param Definition       $definition
-     */
-    private function setEventDispatcher(ContainerBuilder $container, $enableEventDispatcher, Definition $definition)
+    private function setEventDispatcher(ContainerBuilder $container, bool $enableEventDispatcher, Definition $definition)
     {
         // Add the Event dispatcher & Command Event
         if ($enableEventDispatcher === true) {

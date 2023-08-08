@@ -3,42 +3,28 @@
 namespace M6Web\Bundle\AmqpBundle\Event;
 
 use AMQPEnvelope;
-use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Pre retrieve message event.
  */
-class PreRetrieveEvent extends SymfonyEvent
+class PreRetrieveEvent extends Event
 {
     const NAME = 'amqp.pre_retrieve';
 
-    /**
-     * @var AMQPEnvelope|bool
-     */
-    private $envelope;
+    private ?AMQPEnvelope $envelope;
 
-    /**
-     * Constructor.
-     *
-     * @param AMQPEnvelope|bool $envelope
-     */
-    public function __construct($envelope)
+    public function __construct(?AMQPEnvelope $envelope)
     {
         $this->envelope = $envelope;
     }
 
-    /**
-     * @return AMQPEnvelope|bool
-     */
-    public function getEnvelope()
+    public function getEnvelope(): ?AMQPEnvelope
     {
         return $this->envelope;
     }
 
-    /**
-     * @param AMQPEnvelope|bool $envelope
-     */
-    public function setEnvelope($envelope)
+    public function setEnvelope(?AMQPEnvelope $envelope)
     {
         $this->envelope = $envelope;
     }

@@ -91,7 +91,7 @@ class ConsumerFactory extends atoum
                 'prefetch_count' => 0,
             ])
             ->and($factory = new Base($channelClass, $queueClass, $exchangeClass))
-                ->object($factory->get($consumerClass, $connexion, $exchangeOptions, $queueOptions, $qosOptions))
+                ->object($factory->get($consumerClass, $connexion, $exchangeOptions, $queueOptions, false, $qosOptions))
                     ->isInstanceOf($consumerClass);
     }
 }

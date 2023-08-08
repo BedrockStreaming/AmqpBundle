@@ -9,15 +9,9 @@ use M6Web\Bundle\AmqpBundle\Event\PrePublishEvent;
  */
 class Producer extends AbstractAmqp
 {
-    /**
-     * @var \AMQPExchange
-     */
-    protected $exchange = null;
+    protected \AMQPExchange $exchange;
 
-    /**
-     * @var array
-     */
-    protected $exchangeOptions = [];
+    protected array $exchangeOptions = [];
 
     /**
      * Constructor.
@@ -45,7 +39,7 @@ class Producer extends AbstractAmqp
      * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
      */
-    public function publishMessage($message, $flags = AMQP_NOPARAM, array $attributes = [], array $routingKeys = [])
+    public function publishMessage(string $message, int $flags = AMQP_NOPARAM, array $attributes = [], array $routingKeys = []): bool
     {
         // Merge attributes
         $attributes = empty($attributes) ? $this->exchangeOptions['publish_attributes'] :
@@ -56,7 +50,7 @@ class Producer extends AbstractAmqp
 
         if ($this->eventDispatcher) {
             $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
-            $this->eventDispatcher->dispatch(PrePublishEvent::NAME, $prePublishEvent);
+            $this->eventDispatcher->dispatch($prePublishEvent,PrePublishEvent::NAME);
 
             if (!$prePublishEvent->canPublish()) {
                 return true;
@@ -81,40 +75,24 @@ class Producer extends AbstractAmqp
         return (bool) $success;
     }
 
-    /**
-     * @return \AMQPExchange
-     */
-    public function getExchange()
+    public function getExchange(): \AMQPExchange
     {
         return $this->exchange;
     }
 
-    /**
-     * @param \AMQPExchange $exchange
-     *
-     * @return \M6Web\Bundle\AmqpBundle\Amqp\Consumer
-     */
-    public function setExchange(\AMQPExchange $exchange)
+    public function setExchange(\AMQPExchange $exchange): self
     {
         $this->exchange = $exchange;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getExchangeOptions()
+    public function getExchangeOptions(): array
     {
         return $this->exchangeOptions;
     }
 
-    /**
-     * @param array $exchangeOptions
-     *
-     * @return \M6Web\Bundle\AmqpBundle\Amqp\Consumer
-     */
-    public function setExchangeOptions(array $exchangeOptions)
+    public function setExchangeOptions(array $exchangeOptions): self
     {
         $this->exchangeOptions = $exchangeOptions;
 

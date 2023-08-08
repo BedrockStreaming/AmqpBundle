@@ -5,10 +5,10 @@ namespace M6Web\Bundle\AmqpBundle\Amqp;
 class Locator
 {
     /**  @var Consumer[] */
-    protected $consumers = [];
+    protected array $consumers = [];
 
     /** @var Producer[] */
-    protected $producers = [];
+    protected array $producers = [];
 
     public function getConsumer(string $id): Consumer
     {

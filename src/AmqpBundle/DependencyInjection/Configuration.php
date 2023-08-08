@@ -18,16 +18,10 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('m6_web_amqp');
-
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // symfony < 4.2 support
-            $rootNode = $treeBuilder->root('m6_web_amqp');
-        }
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()

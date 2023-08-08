@@ -5,8 +5,6 @@ namespace M6Web\Bundle\AmqpBundle\Tests\Units\DependencyInjection;
 use M6Web\Bundle\AmqpBundle\DependencyInjection\M6WebAmqpExtension as Base;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Yaml\Parser;
 use atoum;
 
@@ -15,10 +13,7 @@ use atoum;
  */
 class M6WebAmqpExtension extends atoum
 {
-    /**
-     * @return ContainerBuilder
-     */
-    protected function getContainerForConfiguration(string $fixtureName)
+    protected function getContainerForConfiguration(string $fixtureName): ContainerBuilder
     {
         $extension = new Base();
 

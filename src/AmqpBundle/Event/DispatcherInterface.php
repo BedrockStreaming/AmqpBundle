@@ -12,21 +12,21 @@ interface DispatcherInterface
      *
      * @param string $command The sqs command
      */
-    public function setCommand($command);
+    public function setCommand(string $command);
 
     /**
      * set execution time.
      *
      * @param float $v temps
      */
-    public function setExecutionTime($v);
+    public function setExecutionTime(float $v);
 
     /**
      * set the arguments.
      *
      * @param array $v argus
      */
-    public function setArguments($v);
+    public function setArguments(array $v);
 
     /**
      * set the return value.

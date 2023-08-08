@@ -2,6 +2,7 @@
 
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
+use M6Web\Bundle\AmqpBundle\Event\DispatcherInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector as SymfonyDataCollector;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,11 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DataCollector extends SymfonyDataCollector
 {
-    /**
-     * @param string $name
-     *
-     * Construct the data collector
-     */
     public function __construct(string $name)
     {
         $this->data['name'] = $name;
@@ -25,20 +21,20 @@ class DataCollector extends SymfonyDataCollector
     /**
      * Collect the data.
      *
-     * @param Request    $request   The request object
-     * @param Response   $response  The response object
-     * @param \Exception $exception An exception
+     * @param Request $request The request object
+     * @param Response $response The response object
+     * @param \Throwable|null $exception An exception
      */
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null)
     {
     }
 
     /**
      * Listen for command event.
      *
-     * @param object $event The event object
+     * @param DispatcherInterface $event The event object
      */
-    public function onCommand($event)
+    public function onCommand(DispatcherInterface $event)
     {
         $this->data['commands'][] = array(
             'command' => $event->getCommand(),
@@ -59,8 +55,6 @@ class DataCollector extends SymfonyDataCollector
 
     /**
      * Return the name of the collector.
-     *
-     * @return string data collector name
      */
     public function getName(): string
     {
@@ -69,8 +63,6 @@ class DataCollector extends SymfonyDataCollector
 
     /**
      * Return total command execution time.
-     *
-     * @return float
      */
     public function getTotalExecutionTime(): float
     {

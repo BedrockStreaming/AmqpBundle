@@ -4,34 +4,20 @@ namespace M6Web\Bundle\AmqpBundle\Factory;
 
 use M6Web\Bundle\AmqpBundle\Amqp\Consumer;
 
-/**
- * ConsumerFactory.
- */
 class ConsumerFactory extends AMQPFactory
 {
-    /**
-     * @var string
-     */
-    protected $channelClass;
-
-    /**
-     * @var string
-     */
-    protected $queueClass;
-
-    /**
-     * @var string
-     */
-    protected $exchangeClass;
+    protected string $channelClass;
+    protected string $queueClass;
+    protected string $exchangeClass;
 
     /**
      * __construct.
      *
-     * @param string $channelClass  Channel class name
-     * @param string $queueClass    Queue class name
-     * @param string $exchangeClass Exchange class name
+     * @param class-string $channelClass  Channel class name
+     * @param class-string $queueClass    Queue class name
+     * @param class-string $exchangeClass Exchange class name
      */
-    public function __construct($channelClass, $queueClass, $exchangeClass)
+    public function __construct(string $channelClass, string $queueClass, string $exchangeClass)
     {
         if (!class_exists($channelClass) || !is_a($channelClass, 'AMQPChannel', true)) {
             throw new \InvalidArgumentException(
@@ -59,7 +45,7 @@ class ConsumerFactory extends AMQPFactory
     /**
      * build the consumer class.
      *
-     * @param string          $class           Consumer class name
+     * @param class-string    $class           Consumer class name
      * @param \AMQPConnection $connexion       AMQP connexion
      * @param array           $exchangeOptions Exchange Options
      * @param array           $queueOptions    Queue Options
@@ -68,7 +54,7 @@ class ConsumerFactory extends AMQPFactory
      *
      * @return Consumer
      */
-    public function get($class, $connexion, array $exchangeOptions, array $queueOptions, $lazy = false, array $qosOptions = [])
+    public function get(string $class, \AMQPConnection $connexion, array $exchangeOptions, array $queueOptions, bool $lazy = false, array $qosOptions = []): Consumer
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(

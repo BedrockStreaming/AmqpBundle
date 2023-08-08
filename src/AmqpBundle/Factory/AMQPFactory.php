@@ -9,14 +9,8 @@ abstract class AMQPFactory
 {
     /**
      * Create and declare exchange.
-     *
-     * @param string       $exchangeClass
-     * @param \AMQPChannel $channel
-     * @param array        $exchangeOptions
-     *
-     * @return \AMQPExchange
      */
-    protected function createExchange($exchangeClass, $channel, array $exchangeOptions)
+    protected function createExchange(string $exchangeClass, \AMQPChannel $channel, array $exchangeOptions): \AMQPExchange
     {
         /** @var \AMQPExchange $exchange */
         $exchange = new $exchangeClass($channel);
