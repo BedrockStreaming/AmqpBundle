@@ -33,7 +33,7 @@ class Producer extends AbstractAmqp
      *                            timestamp, expiration, type or reply_to
      * @param array  $routingKeys If set, overrides the Producer 'routing_keys' for this message
      *
-     * @return bool tRUE on success or FALSE on failure
+     * @return bool TRUE on success or throws on failure
      *
      * @throws \AMQPExchangeException   on failure
      * @throws \AMQPChannelException    if the channel is not open
@@ -63,16 +63,17 @@ class Producer extends AbstractAmqp
         }
 
         if (!$routingKeys) {
-            return $this->call($this->exchange, 'publish', [$message, null, $flags, $attributes]);
+            $this->call($this->exchange, 'publish', [$message, null, $flags, $attributes]);
+
+            return true;
         }
 
         // Publish the message for each routing keys
-        $success = true;
         foreach ($routingKeys as $routingKey) {
-            $success &= $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
+            $this->call($this->exchange, 'publish', [$message, $routingKey, $flags, $attributes]);
         }
 
-        return (bool) $success;
+        return true;
     }
 
     public function getExchange(): \AMQPExchange

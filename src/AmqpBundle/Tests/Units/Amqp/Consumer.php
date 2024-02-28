@@ -26,8 +26,9 @@ class Consumer extends atoum
 
     public function testGetMessageAutoAck()
     {
+        $msgList = ['wait' => [1 => 'message1', '2' => 'message2']];
         $this
-            ->if($msgList = ['wait' => ['m1' => 'message1', 'm2' => 'message2']])
+            ->if($msgList)
             ->and($queue = $this->getQueue($msgList))
             ->and($consumer = new Base($queue, []))
                 // First message : auto ack
@@ -35,12 +36,12 @@ class Consumer extends atoum
                     ->isInstanceOf('\AMQPEnvelope')
                 ->string($message->getBody())
                     ->isEqualTo('message1')
-                ->string($message->getDeliveryTag())
-                    ->isEqualTo('m1')
+                ->integer($message->getDeliveryTag())
+                    ->isEqualTo(1)
                 ->array($msgList['wait'])
-                    ->isEqualTo(['m2' => 'message2'])
+                    ->isEqualTo([2 => 'message2'])
                 ->array($msgList['ack'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['unack'])
                     ->isEmpty()
 
@@ -49,12 +50,12 @@ class Consumer extends atoum
                     ->isInstanceOf('\AMQPEnvelope')
                 ->string($message->getBody())
                     ->isEqualTo('message2')
-                ->string($message->getDeliveryTag())
-                    ->isEqualTo('m2')
+                ->integer($message->getDeliveryTag())
+                    ->isEqualTo(2)
                 ->array($msgList['wait'])
                     ->isEmpty()
                 ->array($msgList['ack'])
-                    ->isEqualTo(['m1' => 'message1', 'm2' => 'message2'])
+                    ->isEqualTo([1 => 'message1', 2 => 'message2'])
                 ->array($msgList['unack'])
                     ->isEmpty()
 
@@ -71,7 +72,7 @@ class Consumer extends atoum
     public function testGetMessageManualAck()
     {
         $this
-            ->if($msgList = ['wait' => ['m1' => 'message1']])
+            ->if($msgList = ['wait' => [1 => 'message1']])
             ->and($queue = $this->getQueue($msgList))
             ->and($consumer = new Base($queue, []))
                 // First message : manual ack
@@ -79,58 +80,56 @@ class Consumer extends atoum
                     ->isInstanceOf('\AMQPEnvelope')
                 ->string($message->getBody())
                     ->isEqualTo('message1')
-                ->string($message->getDeliveryTag())
-                    ->isEqualTo('m1')
+                ->integer($message->getDeliveryTag())
+                    ->isEqualTo(1)
 
                  // Check data
                 ->array($msgList['wait'])
                     ->isEmpty()
                 ->array($msgList['unack'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['ack'])
                     ->isEmpty()
 
                 // Ack (unknown delivery id)
-                ->boolean($message = $consumer->ackMessage(12345))
-                    ->isFalse()
-                ->mock($queue)
-                    ->call('ack')
-                        ->withArguments(12345)
-                        ->once()
+                ->and($message = $consumer->ackMessage(12345))
+                  ->variable($message)
+                  ->isNull()
+                  ->mock($queue)
+                      ->call('ack')
+                          ->withArguments(12345)
+                          ->once()
 
                 // Check data
                 ->array($msgList['wait'])
                     ->isEmpty()
                 ->array($msgList['unack'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['ack'])
                     ->isEmpty()
 
                 // Ack (known delivery id)
-                ->boolean($message = $consumer->ackMessage('m1'))
-                    ->isTrue()
-                ->mock($queue)
-                    ->call('ack')
-                        ->withArguments('m1')
-                        ->once()
+                ->and($message = $consumer->ackMessage(1))
+                  ->variable($message)
+                  ->isNull()
+                  ->mock($queue)
+                      ->call('ack')
+                          ->withArguments(1)
+                          ->once()
 
                  // Check data
                 ->array($msgList['wait'])
                     ->isEmpty()
                 ->array($msgList['ack'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['unack'])
-                    ->isEmpty()
-
-                // Ack (old delivery id)
-                ->boolean($message = $consumer->ackMessage('m1'))
-                    ->isFalse();
+                    ->isEmpty();
     }
 
     public function testGetMessageManualNack()
     {
         $this
-            ->if($msgList = ['wait' => ['m1' => 'message1']])
+            ->if($msgList = ['wait' => [1 => 'message1']])
             ->and($queue = $this->getQueue($msgList))
             ->and($consumer = new Base($queue, []))
                 // First message : manual ack
@@ -138,44 +137,46 @@ class Consumer extends atoum
                     ->isInstanceOf('\AMQPEnvelope')
                 ->string($message->getBody())
                     ->isEqualTo('message1')
-                ->string($message->getDeliveryTag())
-                    ->isEqualTo('m1')
+                ->integer($message->getDeliveryTag())
+                    ->isEqualTo(1)
 
                  // Check data
                 ->array($msgList['wait'])
                     ->isEmpty()
                 ->array($msgList['unack'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['ack'])
                     ->isEmpty()
 
                 // Nack (unknown delivery id)
-                ->boolean($message = $consumer->nackMessage(12345))
-                    ->isFalse()
-                ->mock($queue)
-                    ->call('nack')
-                        ->withArguments(12345)
-                        ->once()
+                ->and($message = $consumer->nackMessage(12345))
+                  ->variable($message)
+                  ->isNull()
+                  ->mock($queue)
+                      ->call('nack')
+                          ->withArguments(12345)
+                          ->once()
 
                 // Check data
                 ->array($msgList['wait'])
                     ->isEmpty()
                 ->array($msgList['unack'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['ack'])
                     ->isEmpty()
 
                 // Nack and requeue (known delivery id)
-                ->boolean($message = $consumer->nackMessage('m1', AMQP_REQUEUE))
-                    ->isTrue()
-                ->mock($queue)
-                    ->call('nack')
-                        ->withArguments('m1')
-                        ->once()
+                ->and($message = $consumer->nackMessage(1, AMQP_REQUEUE))
+                  ->variable($message)
+                  ->isNull()
+                  ->mock($queue)
+                      ->call('nack')
+                          ->withArguments(1)
+                          ->once()
 
                  // Check data
                 ->array($msgList['wait'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['ack'])
                     ->isEmpty()
                 ->array($msgList['unack'])
@@ -186,20 +187,21 @@ class Consumer extends atoum
                     ->isInstanceOf('\AMQPEnvelope')
                 ->string($message->getBody())
                     ->isEqualTo('message1')
-                ->string($message->getDeliveryTag())
-                    ->isEqualTo('m1')
+                ->integer($message->getDeliveryTag())
+                    ->isEqualTo(1)
 
                  // Check data
                 ->array($msgList['wait'])
                     ->isEmpty()
                 ->array($msgList['unack'])
-                    ->isEqualTo(['m1' => 'message1'])
+                    ->isEqualTo([1 => 'message1'])
                 ->array($msgList['ack'])
                     ->isEmpty()
 
                  // Nack and forget (known delivery id)
-                ->boolean($message = $consumer->nackMessage('m1'))
-                    ->isTrue()
+                ->and($message = $consumer->nackMessage(1))
+                    ->variable($message)
+                    ->isNull()
 
                 // Check data
                 ->array($msgList['wait'])
@@ -210,19 +212,19 @@ class Consumer extends atoum
                     ->isEmpty()
 
                 // Nack (old delivery id)
-                ->boolean($message = $consumer->nackMessage('m1'))
-                    ->isFalse();
+                ->variable($message = $consumer->nackMessage(1))
+                    ->isEqualTo(null);
     }
 
     public function testPurge()
     {
         $this
-            ->if($msgList = ['wait' => ['m1' => 'message1']])
+            ->if($msgList = ['wait' => [1 => 'message1']])
             ->and($queue = $this->getQueue($msgList))
             ->and($consumer = new Base($queue, []))
                 // Purge the queue
-                ->boolean($consumer->purge())
-                    ->isTrue()
+                ->integer($consumer->purge())
+                    ->isEqualTo(1)
                 ->mock($queue)
                     ->call('purge')
                         ->once()
@@ -244,7 +246,7 @@ class Consumer extends atoum
     {
         $this
             ->if($msgList = [
-                'wait' => ['m1' => 'message1', 'm2' => 'message2'],
+                'wait' => [1 => 'message1', 2 => 'message2'],
                 'flags' => AMQP_DURABLE | AMQP_EXCLUSIVE | AMQP_AUTODELETE,
             ])
             ->and($queue = $this->getQueue($msgList))
@@ -313,7 +315,8 @@ class Consumer extends atoum
             // Simulate a simple queue
             reset($msgList['wait']);
             $key = key($msgList['wait']);
-            $msg = array_shift($msgList['wait']);
+            $msg = reset($msgList['wait']);
+            unset($msgList['wait'][$key]);
 
             if (!$key) {
                 return null;

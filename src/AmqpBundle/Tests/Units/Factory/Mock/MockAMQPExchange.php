@@ -11,7 +11,7 @@ class MockAMQPExchange extends \AMQPExchange
     {
     }
 
-    public function declareExchange()
+    public function declareExchange(): void
     {
     }
 }

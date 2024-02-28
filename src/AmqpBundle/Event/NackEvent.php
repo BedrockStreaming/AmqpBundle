@@ -11,16 +11,16 @@ class NackEvent extends Event
 {
     const NAME = 'amqp.nack';
 
-    private string $deliveryTag;
+    private int $deliveryTag;
     private int $flags;
 
-    public function __construct(string $deliveryTag, int $flags)
+    public function __construct(int $deliveryTag, int $flags)
     {
         $this->deliveryTag = $deliveryTag;
         $this->flags = $flags;
     }
 
-    public function getDeliveryTag(): string
+    public function getDeliveryTag(): int
     {
         return $this->deliveryTag;
     }

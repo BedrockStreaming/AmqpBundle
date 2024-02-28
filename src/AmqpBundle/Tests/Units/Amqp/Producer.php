@@ -72,8 +72,11 @@ class Producer extends atoum
             ->and($producer = new Base($exchange, $exchangeOptions))
                 ->boolean($producer->publishMessage('message1'))
                     ->isTrue()
-                ->boolean($producer->publishMessage('error'))
-                    ->isFalse()
+                ->exception(
+                  function() use($producer) {
+                    $producer->publishMessage('error');
+                  }
+                )->isInstanceOf(\AMQPExchangeException::class)
                 ->array($msgList)
                     ->isEqualTo([
                         ['message1', 'routing_test', AMQP_NOPARAM, $exchangeOptions['publish_attributes']],
@@ -182,7 +185,7 @@ class Producer extends atoum
 
         $exchange->getMockController()->publish = function ($message, $routing_key, $flags = AMQP_NOPARAM, array $attributes = []) use (&$msgList) {
             if (($message == 'error') && ($routing_key == 'error')) {
-                return false;
+                throw new \AMQPExchangeException();
             }
 
             $msgList[] = [$message, $routing_key, $flags, $attributes];

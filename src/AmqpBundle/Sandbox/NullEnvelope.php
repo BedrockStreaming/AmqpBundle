@@ -7,87 +7,33 @@ namespace M6Web\Bundle\AmqpBundle\Sandbox;
  */
 class NullEnvelope extends \AMQPEnvelope
 {
-    /**
-     * @var string
-     */
-    private $body;
-    /**
-     * @var string
-     */
-    private $routingKey;
-    /**
-     * @var string
-     */
-    private $deliveryTag;
-    /**
-     * @var string
-     */
-    private $deliveryMode;
-    /**
-     * @var bool
-     */
-    private $redelivery;
-    /**
-     * @var string
-     */
-    private $contentType;
-    /**
-     * @var string
-     */
-    private $contentEncoding;
-    /**
-     * @var string
-     */
-    private $type;
-    /**
-     * @var string
-     */
-    private $timestamp;
-    /**
-     * @var int
-     */
-    private $priority;
-    /**
-     * @var string
-     */
-    private $expiration;
-    /**
-     * @var string
-     */
-    private $userId;
-    /**
-     * @var string
-     */
-    private $appId;
-    /**
-     * @var string
-     */
-    private $messageId;
-    /**
-     * @var string
-     */
-    private $replyTo;
-    /**
-     * @var string
-     */
-    private $correlationId;
-    /**
-     * @var array
-     */
-    private $headers;
+    private string $body;
+    private string $routingKey;
+    private int $deliveryTag;
+    private int $deliveryMode;
+    private bool $redelivery;
+    private string $contentType;
+    private string $contentEncoding;
+    private string $type;
+    private string $timestamp;
+    private int $priority;
+    private string $expiration;
+    private string $userId;
+    private string $appId;
+    private string $messageId;
+    private string $replyTo;
+    private string $correlationId;
+    private array $headers;
 
     /**
      * {@inheritdoc}
      */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body;
     }
 
-    /**
-     * @param string $body
-     */
-    public function setBody($body)
+    public function setBody(string $body): void
     {
         $this->body = $body;
     }
@@ -95,15 +41,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getRoutingKey()
+    public function getRoutingKey(): string
     {
         return $this->routingKey;
     }
 
-    /**
-     * @param string $routingKey
-     */
-    public function setRoutingKey($routingKey)
+    public function setRoutingKey(string $routingKey): void
     {
         $this->routingKey = $routingKey;
     }
@@ -111,15 +54,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getDeliveryTag()
+    public function getDeliveryTag(): int
     {
         return $this->deliveryTag;
     }
 
-    /**
-     * @param string $deliveryTag
-     */
-    public function setDeliveryTag($deliveryTag)
+    public function setDeliveryTag(int $deliveryTag): void
     {
         $this->deliveryTag = $deliveryTag;
     }
@@ -127,15 +67,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getDeliveryMode()
+    public function getDeliveryMode(): int
     {
         return $this->deliveryMode;
     }
 
-    /**
-     * @param string $deliveryMode
-     */
-    public function setDeliveryMode($deliveryMode)
+    public function setDeliveryMode(int $deliveryMode): void
     {
         $this->deliveryMode = $deliveryMode;
     }
@@ -143,15 +80,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function isRedelivery()
+    public function isRedelivery(): bool
     {
         return $this->redelivery;
     }
 
-    /**
-     * @param bool $redelivery
-     */
-    public function setRedelivery($redelivery)
+    public function setRedelivery(bool $redelivery): void
     {
         $this->redelivery = $redelivery;
     }
@@ -159,15 +93,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->contentType;
     }
 
-    /**
-     * @param string $contentType
-     */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): void
     {
         $this->contentType = $contentType;
     }
@@ -175,15 +106,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getContentEncoding()
+    public function getContentEncoding(): string
     {
         return $this->contentEncoding;
     }
 
-    /**
-     * @param string $contentEncoding
-     */
-    public function setContentEncoding($contentEncoding)
+    public function setContentEncoding(string $contentEncoding): void
     {
         $this->contentEncoding = $contentEncoding;
     }
@@ -191,15 +119,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -207,15 +132,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getTimestamp()
+    public function getTimestamp(): ?int
     {
         return $this->timestamp;
     }
 
-    /**
-     * @param string $timestamp
-     */
-    public function setTimestamp($timestamp)
+    public function setTimestamp(string $timestamp): void
     {
         $this->timestamp = $timestamp;
     }
@@ -223,15 +145,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
 
-    /**
-     * @param int $priority
-     */
-    public function setPriority($priority)
+    public function setPriority(int $priority): void
     {
         $this->priority = $priority;
     }
@@ -239,15 +158,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getExpiration()
+    public function getExpiration(): string
     {
         return $this->expiration;
     }
 
-    /**
-     * @param string $expiration
-     */
-    public function setExpiration($expiration)
+    public function setExpiration(string $expiration): void
     {
         $this->expiration = $expiration;
     }
@@ -255,15 +171,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @param string $userId
-     */
-    public function setUserId($userId)
+    public function setUserId(string $userId): void
     {
         $this->userId = $userId;
     }
@@ -271,15 +184,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getAppId()
+    public function getAppId(): string
     {
         return $this->appId;
     }
 
-    /**
-     * @param string $appId
-     */
-    public function setAppId($appId)
+    public function setAppId(string $appId): void
     {
         $this->appId = $appId;
     }
@@ -287,15 +197,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getMessageId()
+    public function getMessageId(): string
     {
         return $this->messageId;
     }
 
-    /**
-     * @param string $messageId
-     */
-    public function setMessageId($messageId)
+    public function setMessageId(string $messageId): void
     {
         $this->messageId = $messageId;
     }
@@ -303,15 +210,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getReplyTo()
+    public function getReplyTo(): string
     {
         return $this->replyTo;
     }
 
-    /**
-     * @param string $replyTo
-     */
-    public function setReplyTo($replyTo)
+    public function setReplyTo(string $replyTo): void
     {
         $this->replyTo = $replyTo;
     }
@@ -319,15 +223,12 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getCorrelationId()
+    public function getCorrelationId(): string
     {
         return $this->correlationId;
     }
 
-    /**
-     * @param string $correlationId
-     */
-    public function setCorrelationId($correlationId)
+    public function setCorrelationId(string $correlationId): void
     {
         $this->correlationId = $correlationId;
     }
@@ -335,7 +236,7 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -343,7 +244,7 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * @param array $headers
      */
-    public function setHeaders($headers)
+    public function setHeaders(array $headers): void
     {
         $this->headers = $headers;
     }
@@ -351,8 +252,8 @@ class NullEnvelope extends \AMQPEnvelope
     /**
      * {@inheritdoc}
      */
-    public function getHeader($headerKey)
+    public function getHeader(string $headerName): ?string
     {
-        return isset($this->headers[$headerKey]) ? $this->headers[$headerKey] : false;
+        return $this->headers[$headerName] ?? null;
     }
 }

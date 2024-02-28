@@ -34,7 +34,6 @@ class Consumer extends AbstractAmqp
     public function getMessage(int $flags = AMQP_AUTOACK): ?\AMQPEnvelope
     {
         $envelope = $this->call($this->queue, 'get', [$flags]);
-        $envelope = $envelope === false ? null : $envelope;
 
         if ($this->eventDispatcher) {
             $preRetrieveEvent = new PreRetrieveEvent($envelope);
@@ -49,13 +48,13 @@ class Consumer extends AbstractAmqp
     /**
      * Acknowledge the receipt of a message.
      *
-     * @param string $deliveryTag delivery tag of last message to ack
+     * @param int $deliveryTag delivery tag of last message to ack
      * @param int    $flags       AMQP_MULTIPLE or AMQP_NOPARAM
      *
      * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
      */
-    public function ackMessage(string $deliveryTag, int $flags = AMQP_NOPARAM): bool
+    public function ackMessage(int $deliveryTag, int $flags = AMQP_NOPARAM): void
     {
         if ($this->eventDispatcher) {
             $ackEvent = new AckEvent($deliveryTag, $flags);
@@ -63,19 +62,19 @@ class Consumer extends AbstractAmqp
             $this->eventDispatcher->dispatch($ackEvent,AckEvent::NAME);
         }
 
-        return $this->call($this->queue, 'ack', [$deliveryTag, $flags]);
+        $this->call($this->queue, 'ack', [$deliveryTag, $flags]);
     }
 
     /**
      * Mark a message as explicitly not acknowledged.
      *
-     * @param string $deliveryTag delivery tag of last message to nack
+     * @param int $deliveryTag delivery tag of last message to nack
      * @param int    $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s)
      *
      * @throws \AMQPConnectionException if the connection to the broker was lost
      * @throws \AMQPChannelException    if the channel is not open
      */
-    public function nackMessage(string $deliveryTag, int $flags = AMQP_NOPARAM): bool
+    public function nackMessage(int $deliveryTag, int $flags = AMQP_NOPARAM): void
     {
         if ($this->eventDispatcher) {
             $nackEvent = new NackEvent($deliveryTag, $flags);
@@ -83,7 +82,7 @@ class Consumer extends AbstractAmqp
             $this->eventDispatcher->dispatch($nackEvent, NackEvent::NAME);
         }
 
-        return $this->call($this->queue, 'nack', [$deliveryTag, $flags]);
+        $this->call($this->queue, 'nack', [$deliveryTag, $flags]);
     }
 
     /**
@@ -92,7 +91,7 @@ class Consumer extends AbstractAmqp
      * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
      */
-    public function purge(): bool
+    public function purge(): int
     {
         if ($this->eventDispatcher) {
             $purgeEvent = new PurgeEvent($this->queue);

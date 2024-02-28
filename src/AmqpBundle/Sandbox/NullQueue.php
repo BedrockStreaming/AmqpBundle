@@ -35,19 +35,19 @@ class NullQueue extends \AMQPQueue
     /**
      * {@inheritdoc}
      */
-    public function get($flags = AMQP_NOPARAM)
+    public function get($flags = AMQP_NOPARAM): ?\AMQPEnvelope
     {
         if (!$this->envelopes->isEmpty()) {
             return $this->envelopes->dequeue();
-        } else {
-            return false;
         }
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function declareQueue()
+    public function declareQueue(): int
     {
         return $this->envelopes->count();
     }
