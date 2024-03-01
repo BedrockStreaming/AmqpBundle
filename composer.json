@@ -4,6 +4,9 @@
     "autoload" : {
         "psr-4": { "M6Web\\Bundle\\": "src/" }
     },
+    "config": {
+        "bin-dir": "bin"
+    },
     "require" : {
         "php": ">=7.4",
         "ext-amqp": ">=2.0",
@@ -14,7 +17,8 @@
         "twig/twig": "^2.13 || ^3.0"
     },
     "require-dev" : {
-        "atoum/atoum": "~4.0"
+        "atoum/atoum": "~4.0",
+        "m6web/php-cs-fixer-config": "^3.2"
     },
     "suggest": {
         "ocramius/proxy-manager": "Required for lazy connections"
