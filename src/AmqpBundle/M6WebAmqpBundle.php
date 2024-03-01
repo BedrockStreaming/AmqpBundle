@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle;
 
 use M6Web\Bundle\AmqpBundle\DependencyInjection\CompilerPass\M6webAmqpLocatorPass;

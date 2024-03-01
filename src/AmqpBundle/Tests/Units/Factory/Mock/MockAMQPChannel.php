@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\Factory\Mock;
 
 /**
@@ -11,7 +13,7 @@ class MockAMQPChannel extends \AMQPChannel
     {
     }
 
-    public function qos(int $size, int $count, bool $global = NULL): void
+    public function qos(int $size, int $count, ?bool $global = null): void
     {
     }
 

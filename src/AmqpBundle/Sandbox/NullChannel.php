@@ -1,16 +1,16 @@
 <?php
 
-namespace M6Web\Bundle\AmqpBundle\Sandbox;
+declare(strict_types=1);
 
-use AMQPConnection;
+namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
  * Channel which does not do anything with connection.
  */
 class NullChannel extends \AMQPChannel
 {
-    public function __construct(AMQPConnection $amqp_connection)
+    public function __construct(\AMQPConnection $amqp_connection)
     {
-        //noop
+        // noop
     }
 }

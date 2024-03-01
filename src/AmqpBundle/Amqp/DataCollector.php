@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
 use M6Web\Bundle\AmqpBundle\Event\DispatcherInterface;
-use Symfony\Component\HttpKernel\DataCollector\DataCollector as SymfonyDataCollector;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\DataCollector as SymfonyDataCollector;
 
 /**
  * Handle datacollector for amqp.
@@ -21,11 +23,11 @@ class DataCollector extends SymfonyDataCollector
     /**
      * Collect the data.
      *
-     * @param Request $request The request object
-     * @param Response $response The response object
+     * @param Request         $request   The request object
+     * @param Response        $response  The response object
      * @param \Throwable|null $exception An exception
      */
-    public function collect(Request $request, Response $response, ?\Throwable $exception = null)
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
     {
     }
 
@@ -67,8 +69,6 @@ class DataCollector extends SymfonyDataCollector
 
     /**
      * Get average execution time.
-     *
-     * @return float
      */
     public function getAvgExecutionTime(): float
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Factory;
 
 /**
@@ -23,7 +25,7 @@ abstract class AMQPFactory
             $exchange->setFlags(
                 ($exchangeOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
                 ($exchangeOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
-                ($exchangeOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM)
+                ($exchangeOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM),
             );
             $exchange->declareExchange();
         }

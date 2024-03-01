@@ -1,8 +1,8 @@
 <?php
 
-namespace M6Web\Bundle\AmqpBundle\Sandbox;
+declare(strict_types=1);
 
-use AMQPChannel;
+namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
  * Exchange that does not publish anything.
@@ -12,9 +12,9 @@ class NullExchange extends \AMQPExchange
     /**
      * {@inheritdoc}
      */
-    public function __construct(AMQPChannel $amqp_channel)
+    public function __construct(\AMQPChannel $amqp_channel)
     {
-        //noop
+        // noop
     }
 
     /**
@@ -24,9 +24,9 @@ class NullExchange extends \AMQPExchange
         $message,
         $routingKey = null,
         $flags = AMQP_NOPARAM,
-        array $attributes = []
+        array $attributes = [],
     ): void {
-        //noop
+        // noop
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
 use M6Web\Bundle\AmqpBundle\Event\AckEvent;
@@ -12,7 +14,6 @@ use M6Web\Bundle\AmqpBundle\Event\PurgeEvent;
  */
 class Consumer extends AbstractAmqp
 {
-
     public function __construct(protected \AMQPQueue $queue, protected array $queueOptions)
     {
     }
@@ -43,7 +44,7 @@ class Consumer extends AbstractAmqp
      * Acknowledge the receipt of a message.
      *
      * @param int $deliveryTag delivery tag of last message to ack
-     * @param int    $flags       AMQP_MULTIPLE or AMQP_NOPARAM
+     * @param int $flags       AMQP_MULTIPLE or AMQP_NOPARAM
      *
      * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
@@ -53,7 +54,7 @@ class Consumer extends AbstractAmqp
         if ($this->eventDispatcher) {
             $ackEvent = new AckEvent($deliveryTag, $flags);
 
-            $this->eventDispatcher->dispatch($ackEvent,AckEvent::NAME);
+            $this->eventDispatcher->dispatch($ackEvent, AckEvent::NAME);
         }
 
         $this->call($this->queue, 'ack', [$deliveryTag, $flags]);
@@ -63,7 +64,7 @@ class Consumer extends AbstractAmqp
      * Mark a message as explicitly not acknowledged.
      *
      * @param int $deliveryTag delivery tag of last message to nack
-     * @param int    $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s)
+     * @param int $flags       AMQP_NOPARAM or AMQP_REQUEUE to requeue the message(s)
      *
      * @throws \AMQPConnectionException if the connection to the broker was lost
      * @throws \AMQPChannelException    if the channel is not open

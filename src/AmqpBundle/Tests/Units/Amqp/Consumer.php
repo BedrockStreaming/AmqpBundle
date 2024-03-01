@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\Amqp;
 
-use atoum;
 use M6Web\Bundle\AmqpBundle\Amqp\Consumer as Base;
 use M6Web\Bundle\AmqpBundle\Sandbox\NullChannel;
 use M6Web\Bundle\AmqpBundle\Sandbox\NullConnection;
@@ -12,7 +13,7 @@ use M6Web\Bundle\AmqpBundle\Sandbox\NullQueue;
 /**
  * Consumer.
  */
-class Consumer extends atoum
+class Consumer extends \atoum
 {
     public function testConstruct(): void
     {
@@ -253,7 +254,7 @@ class Consumer extends atoum
             ->and($consumer = new Base($queue, []))
                 // Declare queue in passive mode
                 ->integer($consumer->getCurrentMessageCount())
-                    ->isEqualTo(count($msgList['wait']))
+                    ->isEqualTo(\count($msgList['wait']))
                 ->mock($queue)
                     ->call('getFlags')
                         ->once()
@@ -329,9 +330,9 @@ class Consumer extends atoum
             // Message
             $message = new \mock\AMQPEnvelope();
 
-            $message->getMockController()->getBody = fn() => $msg;
+            $message->getMockController()->getBody = fn () => $msg;
 
-            $message->getMockController()->getDeliveryTag = fn() => $key;
+            $message->getMockController()->getDeliveryTag = fn () => $key;
 
             return $message;
         };
@@ -377,7 +378,7 @@ class Consumer extends atoum
         };
 
         $queue->getMockController()->declareQueue = function () use (&$msgList) {
-            return count($msgList['wait']);
+            return \count($msgList['wait']);
         };
 
         return $queue;

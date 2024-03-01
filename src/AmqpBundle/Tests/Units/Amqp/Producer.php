@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\Amqp;
 
-use atoum;
 use M6Web\Bundle\AmqpBundle\Amqp\Producer as Base;
 
 /**
  * Producer.
  */
-class Producer extends atoum
+class Producer extends \atoum
 {
     public function testConstruct(): void
     {
@@ -73,9 +74,9 @@ class Producer extends atoum
                 ->boolean($producer->publishMessage('message1'))
                     ->isTrue()
                 ->exception(
-                  function() use($producer) {
-                    $producer->publishMessage('error');
-                  }
+                    function () use ($producer): void {
+                        $producer->publishMessage('error');
+                    },
                 )->isInstanceOf(\AMQPExchangeException::class)
                 ->array($msgList)
                     ->isEqualTo([

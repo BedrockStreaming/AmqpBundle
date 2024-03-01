@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
 use M6Web\Bundle\AmqpBundle\Event\PrePublishEvent;
@@ -33,11 +35,11 @@ class Producer extends AbstractAmqp
      *                            timestamp, expiration, type or reply_to
      * @param array  $routingKeys If set, overrides the Producer 'routing_keys' for this message
      *
-     * @return bool TRUE on success or throws on failure
-     *
      * @throws \AMQPExchangeException   on failure
      * @throws \AMQPChannelException    if the channel is not open
      * @throws \AMQPConnectionException if the connection to the broker was lost
+     *
+     * @return bool TRUE on success or throws on failure
      */
     public function publishMessage(string $message, int $flags = AMQP_NOPARAM, array $attributes = [], array $routingKeys = []): bool
     {
@@ -50,7 +52,7 @@ class Producer extends AbstractAmqp
 
         if ($this->eventDispatcher) {
             $prePublishEvent = new PrePublishEvent($message, $routingKeys, $flags, $attributes);
-            $this->eventDispatcher->dispatch($prePublishEvent,PrePublishEvent::NAME);
+            $this->eventDispatcher->dispatch($prePublishEvent, PrePublishEvent::NAME);
 
             if (!$prePublishEvent->canPublish()) {
                 return true;
@@ -97,11 +99,11 @@ class Producer extends AbstractAmqp
     {
         $this->exchangeOptions = $exchangeOptions;
 
-        if (!array_key_exists('publish_attributes', $this->exchangeOptions)) {
+        if (!\array_key_exists('publish_attributes', $this->exchangeOptions)) {
             $this->exchangeOptions['publish_attributes'] = [];
         }
 
-        if (!array_key_exists('routing_keys', $this->exchangeOptions)) {
+        if (!\array_key_exists('routing_keys', $this->exchangeOptions)) {
             $this->exchangeOptions['routing_keys'] = [];
         }
 

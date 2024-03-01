@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -46,7 +48,7 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    protected function addConnections(ArrayNodeDefinition $node)
+    protected function addConnections(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
@@ -73,7 +75,7 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    protected function addProducers(ArrayNodeDefinition $node)
+    protected function addProducers(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
@@ -116,7 +118,7 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    protected function addConsumers(ArrayNodeDefinition $node)
+    protected function addConsumers(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
@@ -209,6 +211,6 @@ class Configuration implements ConfigurationInterface
                         ->defaultValue([])
                     ->end()
                 ->end();
-            //last end is missed here intentionally because arrayNode doesn't have an actual parent
+        // last end is missed here intentionally because arrayNode doesn't have an actual parent
     }
 }

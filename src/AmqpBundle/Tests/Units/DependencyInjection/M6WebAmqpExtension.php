@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\DependencyInjection;
 
 use M6Web\Bundle\AmqpBundle\DependencyInjection\M6WebAmqpExtension as Base;
@@ -8,15 +10,14 @@ use M6Web\Bundle\AmqpBundle\Sandbox\NullConnection;
 use M6Web\Bundle\AmqpBundle\Sandbox\NullEnvelope;
 use M6Web\Bundle\AmqpBundle\Sandbox\NullExchange;
 use M6Web\Bundle\AmqpBundle\Sandbox\NullQueue;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Yaml\Parser;
-use atoum;
 
 /**
  * Class M6WebAmqpExtension.
  */
-class M6WebAmqpExtension extends atoum
+class M6WebAmqpExtension extends \atoum
 {
     protected function getContainerForConfiguration(string $fixtureName): ContainerBuilder
     {
@@ -86,7 +87,7 @@ class M6WebAmqpExtension extends atoum
                 ->contains('super_routing_key')
         ;
 
-        //test connection options
+        // test connection options
         $this
             ->boolean($container->hasDefinition('m6_web_amqp.connection.with_heartbeat'))
                 ->isTrue()
@@ -117,7 +118,7 @@ class M6WebAmqpExtension extends atoum
     {
         $container = $this->getContainerForConfiguration('queue-defaults');
 
-        //sandbox is off by default, check indirectly via classes definition
+        // sandbox is off by default, check indirectly via classes definition
         $this
             ->string($container->getParameter('m6_web_amqp.exchange.class'))
                 ->isEqualTo('AMQPExchange')

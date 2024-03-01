@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -13,7 +15,8 @@ abstract class AbstractAmqp
 
     /**
      * Class of the event notifier.
-     * @var ?class-string $eventClass
+     *
+     * @var ?class-string
      */
     protected ?string $eventClass = null;
 
@@ -23,9 +26,9 @@ abstract class AbstractAmqp
      * @param string $command   The command name
      * @param array  $arguments Args of the command
      * @param mixed  $return    Return value of the command
-     * @param float $time      Exec time
+     * @param float  $time      Exec time
      */
-    protected function notifyEvent(string $command, array $arguments, mixed $return, float $time = 0)
+    protected function notifyEvent(string $command, array $arguments, mixed $return, float $time = 0): void
     {
         if ($this->eventDispatcher) {
             $event = new $this->eventClass();
@@ -44,14 +47,12 @@ abstract class AbstractAmqp
      * @param object $object    Method object
      * @param string $name      Method name
      * @param array  $arguments Method arguments
-     *
-     * @return mixed
      */
     protected function call(object $object, string $name, array $arguments = [])
     {
         $start = microtime(true);
 
-        $ret = call_user_func_array([$object, $name], $arguments);
+        $ret = \call_user_func_array([$object, $name], $arguments);
 
         $this->notifyEvent($name, $arguments, $ret, microtime(true) - $start);
 

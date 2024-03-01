@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
@@ -24,10 +26,8 @@ class NullQueue extends \AMQPQueue
 
     /**
      * Enqueue message or no message.
-     *
-     * @param \AMQPEnvelope|null $envelope
      */
-    public function enqueue(\AMQPEnvelope $envelope = null): void
+    public function enqueue(?\AMQPEnvelope $envelope = null): void
     {
         $this->envelopes->enqueue($envelope);
     }
