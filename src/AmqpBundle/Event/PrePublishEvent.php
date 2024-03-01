@@ -9,20 +9,11 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class PrePublishEvent extends Event
 {
-    const NAME = 'amqp.pre_publish';
-
-    private string $message;
-    private array $routingKeys;
-    private int $flags;
-    private array $attributes;
+    public const NAME = 'amqp.pre_publish';
     private bool $canPublish;
 
-    public function __construct(string $message, array $routingKeys, int $flags, array $attributes)
+    public function __construct(private string $message, private array $routingKeys, private int $flags, private array $attributes)
     {
-        $this->message = $message;
-        $this->routingKeys = $routingKeys;
-        $this->flags = $flags;
-        $this->attributes = $attributes;
         $this->canPublish = true;
     }
 
@@ -31,12 +22,12 @@ class PrePublishEvent extends Event
         return $this->canPublish;
     }
 
-    public function allowPublish()
+    public function allowPublish(): void
     {
         $this->canPublish = true;
     }
 
-    public function denyPublish()
+    public function denyPublish(): void
     {
         $this->canPublish = false;
     }
@@ -46,7 +37,7 @@ class PrePublishEvent extends Event
         return $this->message;
     }
 
-    public function setMessage(string $message)
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -56,7 +47,7 @@ class PrePublishEvent extends Event
         return $this->routingKeys;
     }
 
-    public function setRoutingKeys(array $routingKeys)
+    public function setRoutingKeys(array $routingKeys): void
     {
         $this->routingKeys = $routingKeys;
     }
@@ -66,7 +57,7 @@ class PrePublishEvent extends Event
         return $this->flags;
     }
 
-    public function setFlags(int $flags)
+    public function setFlags(int $flags): void
     {
         $this->flags = $flags;
     }
@@ -76,7 +67,7 @@ class PrePublishEvent extends Event
         return $this->attributes;
     }
 
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes): void
     {
         $this->attributes = $attributes;
     }

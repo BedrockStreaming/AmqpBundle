@@ -14,7 +14,7 @@ use M6Web\Bundle\AmqpBundle\Sandbox\NullQueue;
  */
 class Consumer extends atoum
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this
             ->if($queue = $this->getQueue())
@@ -24,7 +24,7 @@ class Consumer extends atoum
                     ->isIdenticalTo($queue);
     }
 
-    public function testGetMessageAutoAck()
+    public function testGetMessageAutoAck(): void
     {
         $msgList = ['wait' => [1 => 'message1', '2' => 'message2']];
         $this
@@ -69,7 +69,7 @@ class Consumer extends atoum
                         ->exactly(3);
     }
 
-    public function testGetMessageManualAck()
+    public function testGetMessageManualAck(): void
     {
         $this
             ->if($msgList = ['wait' => [1 => 'message1']])
@@ -126,7 +126,7 @@ class Consumer extends atoum
                     ->isEmpty();
     }
 
-    public function testGetMessageManualNack()
+    public function testGetMessageManualNack(): void
     {
         $this
             ->if($msgList = ['wait' => [1 => 'message1']])
@@ -216,7 +216,7 @@ class Consumer extends atoum
                     ->isEqualTo(null);
     }
 
-    public function testPurge()
+    public function testPurge(): void
     {
         $this
             ->if($msgList = ['wait' => [1 => 'message1']])
@@ -242,7 +242,7 @@ class Consumer extends atoum
                     ->isNull();
     }
 
-    public function testGetMessageCurrentCount()
+    public function testGetMessageCurrentCount(): void
     {
         $this
             ->if($msgList = [
@@ -270,7 +270,7 @@ class Consumer extends atoum
                     ->isEqualTo($msgList['flags']);
     }
 
-    public function testConsumerWithNullQueue()
+    public function testConsumerWithNullQueue(): void
     {
         $this
             ->if($connection = new NullConnection())
@@ -312,9 +312,7 @@ class Consumer extends atoum
         $queue = new \mock\AMQPQueue();
 
         $queue->getMockController()->get = function ($flags = AMQP_AUTOACK) use (&$msgList) {
-            // Simulate a simple queue
-            reset($msgList['wait']);
-            $key = key($msgList['wait']);
+            $key = array_key_first($msgList['wait']);
             $msg = reset($msgList['wait']);
             unset($msgList['wait'][$key]);
 
@@ -331,13 +329,9 @@ class Consumer extends atoum
             // Message
             $message = new \mock\AMQPEnvelope();
 
-            $message->getMockController()->getBody = function () use ($key, $msg) {
-                return $msg;
-            };
+            $message->getMockController()->getBody = fn() => $msg;
 
-            $message->getMockController()->getDeliveryTag = function () use ($key, $msg) {
-                return $key;
-            };
+            $message->getMockController()->getDeliveryTag = fn() => $key;
 
             return $message;
         };

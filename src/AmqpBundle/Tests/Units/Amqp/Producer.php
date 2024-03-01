@@ -10,7 +10,7 @@ use M6Web\Bundle\AmqpBundle\Amqp\Producer as Base;
  */
 class Producer extends atoum
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this
             ->if($exchange = $this->getExchange())
@@ -25,7 +25,7 @@ class Producer extends atoum
                     ->contains('test');
     }
 
-    public function testSetOptions()
+    public function testSetOptions(): void
     {
         $this
             ->if($exchange = $this->getExchange())
@@ -35,7 +35,7 @@ class Producer extends atoum
                     ->isEqualTo($exchangeOptions);
     }
 
-    public function testSendMessagesOk()
+    public function testSendMessagesOk(): void
     {
         $msgList = [];
 
@@ -58,7 +58,7 @@ class Producer extends atoum
                 ]);
     }
 
-    public function testSendMessagesError()
+    public function testSendMessagesError(): void
     {
         $msgList = [];
 
@@ -86,7 +86,7 @@ class Producer extends atoum
                     ->notContains(['error', 'error', AMQP_NOPARAM, $exchangeOptions['publish_attributes']]);
     }
 
-    public function testSendMessagesWithAttributes()
+    public function testSendMessagesWithAttributes(): void
     {
         $msgList = [];
 
@@ -115,7 +115,7 @@ class Producer extends atoum
                 ]);
     }
 
-    public function testSendMessageOk()
+    public function testSendMessageOk(): void
     {
         $this
             ->if($exchange = $this->getExchange())
@@ -127,7 +127,7 @@ class Producer extends atoum
                     ->isTrue();
     }
 
-    public function testSendMessageWithOverridedRoutingKey()
+    public function testSendMessageWithOverridedRoutingKey(): void
     {
         $msgList = [];
 
@@ -153,7 +153,7 @@ class Producer extends atoum
             ]);
     }
 
-    public function testSendMessagesWithoutRoutingKey()
+    public function testSendMessagesWithoutRoutingKey(): void
     {
         $msgList = [];
 

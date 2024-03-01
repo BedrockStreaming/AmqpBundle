@@ -27,7 +27,7 @@ class NullQueue extends \AMQPQueue
      *
      * @param \AMQPEnvelope|null $envelope
      */
-    public function enqueue(\AMQPEnvelope $envelope = null)
+    public function enqueue(\AMQPEnvelope $envelope = null): void
     {
         $this->envelopes->enqueue($envelope);
     }

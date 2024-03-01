@@ -241,9 +241,6 @@ class NullEnvelope extends \AMQPEnvelope
         return $this->headers;
     }
 
-    /**
-     * @param array $headers
-     */
     public function setHeaders(array $headers): void
     {
         $this->headers = $headers;

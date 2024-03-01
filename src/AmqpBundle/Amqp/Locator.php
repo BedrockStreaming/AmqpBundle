@@ -16,7 +16,7 @@ class Locator
     }
 
     /** @param Consumer[] $consumers */
-    public function setConsumers(array $consumers)
+    public function setConsumers(array $consumers): void
     {
         $this->consumers = $consumers;
     }
@@ -27,7 +27,7 @@ class Locator
     }
 
     /** @param Producer[] $producers */
-    public function setProducers(array $producers)
+    public function setProducers(array $producers): void
     {
         $this->producers = $producers;
     }

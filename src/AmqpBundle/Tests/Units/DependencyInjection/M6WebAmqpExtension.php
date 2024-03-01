@@ -3,6 +3,11 @@
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\DependencyInjection;
 
 use M6Web\Bundle\AmqpBundle\DependencyInjection\M6WebAmqpExtension as Base;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullChannel;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullConnection;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullEnvelope;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullExchange;
+use M6Web\Bundle\AmqpBundle\Sandbox\NullQueue;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
@@ -17,7 +22,7 @@ class M6WebAmqpExtension extends atoum
     {
         $extension = new Base();
 
-        $parameterBag = new ParameterBag(array('kernel.debug' => true));
+        $parameterBag = new ParameterBag(['kernel.debug' => true]);
         $container = new ContainerBuilder($parameterBag);
 
         $parser = new Parser();
@@ -28,7 +33,7 @@ class M6WebAmqpExtension extends atoum
         return $container;
     }
 
-    public function testQueueArgumentsConfig()
+    public function testQueueArgumentsConfig(): void
     {
         $container = $this->getContainerForConfiguration('queue-arguments-config');
 
@@ -91,24 +96,24 @@ class M6WebAmqpExtension extends atoum
                 ->isEqualTo(1);
     }
 
-    public function testSandboxClasses()
+    public function testSandboxClasses(): void
     {
         $container = $this->getContainerForConfiguration('queue-arguments-config');
 
         $this
             ->string($container->getParameter('m6_web_amqp.exchange.class'))
-                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullExchange')
+                ->isEqualTo(NullExchange::class)
             ->string($container->getParameter('m6_web_amqp.queue.class'))
-                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullQueue')
+                ->isEqualTo(NullQueue::class)
             ->string($container->getParameter('m6_web_amqp.connection.class'))
-                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullConnection')
+                ->isEqualTo(NullConnection::class)
             ->string($container->getParameter('m6_web_amqp.channel.class'))
-                ->isEqualTo('M6Web\Bundle\AmqpBundle\Sandbox\NullChannel')
+                ->isEqualTo(NullChannel::class)
             ->string($container->getParameter('m6_web_amqp.envelope.class'))
-                ->isEqualTo('\M6Web\Bundle\AmqpBundle\Sandbox\NullEnvelope');
+                ->isEqualTo(NullEnvelope::class);
     }
 
-    public function testDefaultConfiguration()
+    public function testDefaultConfiguration(): void
     {
         $container = $this->getContainerForConfiguration('queue-defaults');
 

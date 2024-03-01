@@ -10,14 +10,14 @@ use M6Web\Bundle\AmqpBundle\Factory\ConsumerFactory as Base;
  */
 class ConsumerFactory extends atoum
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this
             ->if($channelClass = '\AMQPChannel')
             ->and($queueClass = '\AMQPQueue')
             ->and($exchangeClass = '\AMQPExchange')
                 ->object($factory = new Base($channelClass, $queueClass, $exchangeClass))
-                    ->isInstanceOf('M6Web\Bundle\AmqpBundle\Factory\ConsumerFactory');
+                    ->isInstanceOf(\M6Web\Bundle\AmqpBundle\Factory\ConsumerFactory::class);
 
         $this
             ->if($channelClass = '\DateTime')
@@ -56,7 +56,7 @@ class ConsumerFactory extends atoum
             ->hasMessage("exchangeClass '\DateTime' doesn't exist or not a AMQPExchange");
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $this->mockGenerator->orphanize('__construct');
         $this->mockGenerator->shuntParentClassCalls();

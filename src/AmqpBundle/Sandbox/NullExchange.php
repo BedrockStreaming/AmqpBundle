@@ -24,8 +24,8 @@ class NullExchange extends \AMQPExchange
         $message,
         $routingKey = null,
         $flags = AMQP_NOPARAM,
-        array $attributes = array()
-    ) {
+        array $attributes = []
+    ): void {
         //noop
     }
 

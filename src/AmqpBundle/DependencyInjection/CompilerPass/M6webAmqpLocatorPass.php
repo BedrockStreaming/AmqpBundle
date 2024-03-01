@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class M6webAmqpLocatorPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->has('m6_web_amqp.locator')) {
             return;

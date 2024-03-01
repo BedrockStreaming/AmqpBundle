@@ -25,7 +25,7 @@ abstract class AbstractAmqp
      * @param mixed  $return    Return value of the command
      * @param float $time      Exec time
      */
-    protected function notifyEvent(string $command, array $arguments, $return, float $time = 0)
+    protected function notifyEvent(string $command, array $arguments, mixed $return, float $time = 0)
     {
         if ($this->eventDispatcher) {
             $event = new $this->eventClass();
@@ -51,7 +51,7 @@ abstract class AbstractAmqp
     {
         $start = microtime(true);
 
-        $ret = call_user_func_array(array($object, $name), $arguments);
+        $ret = call_user_func_array([$object, $name], $arguments);
 
         $this->notifyEvent($name, $arguments, $ret, microtime(true) - $start);
 
@@ -66,10 +66,10 @@ abstract class AbstractAmqp
      *
      * @throws \Exception
      */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher, string $eventClass)
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher, string $eventClass): void
     {
         $class = new \ReflectionClass($eventClass);
-        if (!$class->implementsInterface('\M6Web\Bundle\AmqpBundle\Event\DispatcherInterface')) {
+        if (!$class->implementsInterface(\M6Web\Bundle\AmqpBundle\Event\DispatcherInterface::class)) {
             throw new Exception('The Event class : '.$eventClass.' must implement DispatcherInterface');
         }
 

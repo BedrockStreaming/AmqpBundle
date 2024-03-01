@@ -33,5 +33,5 @@ interface DispatcherInterface
      *
      * @param mixed $v value
      */
-    public function setReturn($v);
+    public function setReturn(mixed $v);
 }

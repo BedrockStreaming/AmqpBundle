@@ -9,15 +9,10 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class NackEvent extends Event
 {
-    const NAME = 'amqp.nack';
+    public const NAME = 'amqp.nack';
 
-    private int $deliveryTag;
-    private int $flags;
-
-    public function __construct(int $deliveryTag, int $flags)
+    public function __construct(private readonly int $deliveryTag, private readonly int $flags)
     {
-        $this->deliveryTag = $deliveryTag;
-        $this->flags = $flags;
     }
 
     public function getDeliveryTag(): int

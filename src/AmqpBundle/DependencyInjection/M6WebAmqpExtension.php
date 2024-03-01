@@ -19,7 +19,7 @@ class M6WebAmqpExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -159,7 +159,7 @@ class M6WebAmqpExtension extends Extension
         }
     }
 
-    private function setEventDispatcher(ContainerBuilder $container, bool $enableEventDispatcher, Definition $definition)
+    private function setEventDispatcher(ContainerBuilder $container, bool $enableEventDispatcher, Definition $definition): void
     {
         // Add the Event dispatcher & Command Event
         if ($enableEventDispatcher === true) {

@@ -9,13 +9,10 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class PurgeEvent extends Event
 {
-    const NAME = 'amqp.purge';
+    public const NAME = 'amqp.purge';
 
-    private \AMQPQueue $queue;
-
-    public function __construct(\AMQPQueue $queue)
+    public function __construct(private readonly \AMQPQueue $queue)
     {
-        $this->queue = $queue;
     }
 
     public function getQueue(): \AMQPQueue

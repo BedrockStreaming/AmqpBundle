@@ -9,16 +9,10 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class AckEvent extends Event
 {
-    const NAME = 'amqp.ack';
+    public const NAME = 'amqp.ack';
 
-    private int $deliveryTag;
-
-    private int $flags;
-
-    public function __construct(int $deliveryTag, int $flags)
+    public function __construct(private readonly int $deliveryTag, private readonly int $flags)
     {
-        $this->deliveryTag = $deliveryTag;
-        $this->flags = $flags;
     }
 
     public function getDeliveryTag(): int

@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class M6WebAmqpBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
         $container->addCompilerPass(new M6webAmqpLocatorPass());

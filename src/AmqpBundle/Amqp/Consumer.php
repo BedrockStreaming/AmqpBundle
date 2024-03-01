@@ -13,14 +13,8 @@ use M6Web\Bundle\AmqpBundle\Event\PurgeEvent;
 class Consumer extends AbstractAmqp
 {
 
-    protected \AMQPQueue $queue;
-
-    protected array $queueOptions = [];
-
-    public function __construct(\AMQPQueue $queue, array $queueOptions)
+    public function __construct(protected \AMQPQueue $queue, protected array $queueOptions)
     {
-        $this->queue = $queue;
-        $this->queueOptions = $queueOptions;
     }
 
     /**

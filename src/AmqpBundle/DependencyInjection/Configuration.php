@@ -99,14 +99,14 @@ class Configuration implements ConfigurationInterface
                                     // args
                                     ->arrayNode('arguments')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                         ->normalizeKeys(false)
                                     ->end()
 
                                     // binding
                                     ->arrayNode('routing_keys')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                     ->end()
                                 ->end()
                             ->end()
@@ -142,14 +142,14 @@ class Configuration implements ConfigurationInterface
                                     // args
                                     ->arrayNode('arguments')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                         ->normalizeKeys(false)
                                     ->end()
 
                                     // binding
                                     ->arrayNode('routing_keys')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                     ->end()
                                 ->end()
                             ->end()
@@ -193,20 +193,20 @@ class Configuration implements ConfigurationInterface
                     // args
                     ->arrayNode('arguments')
                         ->prototype('scalar')->end()
-                        ->defaultValue(array())
+                        ->defaultValue([])
                         ->normalizeKeys(false)
                     ->end()
 
                     // binding
                     ->arrayNode('routing_keys')
                         ->prototype('scalar')->end()
-                        ->defaultValue(array())
+                        ->defaultValue([])
                     ->end()
 
                     // default message attributes
                     ->arrayNode('publish_attributes')
                         ->prototype('scalar')->end()
-                        ->defaultValue(array())
+                        ->defaultValue([])
                     ->end()
                 ->end();
             //last end is missed here intentionally because arrayNode doesn't have an actual parent

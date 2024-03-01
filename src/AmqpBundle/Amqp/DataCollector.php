@@ -34,13 +34,9 @@ class DataCollector extends SymfonyDataCollector
      *
      * @param DispatcherInterface $event The event object
      */
-    public function onCommand(DispatcherInterface $event)
+    public function onCommand(DispatcherInterface $event): void
     {
-        $this->data['commands'][] = array(
-            'command' => $event->getCommand(),
-            'arguments' => $event->getArguments(),
-            'executiontime' => $event->getExecutionTime(),
-        );
+        $this->data['commands'][] = ['command' => $event->getCommand(), 'arguments' => $event->getArguments(), 'executiontime' => $event->getExecutionTime()];
     }
 
     /**
@@ -82,7 +78,7 @@ class DataCollector extends SymfonyDataCollector
     /**
      * {@inheritdoc}
      */
-    public function reset()
+    public function reset(): void
     {
         // Reset the current data, while keeping the 'name' intact.
         $this->data = [
