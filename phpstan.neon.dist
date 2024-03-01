@@ -1,0 +1,10 @@
+parameters:
+    paths:
+        - 'src'
+    excludePaths:
+        - 'src/AmqpBundle/Tests'
+
+    level: 8
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false

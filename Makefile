@@ -52,3 +52,12 @@ cs-fix: composer-install
 cs-ci: composer-install
 	$(call printSection,PHPCS)
 	${BIN_DIR}/php-cs-fixer fix --dry-run --using-cache=no --verbose
+
+.PHONY: phpstan-cache-clear
+phpstan-cache-clear:
+	${BIN_DIR}/phpstan.phar clear-result-cache
+
+.PHONY: phpstan
+phpstan: phpstan-cache-clear
+	$(call printSection,PHPSTAN)
+	${BIN_DIR}/phpstan.phar analyse --memory-limit=1G
