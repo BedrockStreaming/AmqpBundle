@@ -274,9 +274,13 @@ class Consumer extends \atoum
     public function testConsumerWithNullQueue(): void
     {
         $this
-            ->if($connection = new NullConnection())
-                ->and($channel = new NullChannel($connection))
-                ->and($queue = new NullQueue($channel))
+          ->if($connection = new NullConnection())
+          ->exception(
+              static fn() => new NullChannel($connection)
+          );
+
+        $this
+            ->if($queue = new NullQueue())
                 ->and($consumer = new Base($queue, []))
             ->then
                 ->variable($consumer->getMessage())->isNull()

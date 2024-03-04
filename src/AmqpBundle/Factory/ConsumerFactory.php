@@ -105,6 +105,12 @@ class ConsumerFactory extends AMQPFactory
             $queue->bind($exchangeOptions['name']);
         }
 
-        return new $class($queue, $queueOptions);
+        $consumer = new $class($queue, $queueOptions);
+
+        if (!$consumer instanceof Consumer) {
+            throw new \InvalidArgumentException("$class must be an instance of Consumer");
+        }
+
+        return $consumer;
     }
 }

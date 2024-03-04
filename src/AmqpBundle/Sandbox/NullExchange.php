@@ -12,14 +12,6 @@ class NullExchange extends \AMQPExchange
     /**
      * {@inheritdoc}
      */
-    public function __construct(\AMQPChannel $amqp_channel)
-    {
-        // noop
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function publish(
         $message,
         $routingKey = null,
@@ -32,8 +24,7 @@ class NullExchange extends \AMQPExchange
     /**
      * {@inheritdoc}
      */
-    public function declareExchange()
+    public function declareExchange(): void
     {
-        return true;
     }
 }

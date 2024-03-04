@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('m6_web_amqp');
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
@@ -55,7 +56,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('connections')
                     ->useAttributeAsKey('key')
                     ->canBeUnset()
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.connection.class%')->end()
                             ->scalarNode('host')->defaultValue('localhost')->end()
@@ -82,7 +83,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('producers')
                     ->canBeUnset()
                     ->useAttributeAsKey('key')
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.producer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()
@@ -125,7 +126,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('consumers')
                     ->canBeUnset()
                     ->useAttributeAsKey('key')
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.consumer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()

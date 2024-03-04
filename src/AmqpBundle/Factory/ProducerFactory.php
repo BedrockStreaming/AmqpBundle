@@ -70,6 +70,7 @@ class ProducerFactory extends AMQPFactory
         }
 
         // Open a new channel
+        /** @var \AMQPChannel $channel */
         $channel = new $this->channelClass($connexion);
         $exchange = $this->createExchange($this->exchangeClass, $channel, $exchangeOptions);
 
@@ -94,6 +95,7 @@ class ProducerFactory extends AMQPFactory
         }
 
         // Create the producer
+        /** @var Producer */
         return new $class($exchange, $exchangeOptions);
     }
 }

@@ -19,7 +19,7 @@ class NullQueue extends \AMQPQueue
     /**
      * {@inheritdoc}
      */
-    public function __construct(\AMQPChannel $channel)
+    public function __construct()
     {
         $this->envelopes = new \SplQueue();
     }

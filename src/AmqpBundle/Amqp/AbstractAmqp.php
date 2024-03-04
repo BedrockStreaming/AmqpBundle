@@ -48,11 +48,13 @@ abstract class AbstractAmqp
      * @param string $name      Method name
      * @param array  $arguments Method arguments
      */
-    protected function call(object $object, string $name, array $arguments = [])
+    protected function call(object $object, string $name, array $arguments = []): mixed
     {
         $start = microtime(true);
 
-        $ret = \call_user_func_array([$object, $name], $arguments);
+        /** @var callable $callable */
+        $callable = [$object, $name];
+        $ret = \call_user_func_array($callable, $arguments);
 
         $this->notifyEvent($name, $arguments, $ret, microtime(true) - $start);
 
@@ -63,7 +65,7 @@ abstract class AbstractAmqp
      * Set an event dispatcher to notify amqp command.
      *
      * @param EventDispatcherInterface $eventDispatcher The eventDispatcher object, which implement the notify method
-     * @param string                   $eventClass      The event class used to create an event and send it to the event dispatcher
+     * @param class-string             $eventClass      The event class used to create an event and send it to the event dispatcher
      *
      * @throws \Exception
      */

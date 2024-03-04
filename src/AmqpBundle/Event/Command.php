@@ -15,7 +15,7 @@ class Command extends Event implements DispatcherInterface
     protected string $command;
     protected array $arguments;
 
-    protected $return;
+    protected mixed $return;
 
     /**
      * {@inheritDoc}
@@ -58,7 +58,7 @@ class Command extends Event implements DispatcherInterface
      *
      * @param mixed $v value
      */
-    public function setReturn($v): self
+    public function setReturn(mixed $v): self
     {
         $this->return = $v;
 
@@ -68,7 +68,7 @@ class Command extends Event implements DispatcherInterface
     /**
      * get the return value.
      */
-    public function getReturn()
+    public function getReturn(): mixed
     {
         return $this->return;
     }
