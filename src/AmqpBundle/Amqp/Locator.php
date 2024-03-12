@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
 class Locator
 {
-    /**  @var Consumer[] */
+    /** @var Consumer[] */
     protected array $consumers = [];
 
     /** @var Producer[] */
@@ -15,8 +17,10 @@ class Locator
         return $this->consumers[$id];
     }
 
-    /** @param Consumer[] $consumers */
-    public function setConsumers(array $consumers)
+    /**
+     * @param Consumer[] $consumers
+     */
+    public function setConsumers(array $consumers): void
     {
         $this->consumers = $consumers;
     }
@@ -26,8 +30,10 @@ class Locator
         return $this->producers[$id];
     }
 
-    /** @param Producer[] $producers */
-    public function setProducers(array $producers)
+    /**
+     * @param Producer[] $producers
+     */
+    public function setProducers(array $producers): void
     {
         $this->producers = $producers;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle;
 
 use M6Web\Bundle\AmqpBundle\DependencyInjection\CompilerPass\M6webAmqpLocatorPass;
@@ -11,7 +13,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class M6WebAmqpBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
         $container->addCompilerPass(new M6webAmqpLocatorPass());

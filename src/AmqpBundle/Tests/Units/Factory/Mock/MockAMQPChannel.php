@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\Factory\Mock;
 
 /**
@@ -11,15 +13,15 @@ class MockAMQPChannel extends \AMQPChannel
     {
     }
 
-    public function qos($prefetchSize, $prefetchCount, $global = NULL)
+    public function qos(int $size, int $count, ?bool $global = null): void
     {
     }
 
-    public function setPrefetchSize($count){
-
+    public function setPrefetchSize(int $size): void
+    {
     }
 
-    public function setPrefetchCount($count){
-
+    public function setPrefetchCount(int $count): void
+    {
     }
 }

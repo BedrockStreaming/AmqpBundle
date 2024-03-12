@@ -1,33 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\Factory;
 
-use atoum;
 use M6Web\Bundle\AmqpBundle\Factory\ProducerFactory as Base;
 
 /**
  * ProducerFactory.
  */
-class ProducerFactory extends atoum
+class ProducerFactory extends \atoum
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this
             ->if($channelClass = '\AMQPChannel')
             ->and($exchangeClass = '\AMQPExchange')
             ->and($queueClass = '\AMQPQueue')
                 ->object($factory = new Base($channelClass, $exchangeClass, $queueClass))
-                    ->isInstanceOf('M6Web\Bundle\AmqpBundle\Factory\ProducerFactory');
+                    ->isInstanceOf(Base::class);
 
         $this
             ->if($channelClass = '\DateTime')
             ->and($exchangeClass = '\AMQPExchange')
             ->and($queueClass = '\AMQPQueue')
                 ->exception(
-                     function () use ($channelClass, $exchangeClass, $queueClass) {
-                         $factory = new Base($channelClass, $exchangeClass, $queueClass);
-                     }
-                 )
+                    function () use ($channelClass, $exchangeClass, $queueClass): void {
+                        $factory = new Base($channelClass, $exchangeClass, $queueClass);
+                    },
+                )
                      ->isInstanceOf('InvalidArgumentException')
                      ->hasMessage("channelClass '\DateTime' doesn't exist or not a AMQPChannel");
 
@@ -36,10 +37,10 @@ class ProducerFactory extends atoum
             ->and($exchangeClass = '\DateTime')
             ->and($queueClass = '\AMQPQueue')
                 ->exception(
-                     function () use ($channelClass, $exchangeClass, $queueClass) {
-                         $factory = new Base($channelClass, $exchangeClass, $queueClass);
-                     }
-                 )
+                    function () use ($channelClass, $exchangeClass, $queueClass): void {
+                        $factory = new Base($channelClass, $exchangeClass, $queueClass);
+                    },
+                )
                      ->isInstanceOf('InvalidArgumentException')
                      ->hasMessage("exchangeClass '\DateTime' doesn't exist or not a AMQPExchange");
 
@@ -48,15 +49,15 @@ class ProducerFactory extends atoum
             ->and($exchangeClass = '\AMQPExchange')
             ->and($queueClass = '\DateTime')
             ->exception(
-                function () use ($channelClass, $exchangeClass, $queueClass) {
+                function () use ($channelClass, $exchangeClass, $queueClass): void {
                     $factory = new Base($channelClass, $exchangeClass, $queueClass);
-                }
+                },
             )
             ->isInstanceOf('InvalidArgumentException')
             ->hasMessage("queueClass '\DateTime' doesn't exist or not a AMQPQueue");
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $this->mockGenerator->orphanize('__construct');
         $this->mockGenerator->shuntParentClassCalls();

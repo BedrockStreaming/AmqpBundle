@@ -1,0 +1,15 @@
+parameters:
+    paths:
+        - 'src'
+    excludePaths:
+        - 'src/AmqpBundle/Tests'
+        - 'src/AmqpBundle/Sandbox'
+        - 'src/AmqpBundle/DependencyInjection'
+
+    level: 8
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        - '#Unable to resolve the template type T in call to method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\)#'

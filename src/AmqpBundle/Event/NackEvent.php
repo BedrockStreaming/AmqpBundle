@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
@@ -9,18 +11,13 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class NackEvent extends Event
 {
-    const NAME = 'amqp.nack';
+    public const NAME = 'amqp.nack';
 
-    private string $deliveryTag;
-    private int $flags;
-
-    public function __construct(string $deliveryTag, int $flags)
+    public function __construct(private readonly int $deliveryTag, private readonly int $flags)
     {
-        $this->deliveryTag = $deliveryTag;
-        $this->flags = $flags;
     }
 
-    public function getDeliveryTag(): string
+    public function getDeliveryTag(): int
     {
         return $this->deliveryTag;
     }

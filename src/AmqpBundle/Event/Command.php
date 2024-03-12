@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
@@ -13,13 +15,10 @@ class Command extends Event implements DispatcherInterface
     protected string $command;
     protected array $arguments;
 
-    /**
-     * @var mixed
-     */
-    protected $return;
+    protected mixed $return;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setCommand(string $command): self
     {
@@ -59,7 +58,7 @@ class Command extends Event implements DispatcherInterface
      *
      * @param mixed $v value
      */
-    public function setReturn($v): self
+    public function setReturn(mixed $v): self
     {
         $this->return = $v;
 
@@ -68,16 +67,14 @@ class Command extends Event implements DispatcherInterface
 
     /**
      * get the return value.
-     *
-     * @return mixed
      */
-    public function getReturn()
+    public function getReturn(): mixed
     {
         return $this->return;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setExecutionTime(float $v): self
     {

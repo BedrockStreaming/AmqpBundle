@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
@@ -10,48 +12,42 @@ class NullConnection extends \AMQPConnection
     /**
      * {@inheritdoc}
      */
-    public function connect()
+    public function connect(): void
     {
-        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pconnect()
+    public function pconnect(): void
     {
-        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pdisconnect()
+    public function pdisconnect(): void
     {
-        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function disconnect()
+    public function disconnect(): void
     {
-        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function reconnect()
+    public function reconnect(): void
     {
-        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function preconnect()
+    public function preconnect(): void
     {
-        return true;
     }
 }

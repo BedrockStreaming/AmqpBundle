@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Tests\Units\Factory\Mock;
 
 /**
@@ -11,11 +13,12 @@ class MockAMQPQueue extends \AMQPQueue
     {
     }
 
-    public function bind($exchange_name, $routing_key = null, $arguments = array())
+    public function bind(string $exchange_name, ?string $routing_key = null, array $arguments = []): void
     {
     }
 
-    public function declareQueue()
+    public function declareQueue(): int
     {
+        return 1;
     }
 }

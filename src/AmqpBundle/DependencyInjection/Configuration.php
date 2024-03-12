@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -21,6 +23,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('m6_web_amqp');
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
@@ -46,14 +49,14 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    protected function addConnections(ArrayNodeDefinition $node)
+    protected function addConnections(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
                 ->arrayNode('connections')
                     ->useAttributeAsKey('key')
                     ->canBeUnset()
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.connection.class%')->end()
                             ->scalarNode('host')->defaultValue('localhost')->end()
@@ -73,14 +76,14 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    protected function addProducers(ArrayNodeDefinition $node)
+    protected function addProducers(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
                 ->arrayNode('producers')
                     ->canBeUnset()
                     ->useAttributeAsKey('key')
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.producer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()
@@ -99,14 +102,14 @@ class Configuration implements ConfigurationInterface
                                     // args
                                     ->arrayNode('arguments')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                         ->normalizeKeys(false)
                                     ->end()
 
                                     // binding
                                     ->arrayNode('routing_keys')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                     ->end()
                                 ->end()
                             ->end()
@@ -116,14 +119,14 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    protected function addConsumers(ArrayNodeDefinition $node)
+    protected function addConsumers(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
                 ->arrayNode('consumers')
                     ->canBeUnset()
                     ->useAttributeAsKey('key')
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.consumer.class%')->end()
                             ->scalarNode('connection')->defaultValue('default')->end()
@@ -142,14 +145,14 @@ class Configuration implements ConfigurationInterface
                                     // args
                                     ->arrayNode('arguments')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                         ->normalizeKeys(false)
                                     ->end()
 
                                     // binding
                                     ->arrayNode('routing_keys')
                                         ->prototype('scalar')->end()
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                     ->end()
                                 ->end()
                             ->end()
@@ -193,22 +196,22 @@ class Configuration implements ConfigurationInterface
                     // args
                     ->arrayNode('arguments')
                         ->prototype('scalar')->end()
-                        ->defaultValue(array())
+                        ->defaultValue([])
                         ->normalizeKeys(false)
                     ->end()
 
                     // binding
                     ->arrayNode('routing_keys')
                         ->prototype('scalar')->end()
-                        ->defaultValue(array())
+                        ->defaultValue([])
                     ->end()
 
                     // default message attributes
                     ->arrayNode('publish_attributes')
                         ->prototype('scalar')->end()
-                        ->defaultValue(array())
+                        ->defaultValue([])
                     ->end()
                 ->end();
-            //last end is missed here intentionally because arrayNode doesn't have an actual parent
+        // last end is missed here intentionally because arrayNode doesn't have an actual parent
     }
 }

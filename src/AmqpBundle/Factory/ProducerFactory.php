@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Factory;
 
 use M6Web\Bundle\AmqpBundle\Amqp\Producer;
@@ -23,19 +25,19 @@ class ProducerFactory extends AMQPFactory
     {
         if (!class_exists($channelClass) || !is_a($channelClass, 'AMQPChannel', true)) {
             throw new \InvalidArgumentException(
-                sprintf("channelClass '%s' doesn't exist or not a AMQPChannel", $channelClass)
+                sprintf("channelClass '%s' doesn't exist or not a AMQPChannel", $channelClass),
             );
         }
 
         if (!class_exists($exchangeClass) || !is_a($exchangeClass, 'AMQPExchange', true)) {
             throw new \InvalidArgumentException(
-                sprintf("exchangeClass '%s' doesn't exist or not a AMQPExchange", $exchangeClass)
+                sprintf("exchangeClass '%s' doesn't exist or not a AMQPExchange", $exchangeClass),
             );
         }
 
         if (!class_exists($queueClass) || !is_a($queueClass, 'AMQPQueue', true)) {
             throw new \InvalidArgumentException(
-                sprintf("queueClass '%s' doesn't exist or not a AMQPQueue", $queueClass)
+                sprintf("queueClass '%s' doesn't exist or not a AMQPQueue", $queueClass),
             );
         }
 
@@ -47,19 +49,17 @@ class ProducerFactory extends AMQPFactory
     /**
      * build the producer class.
      *
-     * @param class-string     $class           Provider class name
+     * @param class-string    $class           Provider class name
      * @param \AMQPConnection $connexion       AMQP connexion
      * @param array           $exchangeOptions Exchange Options
      * @param array           $queueOptions    Queue Options
      * @param bool            $lazy            Specifies if it should connect
-     *
-     * @return Producer
      */
     public function get(string $class, \AMQPConnection $connexion, array $exchangeOptions, array $queueOptions, bool $lazy = false): Producer
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
-                sprintf("Producer class '%s' doesn't exist", $class)
+                sprintf("Producer class '%s' doesn't exist", $class),
             );
         }
 
@@ -70,6 +70,7 @@ class ProducerFactory extends AMQPFactory
         }
 
         // Open a new channel
+        /** @var \AMQPChannel $channel */
         $channel = new $this->channelClass($connexion);
         $exchange = $this->createExchange($this->exchangeClass, $channel, $exchangeOptions);
 
@@ -82,7 +83,7 @@ class ProducerFactory extends AMQPFactory
             $queue->setFlags(
                 ($queueOptions['passive'] ? AMQP_PASSIVE : AMQP_NOPARAM) |
                 ($queueOptions['durable'] ? AMQP_DURABLE : AMQP_NOPARAM) |
-                ($queueOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM)
+                ($queueOptions['auto_delete'] ? AMQP_AUTODELETE : AMQP_NOPARAM),
             );
             $queue->declareQueue();
             $queue->bind($exchangeOptions['name']);
@@ -94,6 +95,7 @@ class ProducerFactory extends AMQPFactory
         }
 
         // Create the producer
+        /** @var Producer */
         return new $class($exchange, $exchangeOptions);
     }
 }

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -19,7 +21,7 @@ class M6WebAmqpExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -40,7 +42,7 @@ class M6WebAmqpExtension extends Extension
         $this->loadConsumers($container, $config);
     }
 
-    protected function loadConnections(ContainerBuilder $container, array $config)
+    protected function loadConnections(ContainerBuilder $container, array $config): void
     {
         foreach ($config['connections'] as $key => $connection) {
             $connectionDefinition = new Definition($connection['class']);
@@ -63,12 +65,12 @@ class M6WebAmqpExtension extends Extension
 
             $container->setDefinition(
                 sprintf('m6_web_amqp.connection.%s', $key),
-                $connectionDefinition
+                $connectionDefinition,
             );
         }
     }
 
-    protected function loadProducers(ContainerBuilder $container, array $config)
+    protected function loadProducers(ContainerBuilder $container, array $config): void
     {
         foreach ($config['producers'] as $key => $producer) {
             $lazy = $config['connections'][$producer['connection']]['lazy'];
@@ -82,7 +84,7 @@ class M6WebAmqpExtension extends Extension
                     $producer['exchange_options'],
                     $producer['queue_options'],
                     $lazy,
-                ]
+                ],
             );
 
             $this->setEventDispatcher($container, $config['event_dispatcher'], $producerDefinition);
@@ -108,12 +110,12 @@ class M6WebAmqpExtension extends Extension
             $producerDefinition->addTag('m6_web_amqp.producers');
             $container->setDefinition(
                 sprintf('m6_web_amqp.producer.%s', $key),
-                $producerDefinition
+                $producerDefinition,
             );
         }
     }
 
-    protected function loadConsumers(ContainerBuilder $container, array $config)
+    protected function loadConsumers(ContainerBuilder $container, array $config): void
     {
         foreach ($config['consumers'] as $key => $consumer) {
             $lazy = $config['connections'][$consumer['connection']]['lazy'];
@@ -128,7 +130,7 @@ class M6WebAmqpExtension extends Extension
                     $consumer['queue_options'],
                     $lazy,
                     $consumer['qos_options'],
-                ]
+                ],
             );
 
             $this->setEventDispatcher($container, $config['event_dispatcher'], $consumerDefinition);
@@ -154,12 +156,12 @@ class M6WebAmqpExtension extends Extension
             $consumerDefinition->addTag('m6_web_amqp.consumers');
             $container->setDefinition(
                 sprintf('m6_web_amqp.consumer.%s', $key),
-                $consumerDefinition
+                $consumerDefinition,
             );
         }
     }
 
-    private function setEventDispatcher(ContainerBuilder $container, bool $enableEventDispatcher, Definition $definition)
+    private function setEventDispatcher(ContainerBuilder $container, bool $enableEventDispatcher, Definition $definition): void
     {
         // Add the Event dispatcher & Command Event
         if ($enableEventDispatcher === true) {
@@ -168,7 +170,7 @@ class M6WebAmqpExtension extends Extension
                 [
                     new Reference('event_dispatcher'),
                     $container->getParameter('m6_web_amqp.event.command.class'),
-                ]
+                ],
             );
         }
     }

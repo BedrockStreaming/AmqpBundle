@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Sandbox;
 
 /**
@@ -17,17 +19,15 @@ class NullQueue extends \AMQPQueue
     /**
      * {@inheritdoc}
      */
-    public function __construct(\AMQPChannel $channel)
+    public function __construct()
     {
         $this->envelopes = new \SplQueue();
     }
 
     /**
      * Enqueue message or no message.
-     *
-     * @param \AMQPEnvelope|null $envelope
      */
-    public function enqueue(\AMQPEnvelope $envelope = null)
+    public function enqueue(?\AMQPEnvelope $envelope = null): void
     {
         $this->envelopes->enqueue($envelope);
     }
@@ -35,19 +35,19 @@ class NullQueue extends \AMQPQueue
     /**
      * {@inheritdoc}
      */
-    public function get($flags = AMQP_NOPARAM)
+    public function get($flags = AMQP_NOPARAM): ?\AMQPEnvelope
     {
         if (!$this->envelopes->isEmpty()) {
             return $this->envelopes->dequeue();
-        } else {
-            return false;
         }
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function declareQueue()
+    public function declareQueue(): int
     {
         return $this->envelopes->count();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Bundle\AmqpBundle\Amqp;
 
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -13,7 +15,8 @@ abstract class AbstractAmqp
 
     /**
      * Class of the event notifier.
-     * @var ?class-string $eventClass
+     *
+     * @var ?class-string
      */
     protected ?string $eventClass = null;
 
@@ -23,9 +26,9 @@ abstract class AbstractAmqp
      * @param string $command   The command name
      * @param array  $arguments Args of the command
      * @param mixed  $return    Return value of the command
-     * @param float $time      Exec time
+     * @param float  $time      Exec time
      */
-    protected function notifyEvent(string $command, array $arguments, $return, float $time = 0)
+    protected function notifyEvent(string $command, array $arguments, mixed $return, float $time = 0): void
     {
         if ($this->eventDispatcher) {
             $event = new $this->eventClass();
@@ -44,14 +47,14 @@ abstract class AbstractAmqp
      * @param object $object    Method object
      * @param string $name      Method name
      * @param array  $arguments Method arguments
-     *
-     * @return mixed
      */
-    protected function call(object $object, string $name, array $arguments = [])
+    protected function call(object $object, string $name, array $arguments = []): mixed
     {
         $start = microtime(true);
 
-        $ret = call_user_func_array(array($object, $name), $arguments);
+        /** @var callable $callable */
+        $callable = [$object, $name];
+        $ret = \call_user_func_array($callable, $arguments);
 
         $this->notifyEvent($name, $arguments, $ret, microtime(true) - $start);
 
@@ -62,14 +65,14 @@ abstract class AbstractAmqp
      * Set an event dispatcher to notify amqp command.
      *
      * @param EventDispatcherInterface $eventDispatcher The eventDispatcher object, which implement the notify method
-     * @param string                   $eventClass      The event class used to create an event and send it to the event dispatcher
+     * @param class-string             $eventClass      The event class used to create an event and send it to the event dispatcher
      *
      * @throws \Exception
      */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher, string $eventClass)
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher, string $eventClass): void
     {
         $class = new \ReflectionClass($eventClass);
-        if (!$class->implementsInterface('\M6Web\Bundle\AmqpBundle\Event\DispatcherInterface')) {
+        if (!$class->implementsInterface(\M6Web\Bundle\AmqpBundle\Event\DispatcherInterface::class)) {
             throw new Exception('The Event class : '.$eventClass.' must implement DispatcherInterface');
         }
 
