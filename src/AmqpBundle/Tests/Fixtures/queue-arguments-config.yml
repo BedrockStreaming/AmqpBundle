@@ -20,6 +20,26 @@ m6_web_amqp:
             vhost:    '/'
             lazy:     true
             heartbeat: 1
+        with_read_timeout_and_timeout:
+            host:     'localhost'
+            port:     5672
+            read_timeout:  100
+            write_timeout: 50
+            timeout: 3
+            login:    'guest'
+            password: 'guest'
+            vhost:    '/'
+            lazy:     true
+            heartbeat: 1
+        with_read_timeout_only:
+            host:     'localhost'
+            port:     5672
+            read_timeout:  100
+            login:    'guest'
+            password: 'guest'
+            vhost:    '/'
+            lazy:     true
+            heartbeat: 1
     producers:
         producer_1:
             connection: default

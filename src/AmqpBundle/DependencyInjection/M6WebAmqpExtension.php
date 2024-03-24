@@ -48,12 +48,15 @@ class M6WebAmqpExtension extends Extension
             $connectionDefinition = new Definition($connection['class']);
             $connectionDefinition->addMethodCall('setHost ', [$connection['host']])
                                 ->addMethodCall('setPort', [$connection['port']])
-                                ->addMethodCall('setReadTimeout', [$connection['timeout']])
                                 ->addMethodCall('setLogin', [$connection['login']])
                                 ->addMethodCall('setPassword', [$connection['password']])
                                 ->addMethodCall('setVhost', [$connection['vhost']]);
 
-            $connectionDefinition->setArguments([['heartbeat' => $connection['heartbeat']]]);
+            $connectionDefinition->setArguments([[
+                'heartbeat' => $connection['heartbeat'],
+                'read_timeout' => $connection['read_timeout'],
+                'write_timeout' => $connection['write_timeout'],
+            ]]);
 
             if ($config['prototype']) {
                 $connectionDefinition->setShared(false);

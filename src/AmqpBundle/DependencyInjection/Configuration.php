@@ -61,15 +61,36 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('class')->defaultValue('%m6_web_amqp.connection.class%')->end()
                             ->scalarNode('host')->defaultValue('localhost')->end()
                             ->scalarNode('port')->defaultValue(5672)->end()
-                            ->scalarNode('timeout')->defaultValue(10)->end()
+                            ->scalarNode('timeout')
+                                ->defaultValue(10)
+                                ->info('Read timeout for connection. Left for backwards compatibility. Use read_timeout instead')
+                            ->end()
+                            ->scalarNode('read_timeout')
+                                ->defaultNull()
+                                ->info('Read timeout for connection. If ommitted - use timeout value. Left for backwards compatibility')
+                            ->end()
+                            ->scalarNode('write_timeout')
+                                ->defaultValue(10)
+                                ->info('Write timeout for connection')
+                            ->end()
                             ->scalarNode('heartbeat')
                                 ->defaultValue(5)
-                                ->info('Send heartbeat every N seconds. RabbitMQ recommend to use timeout / 2. Supported from 1.6.0beta4 version of amqp extension')
+                                ->info('Send heartbeat every N seconds. RabbitMQ recommend to use read_timeout / 2. Supported from 1.6.0beta4 version of amqp extension')
                             ->end()
                             ->scalarNode('login')->defaultValue('guest')->end()
                             ->scalarNode('password')->defaultValue('guest')->end()
                             ->scalarNode('vhost')->defaultValue('/')->end()
                             ->booleanNode('lazy')->defaultFalse()->end()
+                        ->end()
+                        //backwards compatibility part to copy timeout value to read_timeout if read_timeout is not set
+                        ->validate()
+                            ->always(function($v) {
+                                if ($v['read_timeout'] === null) {
+                                    $v['read_timeout'] = $v['timeout'];
+                                }
+
+                                return $v;
+                            })
                         ->end()
                     ->end()
                 ->end()
